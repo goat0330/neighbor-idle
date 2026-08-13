@@ -1,0 +1,97 @@
+/* app.wxss 全局样式 */
+page {
+  background: #f5f6f8;
+  font-size: 28rpx;
+  color: #222;
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'PingFang SC',
+    'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+}
+
+view, text, image, input, textarea, button {
+  box-sizing: border-box;
+}
+
+/* ========== 通用布局 ========== */
+.flex { display: flex; }
+.flex-col { display: flex; flex-direction: column; }
+.flex-1 { flex: 1; }
+.align-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.justify-center { justify-content: center; }
+.flex-wrap { flex-wrap: wrap; }
+
+/* ========== 通用卡片 ========== */
+.card {
+  background: #fff;
+  border-radius: 16rpx;
+  overflow: hidden;
+}
+
+/* ========== 按钮 ========== */
+.btn-primary {
+  background: #07c160;
+  color: #fff;
+  border-radius: 44rpx;
+  font-size: 30rpx;
+  font-weight: 600;
+  border: none;
+  padding: 20rpx 0;
+  line-height: 1.6;
+}
+.btn-primary::after { border: none; }
+.btn-primary[disabled] { background: #9ce3bd; color: #fff; }
+
+.btn-outline {
+  background: #fff;
+  color: #07c160;
+  border: 2rpx solid #07c160;
+  border-radius: 44rpx;
+  font-size: 30rpx;
+  padding: 18rpx 0;
+  line-height: 1.6;
+}
+.btn-outline::after { border: none; }
+
+.btn-plain {
+  background: #f2f3f5;
+  color: #555;
+  border-radius: 40rpx;
+  font-size: 28rpx;
+  border: none;
+  padding: 14rpx 0;
+}
+.btn-plain::after { border: none; }
+
+/* ========== 标签 ========== */
+.tag {
+  display: inline-block;
+  font-size: 20rpx;
+  padding: 4rpx 14rpx;
+  border-radius: 8rpx;
+  margin-right: 10rpx;
+  background: #f0f9f4;
+  color: #07c160;
+}
+.tag-gray { background: #f2f3f5; color: #888; }
+.tag-orange { background: #fff4e6; color: #ff8f1f; }
+
+/* ========== 价格 ========== */
+.price {
+  color: #ff4d2e;
+  font-weight: 700;
+}
+.price-symbol { font-size: 22rpx; }
+.price-num { font-size: 34rpx; }
+
+/* ========== 状态条 ========== */
+.empty {
+  text-align: center;
+  color: #aaa;
+  padding: 120rpx 0;
+  font-size: 26rpx;
+}
+.empty-icon { font-size: 80rpx; display: block; margin-bottom: 20rpx; }
+.empty-line { display: block; line-height: 1.8; }
+
+/* 安全区 */
+.safe-bottom { padding-bottom: env(safe-area-inset-bottom); }

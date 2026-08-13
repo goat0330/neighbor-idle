@@ -1,0 +1,227 @@
+.wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: $z-index-modal;
+  background: $color-bg-page;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---- 搜索栏 ---- */
+.searchBar {
+  display: flex;
+  align-items: center;
+  padding: $space-sm $space-md;
+  background: $color-bg-card;
+  @include hairline-bottom;
+}
+
+.searchInput {
+  flex: 1;
+  height: 72rpx;
+  padding: 0 $space-md;
+  font-size: $font-size-base;
+  background: $color-bg-page;
+  border-radius: $radius-full;
+}
+
+.clearBtn {
+  width: 56rpx;
+  height: 56rpx;
+  @include flex-center;
+  color: $color-text-placeholder;
+  font-size: $font-size-md;
+}
+
+/* ---- 搜索联想列表 ---- */
+.suggestList {
+  max-height: 400rpx;
+  background: $color-bg-card;
+  @include hairline-bottom;
+}
+
+.suggestItem {
+  padding: $space-md;
+  @include hairline-bottom;
+}
+
+.suggestTitle {
+  font-size: $font-size-base;
+  color: $color-text-primary;
+  @include ellipsis;
+}
+
+.suggestAddr {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-top: $space-xs;
+  @include ellipsis;
+}
+
+/* ---- 地图区域 ---- */
+.mapArea {
+  flex: 1;
+  position: relative;
+}
+
+.map {
+  width: 100%;
+  height: 100%;
+}
+
+.centerMarker {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -100%);
+  pointer-events: none;
+}
+
+.markerDot {
+  width: 32rpx;
+  height: 32rpx;
+  background: $color-secondary;
+  border: 4rpx solid #fff;
+  border-radius: 50%;
+  box-shadow: $shadow-md;
+}
+
+/* ---- 底部信息面板 ---- */
+.bottomPanel {
+  background: $color-bg-card;
+  border-radius: $radius-xl $radius-xl 0 0;
+  box-shadow: $shadow-lg;
+  max-height: 600rpx;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.selectedInfo {
+  padding: $space-md $space-lg;
+  @include hairline-bottom;
+}
+
+.selectedName {
+  display: block;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.selectedAddr {
+  display: block;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-top: $space-xs;
+  @include ellipsis;
+}
+
+/* ---- 附近小区 ---- */
+.nearbyList {
+  flex: 1;
+  max-height: 320rpx;
+}
+
+.nearbyTitle {
+  padding: $space-sm $space-lg;
+  font-size: $font-size-sm;
+  color: $color-text-placeholder;
+  background: $color-bg-page;
+}
+
+.nearbyItem {
+  display: flex;
+  align-items: center;
+  padding: $space-md $space-lg;
+  @include hairline-bottom;
+}
+
+.nearbyInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.nearbyName {
+  display: block;
+  font-size: $font-size-base;
+  color: $color-text-primary;
+  @include ellipsis;
+}
+
+.nearbyAddr {
+  display: block;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-top: 4rpx;
+  @include ellipsis;
+}
+
+.nearbyDist {
+  flex-shrink: 0;
+  font-size: $font-size-sm;
+  color: $color-primary;
+  margin-left: $space-sm;
+}
+
+/* ---- 操作按钮 ---- */
+.actions {
+  display: flex;
+  gap: $space-sm;
+  padding: $space-md $space-lg;
+  @include safe-bottom;
+}
+
+.relocateBtn {
+  flex-shrink: 0;
+  height: 88rpx;
+  padding: 0 $space-lg;
+  @include flex-center;
+  font-size: $font-size-base;
+  color: $color-text-secondary;
+  background: $color-bg-page;
+  border-radius: $radius-full;
+}
+
+.confirmBtn {
+  flex: 1;
+  height: 88rpx;
+  @include flex-center;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: #fff;
+  background: $color-primary;
+  border-radius: $radius-full;
+}
+
+/* ---- 关闭按钮 ---- */
+.closeBtn {
+  position: absolute;
+  top: $space-lg;
+  right: $space-lg;
+  width: 64rpx;
+  height: 64rpx;
+  @include flex-center;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+  box-shadow: $shadow-sm;
+  z-index: $z-index-dropdown;
+}
+
+/* ---- 加载遮罩 ---- */
+.loadingMask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  @include flex-center;
+  background: rgba(255, 255, 255, 0.7);
+  font-size: $font-size-base;
+  color: $color-text-secondary;
+}

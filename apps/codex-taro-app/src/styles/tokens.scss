@@ -1,0 +1,69 @@
+/* ============================================
+ * Design Tokens — 设计令牌
+ * 可与 Figma Tokens 插件 / Tokens Studio 同步
+ * 修改这里 = 全局生效,组件级样式不受影响
+ * ============================================ */
+
+/* ---- 颜色 ---- */
+$color-primary: #07c160;           // 微信绿(品牌主色)
+$color-primary-light: #e8f8f0;     // 主色浅底
+$color-primary-dark: #06ad56;
+$color-secondary: #ff4d2e;         // 价格/急出(红)
+$color-accent: #ffa940;            // 收藏/星标(橙)
+
+$color-text-primary: #1a1a1a;
+$color-text-secondary: #666666;
+$color-text-placeholder: #999999;
+$color-text-disabled: #cccccc;
+
+$color-bg-page: #f5f6f8;
+$color-bg-card: #ffffff;
+$color-bg-mask: rgba(0, 0, 0, 0.5);
+
+$color-border: #ebedf0;
+$color-divider: #f2f3f5;
+
+/* ---- 间距(8px 网格体系) ---- */
+$space-xs: 8rpx;
+$space-sm: 16rpx;
+$space-md: 24rpx;
+$space-lg: 32rpx;
+$space-xl: 48rpx;
+$space-2xl: 64rpx;
+
+/* ---- 字号 ---- */
+$font-size-xs: 20rpx;
+$font-size-sm: 24rpx;
+$font-size-base: 28rpx;
+$font-size-md: 32rpx;
+$font-size-lg: 36rpx;
+$font-size-xl: 40rpx;
+$font-size-2xl: 48rpx;
+
+/* ---- 字重 ---- */
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+/* ---- 圆角 ---- */
+$radius-sm: 8rpx;
+$radius-md: 12rpx;
+$radius-lg: 16rpx;
+$radius-xl: 24rpx;
+$radius-full: 999rpx;
+
+/* ---- 阴影 ---- */
+$shadow-sm: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+$shadow-md: 0 4rpx 16rpx rgba(0, 0, 0, 0.08);
+$shadow-lg: 0 8rpx 32rpx rgba(0, 0, 0, 0.12);
+
+/* ---- 过渡 ---- */
+$transition-fast: 0.15s ease;
+$transition-base: 0.25s ease;
+
+/* ---- z-index 层级 ---- */
+$z-index-map: 100;
+$z-index-dropdown: 200;
+$z-index-modal: 1000;
+$z-index-toast: 2000;

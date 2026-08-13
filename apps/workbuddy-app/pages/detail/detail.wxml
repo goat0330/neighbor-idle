@@ -1,0 +1,96 @@
+<view class="page" wx:if="{{item}}">
+  <!-- 图片轮播 -->
+  <swiper class="gallery" indicator-dots="{{images.length > 1}}" circular="{{images.length > 1}}" indicator-color="rgba(255,255,255,0.5)" indicator-active-color="#07c160">
+    <swiper-item wx:for="{{images}}" wx:key="*this">
+      <image class="gallery-img" src="{{item}}" mode="aspectFill" data-index="{{index}}" bindtap="previewImage" />
+    </swiper-item>
+  </swiper>
+
+  <!-- 状态横幅 -->
+  <view class="status-bar" wx:if="{{item.status !== 'on_sale'}}">
+    当前状态:{{item.status === 'sold' ? '已售出' : item.status === 'reserved' ? '已预约' : item.status === 'pending' ? '审核中' : '已下架'}}
+  </view>
+
+  <!-- 价格与标题 -->
+  <view class="card info-card">
+    <view class="price-row">
+      <text class="price-big">{{item.price === 0 ? '免费送' : '¥' + item.price}}</text>
+      <text class="ori-price" wx:if="{{item.originalPrice > item.price}}">原价 ¥{{item.originalPrice}}</text>
+      <view class="fav-btn {{isFavorite ? 'on' : ''}}" bindtap="toggleFavorite">
+        <text class="fav-icon">{{isFavorite ? '♥' : '♡'}}</text>
+        <text>{{isFavorite ? '已收藏' : '收藏'}}</text>
+      </view>
+    </view>
+    <view class="title">{{item.title}}</view>
+    <view class="tags">
+      <text class="tag" wx:if="{{item.conditionName}}">{{item.conditionName}}</text>
+      <text class="tag tag-gray">{{item.categoryName}}</text>
+      <text class="tag tag-orange" wx:if="{{item.distanceText}}">距你{{item.distanceText}}</text>
+    </view>
+    <view class="meta-line">
+      <text>{{item.timeText}}</text>
+      <text>浏览 {{item.views}}</text>
+      <text>收藏 {{item.favoritesCount || 0}}</text>
+    </view>
+  </view>
+
+  <!-- 卖家卡片 -->
+  <view class="card seller-card">
+    <view class="seller-info">
+      <image class="avatar" src="{{item.seller.avatarUrl || '/assets/default-avatar.png'}}" mode="aspectFill" />
+      <view class="seller-main">
+        <view class="seller-name">
+          {{item.seller.nickname}}
+          <text class="credit">信用 {{item.seller.creditScore}}</text>
+        </view>
+        <view class="seller-comm">{{item.seller.communityName || '未认证小区'}}{{item.seller.building ? ' · ' + item.seller.building : ''}}</view>
+      </view>
+      <view class="phone-btn" wx:if="{{item.phone}}" bindtap="copyPhone">打电话</view>
+    </view>
+    <view class="loc-line" wx:if="{{item.location}}">📍 交易地点:{{item.location}}</view>
+  </view>
+
+  <!-- 描述 -->
+  <view class="card desc-card" wx:if="{{item.desc}}">
+    <view class="card-title">物品描述</view>
+    <view class="desc-text">{{item.desc}}</view>
+  </view>
+
+  <!-- 卖家操作区 -->
+  <view class="card owner-card" wx:if="{{isMine}}">
+    <view class="card-title">我发布的物品</view>
+    <view class="owner-btns">
+      <button class="btn-plain mini" bindtap="goEdit">编辑</button>
+      <button class="btn-plain mini" wx:if="{{item.status === 'on_sale'}}" data-status="off" bindtap="changeStatus">下架</button>
+      <button class="btn-plain mini" wx:if="{{item.status === 'off'}}" data-status="on_sale" bindtap="changeStatus">重新上架</button>
+      <button class="btn-plain mini" wx:if="{{item.status === 'on_sale' || item.status === 'reserved'}}" data-status="sold" bindtap="changeStatus">标记已售出</button>
+      <button class="btn-plain mini danger" bindtap="deleteItem">删除</button>
+    </view>
+  </view>
+
+  <view style="height: 140rpx;"></view>
+
+  <!-- 底部操作栏 -->
+  <view class="bottom-bar safe-bottom" wx:if="{{!isMine}}">
+    <button class="btn-outline msg-btn" bindtap="openMsg">💬 留言询价</button>
+    <button class="btn-primary" open-type="share">分享给邻居</button>
+  </view>
+  <view class="bottom-bar safe-bottom" wx:else>
+    <button class="btn-primary" open-type="share">分享给邻居</button>
+  </view>
+
+  <!-- 留言弹窗 -->
+  <view class="mask" wx:if="{{showMsg}}" bindtap="closeMsg">
+    <view class="msg-dialog" catchtap="noop">
+      <view class="dialog-title">留言给 {{item.seller.nickname}}</view>
+      <textarea class="msg-input" placeholder="如:还在吗?可以便宜点吗?晚上方便自提吗?" maxlength="200" value="{{msgContent}}" bindinput="onMsgInput" auto-height />
+      <view class="dialog-tip">留言将推送给卖家,卖家可在「消息」中查看</view>
+      <view class="dialog-btns">
+        <button class="btn-plain" bindtap="closeMsg">取消</button>
+        <button class="btn-primary" bindtap="sendMsg" disabled="{{sending}}">发送</button>
+      </view>
+    </view>
+  </view>
+</view>
+
+<view class="empty" wx:if="{{!item}}">加载中...</view>

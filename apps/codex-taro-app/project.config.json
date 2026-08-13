@@ -1,0 +1,21 @@
+{
+  "description": "邻里二手小程序 Codex Taro 版本",
+  "packOptions": {
+    "ignore": []
+  },
+  "setting": {
+    "urlCheck": false,
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "minified": true,
+    "compileHotReLoad": true,
+    "lazyloadPlaceholderEnable": false
+  },
+  "compileType": "miniprogram",
+  "libVersion": "3.7.3",
+  "appid": "touristappid",
+  "projectname": "neighbor-secondhand-codex",
+  "miniprogramRoot": "dist/"
+}
+

@@ -1,0 +1,70 @@
+page {
+  background: #f7f5ef;
+  color: #173b34;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+view,
+text,
+button,
+input,
+textarea {
+  box-sizing: border-box;
+}
+
+button::after {
+  border: 0;
+}
+
+.page-shell {
+  min-height: 100vh;
+  padding: 32px 28px 48px;
+}
+
+.eyebrow {
+  color: #7d8b82;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+
+.page-title {
+  margin-top: 12px;
+  color: #173b34;
+  font-size: 54px;
+  font-weight: 800;
+  letter-spacing: -2px;
+}
+
+.muted {
+  color: #77827b;
+}
+
+.button-primary {
+  border-radius: 18px;
+  background: #173b34;
+  color: #fffdf8;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 92px;
+}
+
+.button-secondary {
+  border: 1px solid #173b34;
+  border-radius: 18px;
+  background: transparent;
+  color: #173b34;
+  font-size: 28px;
+  line-height: 84px;
+}
+
+.fade-in {
+  animation: fade-in 360ms ease both;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+

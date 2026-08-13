@@ -1,0 +1,50 @@
+<view class="page">
+  <!-- 搜索框 -->
+  <view class="search-bar">
+    <view class="search-box">
+      <text class="search-icon">🔍</text>
+      <input
+        class="search-input"
+        placeholder="搜索闲置物品,如:婴儿床 冰箱"
+        value="{{keyword}}"
+        bindinput="onInput"
+        confirm-type="search"
+        bindconfirm="doSearch"
+        focus
+      />
+    </view>
+    <text class="search-btn" bindtap="doSearch">搜索</text>
+  </view>
+
+  <!-- 历史 -->
+  <view class="history" wx:if="{{history.length > 0 && !searched}}">
+    <view class="history-head">
+      <text class="history-title">搜索历史</text>
+      <text class="clear" bindtap="clearHistory">清空</text>
+    </view>
+    <view class="history-tags">
+      <text class="history-tag" wx:for="{{history}}" wx:key="*this" data-kw="{{item}}" bindtap="useHistory">{{item}}</text>
+    </view>
+  </view>
+
+  <!-- 结果 -->
+  <view class="result-list" wx:if="{{searched}}">
+    <view class="result-item" wx:for="{{list}}" wx:key="_id" data-id="{{item._id}}" bindtap="goDetail">
+      <image class="result-img" src="{{item.cover}}" mode="aspectFill" lazy-load />
+      <view class="result-main">
+        <view class="result-title">{{item.title}}</view>
+        <view class="result-meta">
+          <text class="price">{{item.priceText}}</text>
+          <text class="meta">{{item.distanceText || item.seller.communityName || ''}}</text>
+        </view>
+        <view class="result-time">{{item.timeText}} · {{item.seller.nickname}}</view>
+      </view>
+    </view>
+
+    <view class="empty" wx:if="{{!loading && list.length === 0}}">
+      <text class="empty-icon">🔍</text>
+      <text class="empty-line">没有找到相关物品</text>
+      <text class="empty-line">换个关键词试试,或去发布求购</text>
+    </view>
+  </view>
+</view>

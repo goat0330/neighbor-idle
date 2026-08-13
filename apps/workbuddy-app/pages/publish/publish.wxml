@@ -1,0 +1,98 @@
+<view class="page">
+  <!-- 图片上传 -->
+  <view class="section">
+    <view class="section-title">实物图片 <text class="required">*</text>
+      <text class="count">{{images.length}}/9</text>
+    </view>
+    <view class="img-grid">
+      <view class="img-item" wx:for="{{images}}" wx:key="*this">
+        <image src="{{item}}" mode="aspectFill" data-index="{{index}}" bindtap="previewImage" />
+        <view class="img-del" data-index="{{index}}" catchtap="removeImage">×</view>
+      </view>
+      <view class="img-add" wx:if="{{images.length < 9}}" bindtap="chooseImage">
+        <text class="add-icon">＋</text>
+        <text class="add-text">添加图片</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 基本信息 -->
+  <view class="section">
+    <view class="form-item">
+      <text class="label">标题 <text class="required">*</text></text>
+      <input class="input" placeholder="如:全新婴儿床,九成新转让" maxlength="30" value="{{form.title}}" bindinput="onTitle" />
+    </view>
+    <view class="form-item">
+      <text class="label">描述</text>
+      <textarea class="textarea" placeholder="描述物品成色、购买时间、转让原因等,越详细越容易出手" maxlength="500" value="{{form.desc}}" bindinput="onDesc" auto-height />
+    </view>
+  </view>
+
+  <!-- 价格 -->
+  <view class="section">
+    <view class="form-item">
+      <text class="label">价格 <text class="required">*</text></text>
+      <view class="price-wrap">
+        <text class="rmb">¥</text>
+        <input class="input price-input" type="digit" placeholder="0" value="{{form.price}}" bindinput="onPrice" disabled="{{form.free}}" />
+      </view>
+    </view>
+    <view class="form-item" wx:if="{{!form.free}}">
+      <text class="label">原价</text>
+      <view class="price-wrap">
+        <text class="rmb">¥</text>
+        <input class="input price-input" type="digit" placeholder="选填" value="{{form.originalPrice}}" bindinput="onOriginalPrice" />
+      </view>
+    </view>
+    <view class="form-item switch-item">
+      <text class="label">免费送</text>
+      <switch color="#07c160" checked="{{form.free}}" bindchange="onFreeChange" />
+    </view>
+  </view>
+
+  <!-- 成色与分类 -->
+  <view class="section">
+    <view class="form-item">
+      <text class="label">成色 <text class="required">*</text></text>
+      <picker range="{{conditions}}" range-key="name" value="{{conditionIndex}}" bindchange="onConditionChange">
+        <view class="picker-value">{{conditions[conditionIndex].name}} ▾</view>
+      </picker>
+    </view>
+    <view class="form-item">
+      <text class="label">分类 <text class="required">*</text></text>
+      <picker range="{{categories}}" range-key="name" value="{{categoryIndex}}" bindchange="onCategoryChange">
+        <view class="picker-value">{{categories[categoryIndex].name}} ▾</view>
+      </picker>
+    </view>
+  </view>
+
+  <!-- 位置 -->
+  <view class="section">
+    <view class="form-item">
+      <text class="label">所在小区 <text class="required">*</text></text>
+      <picker range="{{communities}}" range-key="name" value="{{communityIndex}}" bindchange="onCommunityChange">
+        <view class="picker-value {{form.communityName ? '' : 'placeholder'}}">
+          {{form.communityName || '请选择你所在的小区'}} ▾
+        </view>
+      </picker>
+    </view>
+    <view class="form-item" wx:if="{{form.location}}">
+      <text class="label">交易地点</text>
+      <view class="loc-value" bindtap="chooseLocation">{{form.location}} <text class="loc-change">修改</text></view>
+    </view>
+    <view class="form-item" wx:else>
+      <text class="label">交易地点</text>
+      <view class="loc-value placeholder" bindtap="chooseLocation">选填,点击选择详细交易地点</view>
+    </view>
+    <view class="form-item">
+      <text class="label">联系电话</text>
+      <input class="input" type="number" placeholder="选填,方便邻居联系你" maxlength="11" value="{{form.phone}}" bindinput="onPhone" />
+    </view>
+  </view>
+
+  <!-- 提交 -->
+  <view class="submit-wrap safe-bottom">
+    <button class="btn-primary" bindtap="submit" disabled="{{submitting}}">提交发布</button>
+    <view class="tip">发布即代表同意仅用于邻里之间交换,禁止违禁品交易</view>
+  </view>
+</view>

@@ -1,0 +1,32 @@
+<view class="page">
+  <view class="head-bar">
+    <text class="head-title">消息</text>
+    <text class="read-all" bindtap="readAll">全部已读</text>
+  </view>
+
+  <view class="msg-list" wx:if="{{list.length > 0}}">
+    <view class="msg-item {{item.read ? '' : 'unread'}}" wx:for="{{list}}" wx:key="_id" data-index="{{index}}" bindtap="tapMessage">
+      <image class="msg-avatar" src="{{item.fromAvatar || (item.type === 'audit' ? '/assets/system-icon.png' : '/assets/default-avatar.png')}}" mode="aspectFill" />
+      <view class="msg-main">
+        <view class="msg-head">
+          <text class="msg-name">{{item.type === 'audit' ? '系统通知' : item.fromNickname}}</text>
+          <text class="msg-time">{{item.timeText}}</text>
+        </view>
+        <view class="msg-content">{{item.title || item.content}}</view>
+        <view class="msg-extra" wx:if="{{item.itemTitle}}">关于:{{item.itemTitle}}</view>
+      </view>
+      <view class="dot" wx:if="{{!item.read}}"></view>
+    </view>
+  </view>
+
+  <view class="empty" wx:if="{{!loading && list.length === 0}}">
+    <text class="empty-icon">🔔</text>
+    <text class="empty-line">暂无消息</text>
+    <text class="empty-line">买家留言和系统通知会出现在这里</text>
+  </view>
+
+  <view class="load-more" wx:if="{{list.length > 0}}">
+    <text wx:if="{{loading}}">加载中...</text>
+    <text wx:elif="{{!hasMore}}">— 已经到底啦 —</text>
+  </view>
+</view>

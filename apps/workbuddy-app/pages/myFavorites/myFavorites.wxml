@@ -1,0 +1,20 @@
+<view class="page">
+  <view class="list" wx:if="{{list.length > 0}}">
+    <view class="row" wx:for="{{list}}" wx:key="_id" data-id="{{item._id}}" bindtap="goDetail">
+      <image class="row-img" src="{{item.cover}}" mode="aspectFill" lazy-load />
+      <view class="row-main">
+        <view class="row-title">{{item.title}}</view>
+        <view class="row-tags">
+          <text class="price">{{item.priceText}}</text>
+          <text class="row-meta">{{item.distanceText || item.seller.communityName || ''}} · {{item.timeText}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="empty" wx:if="{{!loading && list.length === 0}}">
+    <text class="empty-icon">❤️</text>
+    <text class="empty-line">还没有收藏</text>
+    <text class="empty-line">看到喜欢的物品点击收藏吧</text>
+  </view>
+</view>

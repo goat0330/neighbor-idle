@@ -1,0 +1,54 @@
+/* packageAdmin/pages/auditDetail/auditDetail.wxss */
+.page { padding-bottom: 80rpx; }
+
+.gallery { width: 100%; height: 600rpx; background: #f0f1f3; }
+.gallery-img { width: 100%; height: 600rpx; }
+
+.card {
+  background: #fff;
+  border-radius: 16rpx;
+  margin: 20rpx 24rpx;
+  padding: 24rpx;
+}
+.title { font-size: 34rpx; font-weight: 600; line-height: 1.5; }
+.tags { margin-top: 14rpx; }
+.price-line { display: flex; align-items: center; margin-top: 16rpx; }
+.price-big { color: #ff4d2e; font-size: 40rpx; font-weight: 700; }
+.ori { font-size: 24rpx; color: #b0b3b8; text-decoration: line-through; margin-left: 16rpx; }
+.desc {
+  margin-top: 16rpx;
+  font-size: 27rpx;
+  color: #444;
+  line-height: 1.7;
+  background: #f7f8fa;
+  border-radius: 12rpx;
+  padding: 20rpx;
+}
+.seller-line { font-size: 25rpx; color: #666; margin-top: 12rpx; }
+
+.card-title { font-size: 28rpx; font-weight: 600; margin-bottom: 12rpx; }
+.reason-text { font-size: 26rpx; color: #ff4d2e; }
+
+.reason-input {
+  width: 100%;
+  min-height: 120rpx;
+  background: #f7f8fa;
+  border-radius: 12rpx;
+  padding: 20rpx;
+  font-size: 27rpx;
+  box-sizing: border-box;
+}
+
+.op-btns {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  background: #fff;
+  padding: 16rpx 24rpx;
+  display: flex;
+  gap: 20rpx;
+  box-shadow: 0 -4rpx 16rpx rgba(0, 0, 0, 0.05);
+}
+.op-btns .btn-primary { flex: 1.4; }
+.btn-outline.reject { flex: 1; color: #ff4d2e; border-color: #ff4d2e; }
+
+.done-tip { text-align: center; color: #9aa0a6; font-size: 26rpx; margin-top: 60rpx; }

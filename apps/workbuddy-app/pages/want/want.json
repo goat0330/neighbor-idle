@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "求购广场",
+  "enablePullDownRefresh": true,
+  "onReachBottomDistance": 100,
+  "usingComponents": {}
+}

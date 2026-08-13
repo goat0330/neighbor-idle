@@ -1,0 +1,12 @@
+{
+  "name": "neighbor-secondhand",
+  "private": true,
+  "version": "0.1.0",
+  "description": "邻里二手闲置小程序双版本协作仓库",
+  "scripts": {
+    "check:codex": "npm --prefix apps/codex-taro-app run typecheck",
+    "build:codex": "npm --prefix apps/codex-taro-app run build:weapp",
+    "dev:codex": "npm --prefix apps/codex-taro-app run dev:weapp"
+  }
+}
+

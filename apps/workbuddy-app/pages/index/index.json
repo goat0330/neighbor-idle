@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "邻里二手",
+  "enablePullDownRefresh": true,
+  "onReachBottomDistance": 100,
+  "usingComponents": {}
+}

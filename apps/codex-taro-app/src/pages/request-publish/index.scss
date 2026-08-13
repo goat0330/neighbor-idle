@@ -1,0 +1,11 @@
+.request-intro { display: block; margin-top: 16px; color: #718077; font-size: 26px; }
+.request-form { margin-top: 28px; padding: 24px 22px 30px; border: 1px solid #e7e3d9; border-radius: 28px; background: #fffdf8; }
+.request-form .field-label { display: block; margin-bottom: 10px; }
+.request-form input, .request-form .picker-value, .request-form .large-textarea { width: 100%; border: 1px solid #dcded6; border-radius: 18px; background: #fffdf8; color: #173b34; font-size: 27px; }
+.request-form input { height: 82px; padding: 0 20px; }
+.request-form .picker-value { display: flex; align-items: center; justify-content: space-between; height: 82px; padding: 0 20px; }
+.request-form .picker-value text { color: #eb8055; }
+.request-form .large-textarea { min-height: 240px; padding: 18px 20px; line-height: 1.55; }
+.request-form .privacy-note { display: flex; gap: 10px; margin: 26px 0 24px; color: #6f8374; font-size: 21px; }
+.request-form .privacy-note text:first-child { color: #74ac78; }
+

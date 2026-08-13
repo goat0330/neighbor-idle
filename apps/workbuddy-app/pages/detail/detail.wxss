@@ -1,0 +1,114 @@
+/* pages/detail/detail.wxss */
+.page { padding-bottom: 40rpx; }
+
+.gallery { width: 100%; height: 750rpx; background: #f0f1f3; }
+.gallery-img { width: 100%; height: 750rpx; }
+
+.status-bar {
+  background: #fff7e6;
+  color: #b76e00;
+  font-size: 26rpx;
+  text-align: center;
+  padding: 14rpx 0;
+}
+
+.card {
+  background: #fff;
+  border-radius: 16rpx;
+  margin: 20rpx 24rpx;
+  padding: 24rpx;
+}
+
+/* 信息卡 */
+.price-row { display: flex; align-items: center; }
+.price-big { color: #ff4d2e; font-size: 44rpx; font-weight: 700; }
+.ori-price { color: #b0b3b8; font-size: 24rpx; text-decoration: line-through; margin-left: 16rpx; }
+.fav-btn { margin-left: auto; display: flex; flex-direction: column; align-items: center; font-size: 22rpx; color: #9aa0a6; }
+.fav-btn.on { color: #ff4d2e; }
+.fav-icon { font-size: 40rpx; line-height: 1; }
+.title { font-size: 34rpx; font-weight: 600; margin-top: 16rpx; line-height: 1.5; }
+.tags { margin-top: 16rpx; }
+.meta-line {
+  margin-top: 20rpx;
+  display: flex;
+  gap: 24rpx;
+  font-size: 22rpx;
+  color: #9aa0a6;
+}
+
+/* 卖家卡 */
+.seller-info { display: flex; align-items: center; }
+.avatar { width: 88rpx; height: 88rpx; border-radius: 50%; background: #f0f1f3; }
+.seller-main { flex: 1; margin-left: 20rpx; }
+.seller-name { font-size: 30rpx; font-weight: 600; }
+.credit {
+  font-size: 22rpx;
+  color: #07c160;
+  background: #f0f9f4;
+  padding: 2rpx 12rpx;
+  border-radius: 8rpx;
+  margin-left: 12rpx;
+  font-weight: 400;
+}
+.seller-comm { font-size: 24rpx; color: #9aa0a6; margin-top: 6rpx; }
+.phone-btn {
+  background: #07c160;
+  color: #fff;
+  font-size: 26rpx;
+  padding: 12rpx 28rpx;
+  border-radius: 32rpx;
+}
+.loc-line { margin-top: 20rpx; font-size: 25rpx; color: #666; }
+
+/* 描述 */
+.card-title { font-size: 30rpx; font-weight: 600; margin-bottom: 16rpx; }
+.desc-text { font-size: 27rpx; color: #444; line-height: 1.7; }
+
+/* 卖家操作 */
+.owner-btns { display: flex; flex-wrap: wrap; gap: 16rpx; }
+.btn-plain.mini { width: 180rpx; padding: 10rpx 0; font-size: 26rpx; }
+.btn-plain.danger { color: #ff4d2e; }
+
+/* 底部栏 */
+.bottom-bar {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  background: #fff;
+  padding: 16rpx 24rpx;
+  display: flex;
+  gap: 20rpx;
+  box-shadow: 0 -4rpx 16rpx rgba(0, 0, 0, 0.05);
+  z-index: 99;
+}
+.bottom-bar .btn-primary { flex: 1.4; }
+.msg-btn { flex: 1; }
+
+/* 弹窗 */
+.mask {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  display: flex;
+  align-items: flex-end;
+}
+.msg-dialog {
+  width: 100%;
+  background: #fff;
+  border-radius: 24rpx 24rpx 0 0;
+  padding: 36rpx 32rpx calc(36rpx + env(safe-area-inset-bottom));
+}
+.dialog-title { font-size: 32rpx; font-weight: 600; }
+.msg-input {
+  width: 100%;
+  min-height: 160rpx;
+  background: #f7f8fa;
+  border-radius: 16rpx;
+  padding: 20rpx;
+  margin-top: 24rpx;
+  font-size: 28rpx;
+  box-sizing: border-box;
+}
+.dialog-tip { font-size: 22rpx; color: #b0b3b8; margin-top: 16rpx; }
+.dialog-btns { display: flex; gap: 20rpx; margin-top: 24rpx; }
+.dialog-btns button { flex: 1; }

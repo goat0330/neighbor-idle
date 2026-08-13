@@ -1,0 +1,30 @@
+.chat-page { display: flex; flex-direction: column; height: 100vh; background: #f7f5ef; }
+.trade-strip { display: flex; justify-content: center; gap: 14px; padding: 18px 20px; background: #e9efdf; color: #89958c; font-size: 21px; }
+.trade-strip-active { color: #173b34; font-weight: 800; }
+.chat-messages { flex: 1; padding: 18px 24px; }
+.chat-safety { margin: 0 auto 20px; padding: 12px 18px; border-radius: 16px; background: #f5e9dc; color: #8a6a58; font-size: 20px; text-align: center; }
+.bubble-row { display: flex; margin-bottom: 16px; }
+.bubble-row-mine { justify-content: flex-end; }
+.bubble { max-width: 72%; padding: 18px 20px; border-radius: 22px; font-size: 26px; line-height: 1.5; }
+.bubble-peer { border-bottom-left-radius: 6px; background: #fffdf8; color: #173b34; }
+.bubble-mine { border-bottom-right-radius: 6px; background: #173b34; color: #fffdf8; }
+.contact-panel { margin: 28px 0 120px; padding: 22px; border: 1px solid #dfe4d8; border-radius: 22px; background: #fffdf8; }
+.contact-approved { background: #e8f1e2; }
+.contact-title, .contact-copy, .contact-warning { display: block; }
+.contact-title { color: #173b34; font-size: 28px; font-weight: 800; }
+.contact-copy { margin-top: 8px; color: #708077; font-size: 23px; line-height: 1.5; }
+.contact-warning { margin-top: 12px; color: #96705d; font-size: 19px; }
+.contact-button { margin-top: 18px; border-radius: 14px; background: #173b34; color: #fff; font-size: 24px; line-height: 72px; }
+.contact-button-demo { background: #eb8055; }
+.quick-actions { display: flex; gap: 12px; overflow-x: auto; padding: 12px 22px; background: #fffdf8; white-space: nowrap; }
+.quick-actions text { padding: 10px 16px; border: 1px solid #cfd7cf; border-radius: 999px; color: #557064; font-size: 21px; }
+.chat-composer { display: flex; gap: 12px; padding: 14px 20px 24px; background: #fffdf8; }
+.chat-composer input { flex: 1; height: 76px; padding: 0 18px; border-radius: 18px; background: #f1f1eb; font-size: 25px; }
+.chat-composer button { width: 130px; border-radius: 18px; background: #173b34; color: #fff; font-size: 24px; line-height: 76px; }
+.contact-modal-mask { position: fixed; z-index: 20; inset: 0; display: flex; align-items: flex-end; background: rgba(18, 42, 35, .44); }
+.contact-modal { width: 100%; padding: 34px 28px 48px; border-radius: 30px 30px 0 0; background: #fffdf8; }
+.contact-modal-title { display: block; color: #173b34; font-size: 32px; font-weight: 800; }
+.contact-modal input { height: 82px; margin-top: 22px; padding: 0 20px; border: 1px solid #d9ddd5; border-radius: 18px; background: #f7f5ef; font-size: 25px; }
+.contact-modal-actions { display: flex; gap: 16px; margin-top: 24px; }
+.contact-modal-actions button { flex: 1; border-radius: 18px; font-size: 25px; }
+.contact-modal-actions .confirm { color: #fff; background: #173b34; }

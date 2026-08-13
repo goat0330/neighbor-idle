@@ -1,0 +1,52 @@
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4rpx;
+  border-radius: $radius-full;
+  white-space: nowrap;
+}
+
+/* ---- 尺寸 ---- */
+.small {
+  padding: 2rpx $space-sm;
+  font-size: $font-size-xs;
+}
+
+.medium {
+  padding: 4rpx $space-sm;
+  font-size: $font-size-sm;
+}
+
+.large {
+  padding: $space-xs $space-md;
+  font-size: $font-size-base;
+}
+
+/* ---- 变体 ---- */
+.default {
+  background: $color-divider;
+  color: $color-text-secondary;
+
+  .icon {
+    opacity: 0.7;
+  }
+}
+
+.primary {
+  background: $color-primary-light;
+  color: $color-primary;
+}
+
+.danger {
+  background: rgba(255, 77, 46, 0.08);
+  color: $color-secondary;
+}
+
+/* ---- 子元素 ---- */
+.icon {
+  line-height: 1;
+}
+
+.text {
+  line-height: 1.2;
+}

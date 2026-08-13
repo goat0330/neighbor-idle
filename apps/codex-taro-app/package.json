@@ -1,0 +1,35 @@
+{
+  "name": "codex-taro-app",
+  "version": "0.1.0",
+  "private": true,
+  "description": "邻里二手小程序 React + TypeScript + Vite + Taro 版本",
+  "scripts": {
+    "dev:weapp": "taro build --type weapp --watch",
+    "build:weapp": "taro build --type weapp",
+    "build:h5": "taro build --type h5",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@tarojs/components": "4.2.1",
+    "@tarojs/react": "4.2.1",
+    "@tarojs/runtime": "4.2.1",
+    "@tarojs/taro": "4.2.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@tarojs/cli": "4.2.1",
+    "@tarojs/helper": "4.2.1",
+    "@tarojs/plugin-framework-react": "4.2.1",
+    "@tarojs/plugin-platform-weapp": "4.2.1",
+    "@tarojs/vite-runner": "4.2.1",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@types/node": "^22.10.7",
+    "@babel/plugin-proposal-decorators": "^7.25.9",
+    "@vitejs/plugin-react": "^4.3.4",
+    "sass": "^1.83.4",
+    "typescript": "^5.7.3",
+    "vite": "^4.5.9"
+  }
+}

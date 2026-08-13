@@ -1,0 +1,25 @@
+/* pages/publishWant/publishWant.wxss */
+.page { padding: 24rpx 24rpx 60rpx; }
+
+.section {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+}
+.section-title { font-size: 30rpx; font-weight: 600; margin-bottom: 8rpx; }
+
+.form-item {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 0;
+  border-bottom: 2rpx solid #f2f3f5;
+}
+.form-item:last-child { border-bottom: none; }
+.label { width: 170rpx; font-size: 28rpx; color: #333; flex-shrink: 0; }
+.required { color: #ff4d2e; }
+.input { flex: 1; font-size: 28rpx; }
+.textarea { flex: 1; font-size: 28rpx; min-height: 120rpx; line-height: 1.6; }
+.picker-value { flex: 1; font-size: 28rpx; color: #222; }
+
+.submit-wrap { padding: 40rpx 0; }
+.tip { text-align: center; font-size: 22rpx; color: #b0b3b8; margin-top: 16rpx; }

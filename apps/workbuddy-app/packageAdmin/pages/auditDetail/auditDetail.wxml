@@ -1,0 +1,46 @@
+<view class="page" wx:if="{{item}}">
+  <!-- 图片 -->
+  <swiper class="gallery" indicator-dots="{{images.length > 1}}" circular="{{images.length > 1}}">
+    <swiper-item wx:for="{{images}}" wx:key="*this">
+      <image class="gallery-img" src="{{item}}" mode="aspectFill" data-index="{{index}}" bindtap="previewImage" />
+    </swiper-item>
+  </swiper>
+
+  <!-- 信息 -->
+  <view class="card">
+    <view class="title">{{item.title}}</view>
+    <view class="tags">
+      <text class="tag">{{item.categoryName}}</text>
+      <text class="tag tag-gray">{{item.conditionName}}</text>
+    </view>
+    <view class="price-line">
+      <text class="price-big">{{item.price === 0 ? '免费送' : '¥' + item.price}}</text>
+      <text class="ori" wx:if="{{item.originalPrice}}">原价 ¥{{item.originalPrice}}</text>
+    </view>
+    <view class="desc" wx:if="{{item.desc}}">{{item.desc}}</view>
+    <view class="seller-line">卖家:{{item.seller.nickname}} · {{item.seller.communityName || '未认证'}} · 信用{{item.seller.creditScore}}</view>
+    <view class="seller-line" wx:if="{{item.phone}}">电话:{{item.phone}}</view>
+    <view class="seller-line" wx:if="{{item.location}}">地点:{{item.location}}</view>
+    <view class="seller-line">发布时间:{{item.timeText}}</view>
+  </view>
+
+  <!-- 驳回原因 -->
+  <view class="card" wx:if="{{item.status === 'off' && item.auditReason}}">
+    <view class="card-title">历史驳回原因</view>
+    <view class="reason-text">{{item.auditReason}}</view>
+  </view>
+
+  <!-- 审核操作 -->
+  <view class="op-area" wx:if="{{item.status === 'pending'}}">
+    <view class="card reason-card">
+      <view class="card-title">驳回原因(驳回时必填)</view>
+      <textarea class="reason-input" placeholder="如:标题不清晰 / 疑似违禁品 / 图片不符" value="{{reason}}" bindinput="onReason" maxlength="100" />
+    </view>
+    <view class="op-btns safe-bottom">
+      <button class="btn-outline reject" data-pass="0" bindtap="audit" disabled="{{submitting}}">驳回</button>
+      <button class="btn-primary" data-pass="1" bindtap="audit" disabled="{{submitting}}">通过并上架</button>
+    </view>
+  </view>
+
+  <view class="done-tip" wx:if="{{item.status !== 'pending'}}">该商品已处理完毕</view>
+</view>

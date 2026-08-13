@@ -1,0 +1,90 @@
+<view class="page">
+  <!-- 用户卡片 -->
+  <view class="user-card">
+    <image class="avatar" src="{{user.avatarUrl || '/assets/default-avatar.png'}}" mode="aspectFill" bindtap="goLogin" />
+    <view class="user-main" bindtap="goLogin">
+      <view class="nickname">{{user ? user.nickname : '点击登录'}}</view>
+      <view class="community" wx:if="{{user && user.communityName}}">
+        {{user.communityName}}{{user.building ? ' · ' + user.building : ''}}
+      </view>
+      <view class="certify" wx:elif="{{user}}" bindtap="goCertify">去认证小区 ＞</view>
+      <view class="certify" wx:else>登录后开启邻里交易 ＞</view>
+    </view>
+    <view class="credit-box" wx:if="{{user}}">
+      <text class="credit-num">{{user.creditScore}}</text>
+      <text class="credit-label">信用分</text>
+    </view>
+  </view>
+
+  <!-- 数据统计 -->
+  <view class="stat-card card" wx:if="{{user}}">
+    <view class="stat-item" bindtap="goMyItems">
+      <text class="stat-num">{{stats.publish}}</text>
+      <text class="stat-label">我的发布</text>
+    </view>
+    <view class="stat-item" bindtap="goMyFavorites">
+      <text class="stat-num">{{stats.favorite}}</text>
+      <text class="stat-label">收藏</text>
+    </view>
+    <view class="stat-item" bindtap="goMyWants">
+      <text class="stat-num">{{stats.want}}</text>
+      <text class="stat-label">求购</text>
+    </view>
+  </view>
+
+  <!-- 菜单 -->
+  <view class="menu card">
+    <view class="menu-item" bindtap="goPublish">
+      <text class="menu-icon">📤</text>
+      <text class="menu-text">发布闲置</text>
+      <text class="menu-arrow">＞</text>
+    </view>
+    <view class="menu-item" bindtap="goMyItems">
+      <text class="menu-icon">📦</text>
+      <text class="menu-text">我的发布</text>
+      <text class="menu-arrow">＞</text>
+    </view>
+    <view class="menu-item" bindtap="goMyFavorites">
+      <text class="menu-icon">❤️</text>
+      <text class="menu-text">我的收藏</text>
+      <text class="menu-arrow">＞</text>
+    </view>
+    <view class="menu-item" bindtap="goMyWants">
+      <text class="menu-icon">🛒</text>
+      <text class="menu-text">我的求购</text>
+      <text class="menu-arrow">＞</text>
+    </view>
+    <view class="menu-item" bindtap="goMessage">
+      <text class="menu-icon">🔔</text>
+      <text class="menu-text">消息中心</text>
+      <text class="menu-badge" wx:if="{{unreadCount > 0}}">{{unreadCount > 99 ? '99+' : unreadCount}}</text>
+      <text class="menu-arrow">＞</text>
+    </view>
+  </view>
+
+  <!-- 管理 -->
+  <view class="menu card" wx:if="{{isAdmin}}">
+    <view class="menu-item" bindtap="goAudit">
+      <text class="menu-icon">🛡️</text>
+      <text class="menu-text">内容审核</text>
+      <text class="menu-tag tag">管理员</text>
+      <text class="menu-arrow">＞</text>
+    </view>
+  </view>
+
+  <!-- 其他 -->
+  <view class="menu card">
+    <view class="menu-item" bindtap="about">
+      <text class="menu-icon">ℹ️</text>
+      <text class="menu-text">关于我们</text>
+      <text class="menu-arrow">＞</text>
+    </view>
+    <view class="menu-item" bindtap="feedback">
+      <text class="menu-icon">💬</text>
+      <text class="menu-text">意见反馈</text>
+      <text class="menu-arrow">＞</text>
+    </view>
+  </view>
+
+  <view class="ver">邻里二手 V1.0.0</view>
+</view>

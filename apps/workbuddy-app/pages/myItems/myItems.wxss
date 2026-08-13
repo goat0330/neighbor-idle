@@ -1,0 +1,33 @@
+/* pages/myItems/myItems.wxss */
+.page { padding: 16rpx 24rpx 60rpx; }
+
+.row {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 20rpx;
+  margin-bottom: 16rpx;
+}
+.row-img { width: 140rpx; height: 140rpx; border-radius: 12rpx; background: #f0f1f3; flex-shrink: 0; }
+.row-main { flex: 1; margin-left: 20rpx; min-width: 0; }
+.row-title {
+  font-size: 28rpx;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+.row-tags { display: flex; align-items: center; margin-top: 12rpx; gap: 12rpx; }
+.row-time { font-size: 22rpx; color: #b0b3b8; margin-left: auto; }
+.op-btn {
+  width: 56rpx;
+  text-align: center;
+  color: #9aa0a6;
+  font-size: 36rpx;
+  font-weight: 700;
+  letter-spacing: 2rpx;
+}
+
+.empty-btn { width: 320rpx; margin-top: 40rpx; }

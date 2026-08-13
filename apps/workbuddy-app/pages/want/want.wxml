@@ -1,0 +1,74 @@
+<view class="page">
+  <!-- 顶部操作 -->
+  <view class="top-bar">
+    <view class="top-left" bindtap="goMyWants">
+      <text>我的求购</text>
+    </view>
+    <view class="top-right" bindtap="goPublishWant">＋ 发布求购</view>
+  </view>
+
+  <!-- 分类 -->
+  <scroll-view class="cate-bar" scroll-x enhanced show-scrollbar="{{false}}">
+    <view
+      class="cate-item {{activeCategory === 'all' ? 'active' : ''}}"
+      data-id="all"
+      bindtap="changeCategory"
+    >全部</view>
+    <view
+      wx:for="{{categories}}"
+      wx:key="id"
+      class="cate-item {{activeCategory === item.id ? 'active' : ''}}"
+      data-id="{{item.id}}"
+      bindtap="changeCategory"
+    >{{item.name}}</view>
+  </scroll-view>
+
+  <!-- 求购列表 -->
+  <view class="want-list" wx:if="{{list.length > 0}}">
+    <view
+      class="want-card"
+      wx:for="{{list}}"
+      wx:key="_id"
+      data-id="{{item._id}}"
+      bindtap="showWantDetail"
+    >
+      <view class="want-head">
+        <text class="want-title">{{item.title}}</text>
+        <text class="tag">{{item.categoryName}}</text>
+      </view>
+      <view class="want-desc" wx:if="{{item.desc}}">{{item.desc}}</view>
+      <view class="want-price" wx:if="{{item.priceRange}}">期望价位:{{item.priceRange}}</view>
+      <view class="want-foot">
+        <text class="want-user">{{item.publisher.nickname}} · {{item.publisher.communityName || '邻居'}}</text>
+        <text class="want-time">{{item.timeText}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty" wx:if="{{!loading && list.length === 0}}">
+    <text class="empty-icon">🛒</text>
+    <text class="empty-line">还没有求购需求</text>
+    <text class="empty-line">点击右上角发布第一条</text>
+  </view>
+
+  <view class="load-more" wx:if="{{list.length > 0}}">
+    <text wx:if="{{loading}}">加载中...</text>
+    <text wx:elif="{{!hasMore}}">— 已经到底啦 —</text>
+  </view>
+
+  <!-- 求购详情弹窗 -->
+  <view class="mask" wx:if="{{showDetail}}" bindtap="hideDetail">
+    <view class="want-dialog" catchtap="noop">
+      <view class="dialog-title">{{currentWant.title}}</view>
+      <view class="dialog-row" wx:if="{{currentWant.categoryName}}">分类:{{currentWant.categoryName}}</view>
+      <view class="dialog-row" wx:if="{{currentWant.priceRange}}">期望价位:{{currentWant.priceRange}}</view>
+      <view class="dialog-desc" wx:if="{{currentWant.desc}}">{{currentWant.desc}}</view>
+      <view class="dialog-row">发布者:{{currentWant.publisher.nickname}}</view>
+      <view class="dialog-row">所在小区:{{currentWant.publisher.communityName || '未认证'}}</view>
+      <view class="dialog-phone" wx:if="{{currentWant.phone}}" bindtap="copyPhone">📞 复制手机号:{{currentWant.phone}}</view>
+      <view class="dialog-tip">有货的邻居可直接在群里联系 TA</view>
+      <view class="dialog-btn" bindtap="hideDetail">知道了</view>
+    </view>
+  </view>
+</view>

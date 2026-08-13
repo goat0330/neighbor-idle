@@ -1,0 +1,49 @@
+<view class="page">
+  <!-- 头像昵称 -->
+  <view class="section">
+    <view class="form-item">
+      <text class="label">头像</text>
+      <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+        <image class="avatar" src="{{avatarUrl || '/assets/default-avatar.png'}}" mode="aspectFill" />
+      </button>
+    </view>
+    <view class="form-item">
+      <text class="label">昵称</text>
+      <input class="input" type="nickname" placeholder="邻居怎么称呼你" value="{{nickname}}" bindinput="onNickname" maxlength="12" />
+    </view>
+  </view>
+
+  <!-- 小区认证 -->
+  <view class="section">
+    <view class="section-title">小区认证 <text class="sub">真实邻居是平台信任的基础,认证后信用分 +5</text></view>
+    <view class="form-item">
+      <text class="label">所在小区 <text class="required">*</text></text>
+      <picker range="{{communities}}" range-key="name" value="{{communityIndex}}" bindchange="onCommunityChange">
+        <view class="picker-value {{communityIndex >= 0 ? '' : 'placeholder'}}">
+          {{communityIndex >= 0 ? communities[communityIndex].name : '请选择你所在的小区'}} ▾
+        </view>
+      </picker>
+    </view>
+
+    <!-- 定位自动匹配 -->
+    <view class="locate-btn {{locating ? 'locating' : ''}}" bindtap="locateMatch">
+      <text wx:if="{{!locating}}">📍 用定位自动匹配小区</text>
+      <text wx:else>正在定位...</text>
+    </view>
+    <view class="matched" wx:if="{{matchedCommunity}}">
+      <text>✅ 已自动匹配:<text class="matched-name">{{matchedCommunity.name}}</text></text>
+      <text class="matched-dist">距你 {{matchedCommunity.distanceText}}</text>
+    </view>
+
+    <view class="form-item">
+      <text class="label">楼栋号 <text class="optional">(选填)</text></text>
+      <input class="input" placeholder="如:3栋2单元501,方便邻居自提" value="{{building}}" bindinput="onBuilding" maxlength="20" />
+    </view>
+    <view class="certify-tip">选择小区即同意仅用于邻里交易,信息仅对平台可见;也可直接跳过认证浏览</view>
+  </view>
+
+  <view class="submit-wrap">
+    <button class="btn-primary" bindtap="save" disabled="{{submitting}}">保存并完成认证</button>
+    <button class="btn-skip" bindtap="skipCertify">跳过认证,先逛逛 ＞</button>
+  </view>
+</view>

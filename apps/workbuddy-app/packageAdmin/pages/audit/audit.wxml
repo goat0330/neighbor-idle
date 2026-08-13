@@ -1,0 +1,26 @@
+<view class="page">
+  <view class="head-tip" wx:if="{{isAdmin}}">共 {{list.length}} 条待审核</view>
+
+  <view class="list" wx:if="{{list.length > 0}}">
+    <view class="row" wx:for="{{list}}" wx:key="_id" data-id="{{item._id}}" bindtap="goDetail">
+      <image class="row-img" src="{{item.cover}}" mode="aspectFill" data-index="{{index}}" catchtap="previewImage" />
+      <view class="row-main">
+        <view class="row-title">{{item.title}}</view>
+        <view class="row-tags">
+          <text class="tag">{{item.categoryName}}</text>
+          <text class="tag tag-gray">{{item.conditionName}}</text>
+        </view>
+        <view class="row-meta">
+          <text class="price">{{item.priceText}}</text>
+          <text class="time">{{item.timeText}} · 卖家:{{item.seller.nickname}}</text>
+        </view>
+      </view>
+      <view class="arrow">＞</view>
+    </view>
+  </view>
+
+  <view class="empty" wx:if="{{isAdmin && !loading && list.length === 0}}">
+    <text class="empty-icon">✅</text>
+    <text>没有待审核的内容,一切正常</text>
+  </view>
+</view>

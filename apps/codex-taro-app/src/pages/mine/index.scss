@@ -1,0 +1,20 @@
+.mine-page { padding-bottom: 180rpx; }
+.profile-card { display: flex; align-items: center; gap: 24rpx; margin-top: 28rpx; padding: 32rpx; border-radius: 32rpx; background: #fffdf8; box-shadow: 0 16rpx 48rpx rgba(40, 75, 64, .08); }
+.avatar { display: flex; width: 96rpx; height: 96rpx; align-items: center; justify-content: center; border-radius: 50%; color: #285044; background: #cce7dc; font-size: 38rpx; font-weight: 700; }
+.profile-main { display: flex; flex: 1; flex-direction: column; gap: 8rpx; }
+.profile-name { color: #173f34; font-size: 34rpx; font-weight: 700; }
+.profile-meta, .entry-detail, .service-copy { color: #7b817c; font-size: 24rpx; line-height: 1.6; }
+.verified-badge { padding: 10rpx 16rpx; border-radius: 999rpx; color: #285044; background: #e2f2dc; font-size: 20rpx; }
+.trust-row { display: grid; grid-template-columns: repeat(3, 1fr); margin: 28rpx 0; padding: 28rpx 0; border: 1rpx solid #e8e3d9; border-radius: 28rpx; background: rgba(255,255,255,.65); text-align: center; }
+.trust-row > view { display: flex; flex-direction: column; gap: 8rpx; }
+.trust-value { color: #eb8055; font-size: 34rpx; font-weight: 700; }
+.trust-label { color: #59645f; font-size: 22rpx; }
+.mine-list { overflow: hidden; border-radius: 28rpx; background: #fffdf8; }
+.mine-entry { display: flex; align-items: center; justify-content: space-between; padding: 28rpx 30rpx; border-bottom: 1rpx solid #eee9df; }
+.mine-entry > view { display: flex; flex-direction: column; gap: 6rpx; }
+.entry-title { color: #244a3f; font-size: 28rpx; font-weight: 600; }
+.entry-arrow { color: #a5aaa6; font-size: 42rpx; }
+.service-card { display: flex; flex-direction: column; gap: 18rpx; margin-top: 28rpx; padding: 30rpx; border-radius: 28rpx; background: #eaf1df; }
+.service-title { color: #244a3f; font-size: 30rpx; font-weight: 700; }
+.service-button, .map-demo-button { margin: 0; border: 0; border-radius: 22rpx; color: #fff; background: #285044; font-size: 26rpx; }
+.map-demo-button { margin-top: 24rpx; background: #eb8055; }

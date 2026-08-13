@@ -1,0 +1,139 @@
+.cover-page {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  padding: 32px 32px 60px;
+  background: #f7f5ef;
+}
+
+.cover-topbar {
+  position: relative;
+  z-index: 1;
+  color: #173b34;
+  font-size: 24px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.cover-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(1px);
+  opacity: .76;
+}
+
+.cover-orb-one {
+  top: 160px;
+  right: -150px;
+  width: 480px;
+  height: 480px;
+  background: #e0efd8;
+}
+
+.cover-orb-two {
+  bottom: 90px;
+  left: -180px;
+  width: 420px;
+  height: 420px;
+  background: #f8e2d2;
+}
+
+.cover-copy {
+  position: relative;
+  z-index: 1;
+  margin-top: 150px;
+}
+
+.cover-label {
+  display: block;
+  color: #7d8b82;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 4px;
+}
+
+.cover-title {
+  display: block;
+  margin-top: 24px;
+  color: #173b34;
+  font-size: 70px;
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.cover-title-accent {
+  color: #eb8055;
+}
+
+.cover-subtitle {
+  display: block;
+  max-width: 600px;
+  margin-top: 22px;
+  color: #6f7f76;
+  font-size: 28px;
+  line-height: 1.55;
+}
+
+.cover-actions {
+  position: absolute;
+  right: 32px;
+  bottom: 70px;
+  left: 32px;
+  z-index: 1;
+}
+
+.cover-location {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 22px;
+  border-radius: 24px;
+  background: rgba(255, 253, 248, .78);
+}
+
+.cover-location-dot {
+  color: #74ac78;
+  font-size: 22px;
+}
+
+.cover-location-label,
+.cover-location-value {
+  display: block;
+}
+
+.cover-location-label {
+  color: #869089;
+  font-size: 20px;
+}
+
+.cover-location-value {
+  margin-top: 4px;
+  color: #173b34;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.cover-location-arrow {
+  margin-left: auto;
+  color: #eb8055;
+  font-size: 30px;
+}
+
+.cover-button {
+  margin-top: 18px;
+  border-radius: 20px;
+  background: #173b34;
+  color: #fffdf8;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 98px;
+}
+
+.cover-note {
+  display: block;
+  margin-top: 16px;
+  color: #89938c;
+  font-size: 21px;
+  text-align: center;
+}
+

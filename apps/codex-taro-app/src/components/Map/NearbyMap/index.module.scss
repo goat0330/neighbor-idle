@@ -1,0 +1,113 @@
+.container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: $radius-lg;
+}
+
+.map {
+  width: 100%;
+  height: 100%;
+}
+
+.placeholder {
+  @include flex-center;
+  background: $color-bg-page;
+  border-radius: $radius-lg;
+}
+
+.placeholderText {
+  font-size: $font-size-base;
+  color: $color-text-placeholder;
+}
+
+/* ---- 重新定位按钮 ---- */
+.relocateBtn {
+  position: absolute;
+  right: $space-md;
+  bottom: 180rpx;
+  width: 72rpx;
+  height: 72rpx;
+  background: #fff;
+  border-radius: 50%;
+  @include flex-center;
+  box-shadow: $shadow-md;
+}
+
+.relocateIcon {
+  font-size: 36rpx;
+}
+
+/* ---- 底部物品卡片 ---- */
+.itemCard {
+  position: absolute;
+  left: $space-md;
+  right: $space-md;
+  bottom: $space-md;
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-lg;
+  padding: $space-sm;
+}
+
+.itemImg {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: $radius-md;
+  flex-shrink: 0;
+  background: $color-bg-page;
+}
+
+.itemInfo {
+  flex: 1;
+  min-width: 0;
+  padding: 0 $space-sm;
+}
+
+.itemTitle {
+  font-size: $font-size-base;
+  color: $color-text-primary;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.itemMeta {
+  display: flex;
+  align-items: center;
+  margin-top: $space-xs;
+}
+
+.itemPrice {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-secondary;
+}
+
+.itemDist {
+  font-size: $font-size-sm;
+  color: $color-primary;
+  margin-left: $space-sm;
+}
+
+.itemArrow {
+  flex-shrink: 0;
+  font-size: 40rpx;
+  color: $color-text-placeholder;
+  padding: 0 $space-xs;
+}
+
+/* ---- 物品数量提示 ---- */
+.countBadge {
+  position: absolute;
+  top: $space-md;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 8rpx $space-md;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: $radius-full;
+  font-size: $font-size-sm;
+  color: #fff;
+}

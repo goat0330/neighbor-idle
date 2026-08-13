@@ -1,0 +1,32 @@
+<view class="page">
+  <view class="section">
+    <view class="section-title">你想求购什么?</view>
+    <view class="form-item">
+      <text class="label">物品名称 <text class="required">*</text></text>
+      <input class="input" placeholder="如:婴儿推车、二手电动车" maxlength="30" value="{{form.title}}" bindinput="onTitle" />
+    </view>
+    <view class="form-item">
+      <text class="label">详细描述</text>
+      <textarea class="textarea" placeholder="如:希望几成新、预算多少、自提还是送货" maxlength="300" value="{{form.desc}}" bindinput="onDesc" auto-height />
+    </view>
+    <view class="form-item">
+      <text class="label">分类 <text class="required">*</text></text>
+      <picker range="{{categories}}" range-key="name" value="{{categoryIndex}}" bindchange="onCategoryChange">
+        <view class="picker-value">{{categories[categoryIndex].name}} ▾</view>
+      </picker>
+    </view>
+    <view class="form-item">
+      <text class="label">期望价位</text>
+      <input class="input" placeholder="如:300元左右(选填)" maxlength="20" value="{{form.priceRange}}" bindinput="onPriceRange" />
+    </view>
+    <view class="form-item">
+      <text class="label">联系电话</text>
+      <input class="input" type="number" placeholder="选填,方便邻居联系" maxlength="11" value="{{form.phone}}" bindinput="onPhone" />
+    </view>
+  </view>
+
+  <view class="submit-wrap safe-bottom">
+    <button class="btn-primary" bindtap="submit" disabled="{{submitting}}">发布求购</button>
+    <view class="tip">发布后,有货的邻居会在「求购广场」看到你的需求</view>
+  </view>
+</view>

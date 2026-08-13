@@ -1,0 +1,32 @@
+/* pages/myWants/myWants.wxss */
+.page { padding: 16rpx 24rpx 60rpx; }
+
+.row {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 16rpx;
+}
+.row-main { flex: 1; min-width: 0; }
+.row-title { font-size: 30rpx; font-weight: 600; }
+.row-tags { display: flex; align-items: center; margin-top: 12rpx; gap: 12rpx; }
+.row-time { font-size: 22rpx; color: #b0b3b8; margin-left: auto; }
+.row-desc {
+  margin-top: 12rpx;
+  font-size: 25rpx;
+  color: #777;
+  line-height: 1.5;
+}
+.op-btn {
+  flex-shrink: 0;
+  margin-left: 16rpx;
+  font-size: 24rpx;
+  color: #ff4d2e;
+  border: 2rpx solid #ff4d2e;
+  border-radius: 28rpx;
+  padding: 8rpx 24rpx;
+}
+
+.empty-btn { width: 320rpx; margin-top: 40rpx; }

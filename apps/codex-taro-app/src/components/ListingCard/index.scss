@@ -1,0 +1,66 @@
+.listing-card {
+  overflow: hidden;
+  border: 1px solid #ebe8de;
+  border-radius: 28px;
+  background: #fffdf8;
+  box-shadow: 0 10px 26px rgba(23, 59, 52, 0.06);
+}
+
+.listing-image {
+  display: block;
+  width: 100%;
+  height: 260px;
+  background: #e6e3da;
+}
+
+.listing-content {
+  padding: 20px 18px 18px;
+}
+
+.listing-title {
+  display: block;
+  overflow: hidden;
+  color: #173b34;
+  font-size: 27px;
+  font-weight: 700;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.listing-meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-top: 18px;
+}
+
+.listing-price {
+  color: #eb8055;
+  font-size: 34px;
+  font-weight: 800;
+}
+
+.listing-distance {
+  color: #869089;
+  font-size: 22px;
+}
+
+.listing-tags {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.listing-tag {
+  max-width: 140px;
+  overflow: hidden;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: #eef3e8;
+  color: #557266;
+  font-size: 20px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+

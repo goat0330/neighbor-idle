@@ -1,0 +1,19 @@
+.container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: $radius-lg;
+}
+
+.map {
+  width: 100%;
+  height: 100%;
+}
+
+.overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}

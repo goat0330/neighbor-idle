@@ -1,0 +1,72 @@
+/* pages/mine/mine.wxss */
+.page { padding: 20rpx 24rpx 60rpx; }
+
+.user-card {
+  background: linear-gradient(135deg, #07c160, #05a04f);
+  border-radius: 20rpx;
+  padding: 40rpx 32rpx;
+  display: flex;
+  align-items: center;
+  color: #fff;
+}
+.avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  border: 4rpx solid rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.3);
+  flex-shrink: 0;
+}
+.user-main { flex: 1; margin-left: 24rpx; min-width: 0; }
+.nickname { font-size: 36rpx; font-weight: 700; }
+.community { font-size: 24rpx; opacity: 0.9; margin-top: 8rpx; }
+.certify {
+  font-size: 24rpx;
+  margin-top: 10rpx;
+  background: rgba(255, 255, 255, 0.2);
+  display: inline-block;
+  padding: 6rpx 18rpx;
+  border-radius: 24rpx;
+}
+.credit-box {
+  text-align: center;
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 16rpx;
+  padding: 12rpx 20rpx;
+  flex-shrink: 0;
+}
+.credit-num { display: block; font-size: 40rpx; font-weight: 700; line-height: 1.2; }
+.credit-label { font-size: 20rpx; opacity: 0.9; }
+
+.stat-card {
+  display: flex;
+  margin-top: 20rpx;
+  padding: 28rpx 0;
+}
+.stat-item { flex: 1; text-align: center; }
+.stat-num { display: block; font-size: 36rpx; font-weight: 700; color: #07c160; }
+.stat-label { font-size: 24rpx; color: #888; margin-top: 4rpx; display: block; }
+
+.menu { margin-top: 20rpx; }
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 28rpx 28rpx;
+  border-bottom: 2rpx solid #f7f8fa;
+  position: relative;
+}
+.menu-item:last-child { border-bottom: none; }
+.menu-icon { font-size: 32rpx; width: 60rpx; }
+.menu-text { flex: 1; font-size: 28rpx; }
+.menu-arrow { color: #c8ccd1; font-size: 26rpx; }
+.menu-badge {
+  background: #ff4d2e;
+  color: #fff;
+  font-size: 20rpx;
+  border-radius: 20rpx;
+  padding: 2rpx 14rpx;
+  margin-right: 12rpx;
+}
+.menu-tag { margin-right: 12rpx; }
+
+.ver { text-align: center; color: #c8ccd1; font-size: 22rpx; margin-top: 40rpx; }
