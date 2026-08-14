@@ -1,28 +1,28 @@
-.mine-page { padding-bottom: 180rpx; }
-.profile-card { display: flex; align-items: center; gap: 24rpx; margin-top: 28rpx; padding: 32rpx; border-radius: 32rpx; background: #fffdf8; box-shadow: 0 16rpx 48rpx rgba(40, 75, 64, .08); }
-.avatar { display: flex; width: 96rpx; height: 96rpx; align-items: center; justify-content: center; border-radius: 50%; color: #285044; background: #cce7dc; font-size: 38rpx; font-weight: 700; }
-.profile-main { display: flex; flex: 1; flex-direction: column; gap: 8rpx; }
-.profile-name { color: #173f34; font-size: 34rpx; font-weight: 700; }
-.profile-meta, .entry-detail, .service-copy { color: #7b817c; font-size: 24rpx; line-height: 1.6; }
-.verified-badge { padding: 10rpx 16rpx; border-radius: 999rpx; color: #285044; background: #e2f2dc; font-size: 20rpx; }
-.trust-row { display: grid; grid-template-columns: repeat(3, 1fr); margin: 28rpx 0; padding: 28rpx 0; border: 1rpx solid #e8e3d9; border-radius: 28rpx; background: rgba(255,255,255,.65); text-align: center; }
-.trust-row > view { display: flex; flex-direction: column; gap: 8rpx; }
-.trust-value { color: #eb8055; font-size: 34rpx; font-weight: 700; }
-.trust-label { color: #59645f; font-size: 22rpx; }
-.mine-list { overflow: hidden; border-radius: 28rpx; background: #fffdf8; }
-.wechat-setting { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28rpx; padding: 26rpx 30rpx; border: 2rpx solid #cfdbd2; border-radius: 26rpx; background: #fffdf8; }
-.wechat-setting > view { display: flex; flex: 1; flex-direction: column; gap: 6rpx; }
-.mine-entry { display: flex; align-items: center; justify-content: space-between; padding: 28rpx 30rpx; border-bottom: 1rpx solid #eee9df; }
-.mine-entry > view { display: flex; flex-direction: column; gap: 6rpx; }
-.entry-title { color: #244a3f; font-size: 28rpx; font-weight: 600; }
-.entry-arrow { color: #a5aaa6; font-size: 42rpx; }
-.service-card { display: flex; flex-direction: column; gap: 18rpx; margin-top: 28rpx; padding: 30rpx; border-radius: 28rpx; background: #eaf1df; }
-.service-title { color: #244a3f; font-size: 30rpx; font-weight: 700; }
-.service-button, .map-demo-button { margin: 0; border: 0; border-radius: 22rpx; color: #fff; background: #285044; font-size: 26rpx; }
-.map-demo-button { margin-top: 24rpx; background: #eb8055; }
-.wechat-modal-mask { position: fixed; z-index: 30; inset: 0; display: flex; align-items: flex-end; background: rgba(18, 42, 35, .44); }
-.wechat-modal { width: 100%; padding: 36rpx 30rpx 56rpx; border-radius: 36rpx 36rpx 0 0; background: #fffdf8; }
-.wechat-modal input { height: 88rpx; margin-top: 24rpx; padding: 0 22rpx; border: 2rpx solid #d9ddd5; border-radius: 20rpx; background: #f7f5ef; font-size: 26rpx; }
-.wechat-modal-actions { display: flex; gap: 18rpx; margin-top: 24rpx; }
-.wechat-modal-actions button { flex: 1; border-radius: 18rpx; font-size: 25rpx; }
-.wechat-modal-actions .confirm { color: #fff; background: #173b34; }
+.mine-page { min-height: 100vh; padding: 24rpx 32rpx calc(172rpx + env(safe-area-inset-bottom)); background: $color-page; color: $color-text-primary; }
+.mine-topbar { display: flex; justify-content: flex-end; gap: 34rpx; height: 70rpx; align-items: center; }
+.mine-topbar-icon { color: $color-text-primary; font-size: 38rpx; }
+.mine-profile-card { display: flex; min-height: 206rpx; align-items: center; gap: 24rpx; padding: 30rpx; border-radius: 32rpx; background: $color-surface-strong; }
+.mine-avatar { width: 132rpx; height: 132rpx; flex: 0 0 132rpx; border: 6rpx solid $color-brand-soft; border-radius: 50%; }
+.mine-profile-copy { display: flex; min-width: 0; flex: 1; flex-direction: column; gap: 8rpx; }
+.mine-name { font-size: 40rpx; font-weight: 700; }
+.mine-community { font-size: 27rpx; }
+.mine-trust { color: $color-text-tertiary; font-size: 24rpx; }
+.mine-contact-entry { flex: 0 0 190rpx; color: $color-text-secondary; font-size: 25rpx; line-height: 1.4; }
+.mine-stats { display: grid; grid-template-columns: repeat(3, 1fr); align-items: center; margin-top: 24rpx; padding: 30rpx 12rpx; border-radius: 28rpx; background: $color-surface-strong; }
+.mine-stat { display: flex; align-items: center; justify-content: center; gap: 12rpx; border-right: 1px solid $color-border; }
+.mine-stat:last-child { border-right: 0; }
+.mine-stat-icon { display: block; width: 42rpx; height: 42rpx; border: 3rpx solid $color-brand; border-radius: 10rpx; }
+.mine-stat-icon-check { border-radius: 50%; }
+.mine-stat-icon-star { transform: rotate(45deg); }
+.mine-stat-value { font-size: 28rpx; }
+.mine-selling-card, .mine-menu-card { margin-top: 24rpx; padding: 28rpx; border-radius: 30rpx; background: $color-surface-strong; }
+.mine-section-heading { display: flex; align-items: center; justify-content: space-between; padding-bottom: 20rpx; font-size: 32rpx; font-weight: 600; }
+.mine-manage-link { color: $color-text-secondary; font-size: 25rpx; font-weight: 400; }
+.mine-menu-card { padding: 0 28rpx; }
+.mine-menu-row { display: flex; min-height: 86rpx; align-items: center; gap: 22rpx; border-bottom: 1px solid $color-border; font-size: 28rpx; }
+.mine-menu-row:last-child { border-bottom: 0; }
+.mine-menu-icon { display: block; width: 34rpx; height: 34rpx; border: 3rpx solid $color-text-secondary; border-radius: 8rpx; }
+.mine-menu-icon-clock { border-radius: 50%; }
+.mine-menu-icon-question { border-radius: 50%; }
+.mine-menu-icon-info { border-radius: 50%; }
+.mine-menu-arrow { margin-left: auto; color: $color-text-secondary; font-size: 38rpx; }

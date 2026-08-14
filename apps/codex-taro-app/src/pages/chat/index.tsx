@@ -1,26 +1,79 @@
-import { Button, Input, ScrollView, Text, View } from '@tarojs/components'
+import { Button, ScrollView, Text, View } from '@tarojs/components'
 import Taro, { useRouter } from '@tarojs/taro'
-import { useEffect, useState } from 'react'
-import { backendEnabled, conversationApi, type ConversationMessage } from '@/services/backend'
+import { useEffect, useMemo, useState } from 'react'
+import {
+  ChatBubble,
+  ChatComposer,
+  ContactCard,
+  ContactExchangeAction,
+  ContactExchangeSheet,
+  QuickQuestionChips,
+  ProductChatAnchor,
+  WechatContactSetupSheet,
+  type ContactExchangeStatus,
+} from '@/components/community'
+import { backendEnabled, conversationApi, userApi, type ConversationMessage, type UserProfile } from '@/services/backend'
+import { itemApi } from '@/services/backend'
 import { contactExchange, type ContactRequest } from '@/services/contactExchange'
+import { mapBackendItem, seedListings, seedWants } from '@/services/market'
+import type { Listing } from '@/types/market'
+import avatarOrange from '@/assets/mock/avatar-orange.png'
+import avatarBlue from '@/assets/mock/avatar-blue.png'
 import './index.scss'
 
 const demoMessages: ConversationMessage[] = [
-  { id: '1', side: 'peer', type: 'text', text: '你好，物品还在，可以小区东门自提。', read: true, createdAt: Date.now() - 60000 },
-  { id: '2', side: 'mine', type: 'text', text: '可以便宜一点吗？今晚 7 点方便。', read: true, createdAt: Date.now() },
+  { id: '1', side: 'peer', type: 'text', text: '请问书桌还在吗？', read: true, createdAt: Date.now() - 180000 },
+  { id: '2', side: 'mine', type: 'text', text: '还在的，成色很新，可以自提。', read: true, createdAt: Date.now() - 120000 },
+  { id: '3', side: 'peer', type: 'text', text: '今天晚上方便拿吗？', read: true, createdAt: Date.now() - 60000 },
 ]
+
+const demoProfile: UserProfile = {
+  id: 'demo',
+  nickname: '小橘子',
+  avatarUrl: avatarOrange,
+  communityId: 'demo-community',
+  communityName: '金水花园',
+  building: '',
+  verificationStatus: 'verified',
+  hasWechat: false,
+  hasPhone: false,
+  phoneMasked: '',
+  creditScore: 100,
+  status: 'active',
+}
 
 export default function ChatPage() {
   const router = useRouter()
   const routeConversationId = router.params.conversationId || ''
   const listingId = router.params.listingId || ''
-  const [conversationId, setConversationId] = useState(routeConversationId || `listing-${listingId || 'demo'}`)
-  const [role, setRole] = useState<'buyer' | 'seller'>('buyer')
+  const wantId = router.params.wantId || ''
+  const wanted = useMemo(() => {
+    const known = seedWants.find((want) => want.id === wantId)
+    if (known || !wantId) return known
+    return {
+      id: wantId,
+      title: decodeRouteParam(router.params.wantTitle || '') || '求购物品',
+      budget: decodeRouteParam(router.params.wantBudget || '') || '价格面议',
+      category: '其他',
+      community: decodeRouteParam(router.params.wantCommunity || '') || '金水花园',
+      description: '',
+      author: decodeRouteParam(router.params.wantAuthor || '') || '邻居',
+    }
+  }, [router.params.wantAuthor, router.params.wantBudget, router.params.wantCommunity, router.params.wantTitle, wantId])
+  const seedItem = useMemo(() => seedListings.find((listing) => listing.id === listingId) ?? seedListings[0], [listingId])
+  const [item, setItem] = useState<Listing>(seedItem)
+  const [conversationId, setConversationId] = useState(routeConversationId || (wantId ? `want-${wantId}` : `listing-${item.id}`))
+  const [role, setRole] = useState<'buyer' | 'seller'>(wantId || router.params.role === 'seller' ? 'seller' : 'buyer')
   const [messages, setMessages] = useState<ConversationMessage[]>(demoMessages)
-  const [draft, setDraft] = useState('')
+  const [draft, setDraft] = useState(() => decodeRouteParam(router.params.draft || ''))
   const [contactRequest, setContactRequest] = useState<ContactRequest>()
-  const [showContactForm, setShowContactForm] = useState(false)
-  const [contactReason, setContactReason] = useState('方便自提时联系')
+  const [showApprovalSheet, setShowApprovalSheet] = useState(false)
+  const [showContactSetup, setShowContactSetup] = useState(false)
+  const [contactSetupPurpose, setContactSetupPurpose] = useState<'approve' | 'none'>('none')
+  const [profile, setProfile] = useState<UserProfile>(demoProfile)
+  const [wechatId, setWechatId] = useState('')
+  const [phoneLoading, setPhoneLoading] = useState(false)
+  const [savingContact, setSavingContact] = useState(false)
   const [cloudConversationReady, setCloudConversationReady] = useState(false)
 
   useEffect(() => {
@@ -42,6 +95,19 @@ export default function ChatPage() {
   }, [cloudConversationReady, conversationId])
 
   async function initialize() {
+    if (backendEnabled) {
+      try {
+        const profileResult = await userApi.me()
+        setProfile(profileResult)
+      } catch {
+        // CloudBase 登录失败不阻断本地页面，后续动作会给出明确提示。
+      }
+    }
+    if (wantId) {
+      setRole('seller')
+      setMessages([{ id: `want-${wantId}`, side: 'peer', type: 'text', text: `你好，我想响应你的求购：${wanted?.title || '这个物品'}`, read: true, createdAt: Date.now() }])
+      return
+    }
     if (!backendEnabled) {
       setContactRequest((await contactExchange.get(conversationId)) || undefined)
       return
@@ -49,9 +115,13 @@ export default function ChatPage() {
     try {
       const summary = routeConversationId
         ? await conversationApi.detail(routeConversationId)
-        : await conversationApi.open(listingId)
+        : await conversationApi.open(item.id)
       setConversationId(summary.id)
       setRole(summary.role)
+      if (summary.itemId) {
+        const itemResult = await itemApi.detail(summary.itemId)
+        setItem(mapBackendItem(itemResult.item))
+      }
       const [messageResult, request] = await Promise.all([
         conversationApi.messages(summary.id),
         contactExchange.get(summary.id),
@@ -65,10 +135,14 @@ export default function ChatPage() {
     }
   }
 
+  useEffect(() => {
+    setItem(seedItem)
+  }, [seedItem])
+
   async function send() {
     const text = draft.trim()
     if (!text) return
-    if (!backendEnabled) {
+    if (!backendEnabled || wantId) {
       setMessages((current) => [...current, { id: String(Date.now()), side: 'mine', type: 'text', text, read: false, createdAt: Date.now() }])
       setDraft('')
       return
@@ -82,14 +156,26 @@ export default function ChatPage() {
     }
   }
 
-  async function submitContactRequest() {
+  async function requestContact() {
     try {
-      const request = await contactExchange.request(conversationId, contactReason.trim() || '方便自提时联系')
+      const request = await contactExchange.request(conversationId, '方便继续沟通交易细节')
       setContactRequest(request)
-      setShowContactForm(false)
+      Taro.showToast({ title: '已发送联系方式申请', icon: 'success' })
     } catch (error: any) {
       Taro.showToast({ title: error.message || '申请失败', icon: 'none' })
     }
+  }
+
+  function approveContact() {
+    if (!contactRequest) return
+    if (!profile.hasPhone && !profile.hasWechat) {
+      setContactSetupPurpose('approve')
+      setShowApprovalSheet(false)
+      setShowContactSetup(true)
+      Taro.showToast({ title: '需先授权手机号或填写微信号', icon: 'none' })
+      return
+    }
+    void respond(true)
   }
 
   async function respond(approved: boolean) {
@@ -97,59 +183,151 @@ export default function ChatPage() {
     try {
       const request = approved ? await contactExchange.approve(contactRequest) : await contactExchange.reject(contactRequest)
       setContactRequest(request)
-      Taro.showToast({ title: approved ? '已同意交换微信' : '已拒绝申请', icon: 'none' })
+      setShowApprovalSheet(false)
+      Taro.showToast({ title: approved ? '已同意交换联系方式' : '已暂不同意', icon: 'success' })
     } catch (error: any) {
       Taro.showToast({ title: error.message || '处理失败', icon: 'none' })
     }
   }
 
-  async function revoke() {
-    if (!contactRequest) return
+  async function receivePhoneCode(code: string) {
+    setPhoneLoading(true)
     try {
-      setContactRequest(await contactExchange.revoke(contactRequest))
-      Taro.showToast({ title: '授权已撤回', icon: 'none' })
+      if (backendEnabled) {
+        const result = await userApi.setPhone(code)
+        setProfile(result)
+      } else {
+        setProfile((current) => ({ ...current, hasPhone: true, phoneMasked: '138 **** 5678' }))
+      }
+      Taro.showToast({ title: '手机号已授权', icon: 'success' })
     } catch (error: any) {
-      Taro.showToast({ title: error.message || '撤回失败', icon: 'none' })
+      Taro.showToast({ title: error.message || '手机号授权失败', icon: 'none' })
+    } finally {
+      setPhoneLoading(false)
     }
   }
 
-  function copyWechat() {
-    if (contactRequest?.wechatId) Taro.setClipboardData({ data: contactRequest.wechatId })
+  async function saveContact() {
+    if (!profile.hasPhone && !wechatId.trim()) {
+      Taro.showToast({ title: '请授权手机号或填写微信号', icon: 'none' })
+      return
+    }
+    setSavingContact(true)
+    try {
+      if (wechatId.trim()) {
+        if (backendEnabled) await userApi.setWechat(wechatId.trim())
+        setProfile((current) => ({ ...current, hasWechat: true }))
+      }
+      setShowContactSetup(false)
+      if (contactSetupPurpose === 'approve') await respond(true)
+      setContactSetupPurpose('none')
+    } catch (error: any) {
+      Taro.showToast({ title: error.message || '联系方式保存失败', icon: 'none' })
+    } finally {
+      setSavingContact(false)
+    }
   }
+
+  const contactStatus: ContactExchangeStatus = contactRequest?.status === 'approved'
+    ? 'approved'
+    : contactRequest?.status === 'pending'
+      ? 'pending'
+      : 'available'
+  const peerAvatar = role === 'buyer' ? item.sellerAvatar : avatarBlue
+  const ownAvatar = profile.avatarUrl || avatarOrange
 
   return (
     <View className='chat-page'>
-      <View className='trade-strip'><Text>我想要</Text><Text>›</Text><Text className='trade-strip-active'>聊天议价</Text><Text>›</Text><Text>约定自提</Text></View>
+      <View className='chat-header'>
+        <Text className='chat-back' onClick={() => Taro.navigateBack()}>‹</Text>
+        <View className='chat-header-title'><Text>{wanted ? wanted.author : role === 'buyer' ? item.seller : '小橘子'}</Text><Text>{wanted?.community || item.community}</Text></View>
+        <Text className='chat-more'>···</Text>
+      </View>
       <ScrollView scrollY className='chat-messages'>
-        <View className='chat-safety'>请勿提前转账；建议在小区公共区域验货后成交</View>
-        {messages.map((item) => item.type === 'system'
-          ? <View key={item.id} className='system-message'><Text>{item.text}</Text></View>
-          : <View key={item.id} className={`bubble-row bubble-row-${item.side}`}><Text className={`bubble bubble-${item.side}`}>{item.text}</Text></View>)}
-        <ContactPanel role={role} request={contactRequest} onRequest={() => setShowContactForm(true)} onApprove={() => respond(true)} onReject={() => respond(false)} onCopy={copyWechat} onRevoke={revoke} />
+        {wanted ? <WantedChatAnchor title={wanted.title} budget={wanted.budget} communityName={wanted.community} /> : <ProductChatAnchor image={item.image} title={item.title} price={item.price} communityName={item.community} onOpen={() => Taro.navigateTo({ url: `/pages/detail/index?id=${item.id}` })} />}
+        <Text className='chat-time-label'>今天 {formatTime(Date.now())}</Text>
+        {messages.map((message) => message.type === 'system'
+          ? <View key={message.id} className='chat-system-message'><Text>{message.text}</Text></View>
+          : <ChatBubble
+            key={message.id}
+            side={message.side === 'mine' ? 'outgoing' : 'incoming'}
+            avatar={message.side === 'mine' ? ownAvatar : peerAvatar}
+            text={message.text}
+            time={formatTime(message.createdAt)}
+            read={message.read}
+          />)}
+        {!wanted && role === 'seller' && contactRequest?.status === 'pending' && (
+          <View className='seller-approval-trigger' onClick={() => setShowApprovalSheet(true)}>
+            <Text>查看联系方式申请</Text>
+          </View>
+        )}
+        {contactRequest?.status === 'approved' && (
+          <View className='approved-contact-block'>
+            <Text className='approved-contact-title'>已交换联系方式</Text>
+            <ContactCard
+              data={{ phone: contactRequest.phoneNumber, wechatId: contactRequest.wechatId }}
+              showCopy
+              onCopyPhone={(phone) => Taro.setClipboardData({ data: phone })}
+              onCopyWechatId={(id) => Taro.setClipboardData({ data: id })}
+            />
+          </View>
+        )}
       </ScrollView>
-      <View className='quick-actions'><Text onClick={() => setDraft('可以少一点吗？')}>议价</Text><Text onClick={() => setDraft('今晚 19:00 东门自提可以吗？')}>约自提</Text>{role === 'buyer' && <Text onClick={() => setShowContactForm(true)}>申请加微信</Text>}</View>
-      <View className='chat-composer'><Input value={draft} onInput={(event) => setDraft(event.detail.value)} confirmType='send' onConfirm={send} placeholder='友好沟通，描述清楚时间和地点' /><Button onClick={send}>发送</Button></View>
-      {showContactForm && <View className='contact-modal-mask' onClick={() => setShowContactForm(false)}><View className='contact-modal' onClick={(event) => event.stopPropagation()}><Text className='contact-modal-title'>申请交换微信</Text><Text className='contact-copy'>说明用途，卖家同意后双方才可查看联系方式。</Text><Input value={contactReason} maxlength={60} onInput={(event) => setContactReason(event.detail.value)} placeholder='例如：方便自提时联系' /><View className='contact-modal-actions'><Button onClick={() => setShowContactForm(false)}>取消</Button><Button className='confirm' onClick={submitContactRequest}>发送申请</Button></View></View></View>}
+      <QuickQuestionChips onSelect={setDraft} />
+      <ChatComposer
+        value={draft}
+        contactStatus={contactStatus}
+        onInput={setDraft}
+        onSend={() => { void send() }}
+        onContactRequest={!wanted && role === 'buyer' ? () => { if (contactStatus === 'available') void requestContact() } : undefined}
+      />
+      {!wanted && role === 'seller' && contactRequest?.status === 'pending' && (
+        <ContactExchangeAction status='pending' onRequest={() => setShowApprovalSheet(true)} />
+      )}
+      {!wanted && <ContactExchangeSheet
+        open={showApprovalSheet}
+        counterpartName={role === 'seller' ? '小橘子' : item.seller}
+        wechatMasked={profile.hasWechat ? '已设置' : '未填写'}
+        phoneMasked={profile.phoneMasked || '未授权'}
+        onClose={() => setShowApprovalSheet(false)}
+        onReject={() => { void respond(false) }}
+        onApprove={approveContact}
+      />}
+      {!wanted && <WechatContactSetupSheet
+        open={showContactSetup}
+        phoneMasked={profile.phoneMasked}
+        phoneVerified={Boolean(profile.hasPhone)}
+        wechatId={wechatId}
+        phoneLoading={phoneLoading}
+        saving={savingContact}
+        onPhoneCode={(code) => { void receivePhoneCode(code) }}
+        onWechatIdChange={setWechatId}
+        onSave={() => { void saveContact() }}
+        onClose={() => { setShowContactSetup(false); setContactSetupPurpose('none') }}
+      />}
     </View>
   )
 }
 
-type ContactPanelProps = {
-  role: 'buyer' | 'seller'
-  request?: ContactRequest
-  onRequest: () => void
-  onApprove: () => void
-  onReject: () => void
-  onCopy: () => void
-  onRevoke: () => void
+function formatTime(timestamp: number) {
+  const date = new Date(timestamp)
+  return `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`
 }
 
-function ContactPanel({ role, request, onRequest, onApprove, onReject, onCopy, onRevoke }: ContactPanelProps) {
-  if (!request || request.status === 'rejected' || request.status === 'revoked') {
-    if (role === 'seller') return <View className='contact-panel'><Text className='contact-title'>微信号不会自动公开</Text><Text className='contact-copy'>买家发起申请后，你可以在这里同意或拒绝。</Text></View>
-    return <View className='contact-panel'><Text className='contact-title'>需要转到微信继续联系？</Text><Text className='contact-copy'>发送申请后，只有卖家明确同意才会展示微信号。</Text><Button className='contact-button' onClick={onRequest}>申请交换微信</Button></View>
+function decodeRouteParam(value: string) {
+  try {
+    return decodeURIComponent(value)
+  } catch {
+    return value
   }
-  if (request.status === 'pending' && role === 'seller') return <View className='contact-panel'><Text className='contact-title'>买家申请交换微信</Text><Text className='contact-copy'>申请理由：{request.reason}</Text><View className='contact-review-actions'><Button onClick={onReject}>拒绝</Button><Button className='contact-button' onClick={onApprove}>同意</Button></View></View>
-  if (request.status === 'pending') return <View className='contact-panel'><Text className='contact-title'>等待卖家同意</Text><Text className='contact-copy'>申请理由：{request.reason}</Text></View>
-  return <View className='contact-panel contact-approved'><Text className='contact-title'>卖家已同意交换微信</Text><Text className='contact-copy'>微信号：{request.wechatId || '卖家尚未设置'}</Text>{request.wechatId && <Button className='contact-button' onClick={onCopy}>复制微信号</Button>}<Text className='contact-revoke' onClick={onRevoke}>撤回授权</Text><Text className='contact-warning'>离开平台后的沟通与付款风险由双方自行判断，请勿提前转账。</Text></View>
+}
+
+function WantedChatAnchor({ title, budget, communityName }: { title: string; budget: string; communityName: string }) {
+  return (
+    <View className='wanted-chat-anchor'>
+      <Text className='wanted-chat-anchor-kicker'>社区求购</Text>
+      <Text className='wanted-chat-anchor-title'>{title}</Text>
+      <View className='wanted-chat-anchor-meta'><Text>{budget}</Text><Text>{communityName}</Text></View>
+    </View>
+  )
 }

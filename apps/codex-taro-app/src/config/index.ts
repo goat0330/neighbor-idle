@@ -4,12 +4,13 @@
  * 真实 Key 只写入本机 `.env.local` 或云函数环境变量，该文件已由 Git 忽略。
  */
 
-const isH5Build = process.env.TARO_ENV === 'h5'
+const buildEnv = typeof process !== 'undefined' && process.env ? process.env : {}
+const isH5Build = buildEnv.TARO_ENV === 'h5'
 
 export const APP_CONFIG = {
-  TENCENT_MAP_KEY: isH5Build ? process.env.TARO_APP_TENCENT_MAP_KEY ?? '' : '',
+  TENCENT_MAP_KEY: isH5Build ? buildEnv.TARO_APP_TENCENT_MAP_KEY ?? '' : '',
   TENCENT_MAP_BASE: 'https://apis.map.qq.com',
-  CLOUD_ENV: process.env.TARO_APP_CLOUD_ENV ?? '',
+  CLOUD_ENV: buildEnv.TARO_APP_CLOUD_ENV ?? '',
   NEARBY_RADIUS: 5000,
   NEARBY_PAGE_SIZE: 20,
 } as const

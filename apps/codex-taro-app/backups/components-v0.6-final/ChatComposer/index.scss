@@ -1,0 +1,49 @@
+.chat-composer-r2 {
+  padding: 18rpx 28rpx calc(22rpx + env(safe-area-inset-bottom));
+  border-top: 1rpx solid $color-border;
+  background: rgba(255, 255, 255, .98);
+}
+
+.chat-composer-r2__bar {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.chat-composer-r2__input {
+  min-width: 0;
+  height: 80rpx;
+  flex: 1;
+  padding: 0 28rpx;
+  border: 1rpx solid $color-border;
+  border-radius: 40rpx;
+  background: $color-surface;
+  color: $color-text-primary;
+  font-size: 28rpx;
+}
+
+.chat-composer-r2__placeholder {
+  color: $color-text-tertiary;
+}
+
+.chat-composer-r2__send {
+  display: flex;
+  width: 104rpx;
+  height: 80rpx;
+  flex: 0 0 104rpx;
+  align-items: center;
+  justify-content: center;
+  border-radius: 40rpx;
+  background: #f0efec;
+  color: $color-text-tertiary;
+  font-size: 26rpx;
+}
+
+.chat-composer-r2__send.is-enabled {
+  background: $color-brand;
+  color: #fff;
+}
+
+.chat-composer-r2 .contact-exchange-action {
+  margin-top: 18rpx;
+}

@@ -1,7 +1,8 @@
 {
   "description": "邻里二手小程序 Codex Taro 版本",
   "packOptions": {
-    "ignore": []
+    "ignore": [],
+    "include": []
   },
   "setting": {
     "urlCheck": false,
@@ -10,12 +11,29 @@
     "postcss": true,
     "minified": true,
     "compileHotReLoad": true,
-    "lazyloadPlaceholderEnable": false
+    "lazyloadPlaceholderEnable": false,
+    "compileWorklet": false,
+    "uglifyFileName": false,
+    "uploadWithSourceMap": true,
+    "packNpmManually": false,
+    "packNpmRelationList": [],
+    "minifyWXSS": true,
+    "minifyWXML": true,
+    "localPlugins": false,
+    "disableUseStrict": false,
+    "useCompilerPlugins": false,
+    "condition": false,
+    "babelSetting": {
+      "ignore": [],
+      "disablePlugins": [],
+      "outputPath": ""
+    }
   },
   "compileType": "miniprogram",
   "libVersion": "3.7.3",
-  "appid": "touristappid",
+  "appid": "wx00edfdef9d44805f",
   "projectname": "neighbor-secondhand-codex",
-  "miniprogramRoot": "dist/"
+  "miniprogramRoot": "dist-weapp/",
+  "simulatorPluginLibVersion": {},
+  "editorSetting": {}
 }
-

@@ -9,7 +9,7 @@
 .cover-topbar {
   position: relative;
   z-index: 1;
-  color: #173b34;
+  color: #222222;
   font-size: 24px;
   font-weight: 700;
   text-align: center;
@@ -27,7 +27,7 @@
   right: -150px;
   width: 480px;
   height: 480px;
-  background: #e0efd8;
+  background: #f4e3d8;
 }
 
 .cover-orb-two {
@@ -55,14 +55,14 @@
 .cover-title {
   display: block;
   margin-top: 24px;
-  color: #173b34;
+  color: #222222;
   font-size: 70px;
   font-weight: 900;
   line-height: 1.2;
 }
 
 .cover-title-accent {
-  color: #eb8055;
+  color: #FF7433;
 }
 
 .cover-subtitle {
@@ -92,7 +92,7 @@
 }
 
 .cover-location-dot {
-  color: #74ac78;
+  color: #FF7433;
   font-size: 22px;
 }
 
@@ -108,21 +108,21 @@
 
 .cover-location-value {
   margin-top: 4px;
-  color: #173b34;
+  color: #222222;
   font-size: 28px;
   font-weight: 700;
 }
 
 .cover-location-arrow {
   margin-left: auto;
-  color: #eb8055;
+  color: #FF7433;
   font-size: 30px;
 }
 
 .cover-button {
   margin-top: 18px;
   border-radius: 20px;
-  background: #173b34;
+  background: #FF7433;
   color: #fffdf8;
   font-size: 32px;
   font-weight: 700;
@@ -136,4 +136,3 @@
   font-size: 21px;
   text-align: center;
 }
-

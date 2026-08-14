@@ -1,5 +1,7 @@
 **/node_modules/
 **/dist/
+**/dist-h5/
+**/dist-weapp/
 **/.taro/
 **/.swc/
 **/project.private.config.json

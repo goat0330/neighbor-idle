@@ -11,7 +11,7 @@ export default defineConfig({
     828: 1.81 / 2,
   },
   sourceRoot: 'src',
-  outputRoot: 'dist',
+  outputRoot: process.env.TARO_ENV === 'h5' ? 'dist-h5' : 'dist-weapp',
   framework: 'react',
   compiler: 'vite',
   alias: {
@@ -44,5 +44,10 @@ export default defineConfig({
   },
   h5: {
     publicPath: '/',
+    devServer: {
+      host: '127.0.0.1',
+      port: 10086,
+      open: '/index.html',
+    },
   },
 })

@@ -1,0 +1,77 @@
+.search-location-bar {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  min-height: 112rpx;
+}
+
+.search-location-input-wrap {
+  display: flex;
+  min-width: 0;
+  height: 112rpx;
+  flex: 1;
+  align-items: center;
+  padding: 0 36rpx;
+  border: 1px solid $color-border;
+  border-radius: 30rpx;
+  background: $color-surface;
+}
+
+.search-location-icon {
+  position: relative;
+  width: 44rpx;
+  height: 44rpx;
+  flex: 0 0 44rpx;
+  margin-right: 18rpx;
+  border: 3rpx solid currentColor;
+  border-radius: 50%;
+  color: $color-text-secondary;
+}
+
+.search-location-icon::after {
+  position: absolute;
+  right: -12rpx;
+  bottom: -8rpx;
+  width: 16rpx;
+  height: 3rpx;
+  border-radius: 3rpx;
+  background: currentColor;
+  content: '';
+  transform: rotate(45deg);
+}
+
+.search-location-input {
+  min-width: 0;
+  flex: 1;
+  color: $color-text-primary;
+  font-size: 36rpx;
+}
+
+.search-location-input::placeholder {
+  color: $color-text-tertiary;
+}
+
+.search-location-community {
+  display: flex;
+  width: 220rpx;
+  align-items: center;
+  justify-content: flex-end;
+  color: $color-text-primary;
+  font-size: 36rpx;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.search-location-name {
+  max-width: 160rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.search-location-chevron {
+  margin-left: 10rpx;
+  color: $color-text-secondary;
+  font-size: 34rpx;
+  line-height: 1;
+}

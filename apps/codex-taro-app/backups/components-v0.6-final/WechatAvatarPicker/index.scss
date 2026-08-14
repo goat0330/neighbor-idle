@@ -1,0 +1,66 @@
+.wechat-avatar-picker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.wechat-avatar-picker__button {
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  line-height: 1;
+}
+
+.wechat-avatar-picker__button::after {
+  border: 0;
+}
+
+.wechat-avatar-picker__avatar {
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+  border: 6rpx solid $color-brand-soft;
+  border-radius: 50%;
+  background: $color-surface;
+}
+
+.wechat-avatar-picker__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.wechat-avatar-picker__placeholder {
+  color: $color-brand-muted;
+  font-size: 24rpx;
+}
+
+.wechat-avatar-picker__loading {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(34, 34, 34, .44);
+  color: #fff;
+  font-size: 22rpx;
+}
+
+.wechat-avatar-picker__caption {
+  display: block;
+  margin-top: 14rpx;
+  color: $color-brand;
+  font-size: 24rpx;
+}
+
+.wechat-avatar-picker--disabled {
+  opacity: .56;
+}

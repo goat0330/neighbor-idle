@@ -1,0 +1,38 @@
+.wechat-id-input {
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid $color-border;
+}
+
+.wechat-id-input__row {
+  display: flex;
+  min-height: 64rpx;
+  align-items: center;
+  gap: 24rpx;
+}
+
+.wechat-id-input__label {
+  flex: 0 0 108rpx;
+  color: $color-text-primary;
+  font-size: 28rpx;
+  font-weight: 500;
+}
+
+.wechat-id-input__field {
+  min-width: 0;
+  flex: 1;
+  height: 64rpx;
+  color: $color-text-primary;
+  font-size: 28rpx;
+}
+
+.wechat-id-input__field::placeholder {
+  color: $color-text-tertiary;
+}
+
+.wechat-id-input__hint {
+  display: block;
+  margin-top: 10rpx;
+  color: $color-text-tertiary;
+  font-size: 22rpx;
+  line-height: 1.45;
+}

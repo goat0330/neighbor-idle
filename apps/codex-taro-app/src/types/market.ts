@@ -6,6 +6,7 @@ export type Listing = {
   price: number
   originalPrice?: number
   image: string
+  images?: string[]
   category: string
   condition: string
   community: string
@@ -14,9 +15,13 @@ export type Listing = {
   longitude: number
   distanceKm?: number
   seller: string
+  sellerAvatar?: string
   sellerCredit: number
   status: ListingStatus
   description: string
+  views?: number
+  favorites?: number
+  updatedAtText?: string
 }
 
 export type WantPost = {
@@ -27,6 +32,8 @@ export type WantPost = {
   community: string
   description: string
   author: string
+  authorAvatar?: string
+  publishedAtText?: string
 }
 
 export type Conversation = {
@@ -36,5 +43,7 @@ export type Conversation = {
   preview: string
   unread: number
   listingId: string
+  itemImage?: string
+  peerAvatar?: string
+  lastMessageAt?: number
 }
-

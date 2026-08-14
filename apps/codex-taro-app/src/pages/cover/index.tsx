@@ -18,11 +18,11 @@ export default function CoverPage() {
           <Text className='cover-location-dot'>●</Text>
           <View>
             <Text className='cover-location-label'>当前浏览</Text>
-            <Text className='cover-location-value'>云杉里小区</Text>
+          <Text className='cover-location-value'>金水花园</Text>
           </View>
           <Text className='cover-location-arrow'>↗</Text>
         </View>
-        <Button className='cover-button' onClick={() => Taro.switchTab({ url: '/pages/home/index' })}>进入附近闲置</Button>
+        <Button className='cover-button' onClick={() => Taro.reLaunch({ url: '/pages/home/index' })}>进入附近闲置</Button>
         <Text className='cover-note'>看闲置 · 聊价格 · 约自提</Text>
       </View>
     </View>

@@ -1,38 +1,115 @@
-import { Input, Text, View } from '@tarojs/components'
+import { Text, View } from '@tarojs/components'
 import Taro from '@tarojs/taro'
-import { useMemo, useState } from 'react'
-import SectionHeading from '@/components/SectionHeading'
-import { seedWants } from '@/services/market'
+import { useEffect, useMemo, useState } from 'react'
+import {
+  BottomNav,
+  CategoryTabs,
+  PublishActionSheet,
+  SearchLocationBar,
+  WantedCard,
+  type BottomNavTab,
+  type CategoryTab,
+} from '@/components/community'
+import { backendEnabled, wantApi } from '@/services/backend'
+import { backendCategoryKey, mapBackendWant, seedWants } from '@/services/market'
+import type { WantPost } from '@/types/market'
 import './index.scss'
 
-const categories = ['全部', '家具家电', '家居用品', '母婴玩具', '数码产品']
+const categoryTabs: CategoryTab[] = ['全部', '家具', '家电', '数码', '母婴', '图书', '其他'].map((label) => ({ key: label, label }))
 
 export default function WantPage() {
   const [keyword, setKeyword] = useState('')
   const [category, setCategory] = useState('全部')
-  const wants = useMemo(() => seedWants.filter((item) => {
-    const matchKeyword = !keyword.trim() || `${item.title}${item.description}`.includes(keyword.trim())
-    return matchKeyword && (category === '全部' || item.category === category)
-  }), [keyword, category])
+  const [showPublishSheet, setShowPublishSheet] = useState(false)
+  const [remoteWants, setRemoteWants] = useState<WantPost[]>([])
+  const [loading, setLoading] = useState(backendEnabled)
+  const [loadError, setLoadError] = useState('')
+  const wants = useMemo(() => (backendEnabled ? remoteWants : seedWants).filter((item) => {
+    const normalized = keyword.trim().toLowerCase()
+    const matchKeyword = !normalized || `${item.title}${item.description}${item.community}`.toLowerCase().includes(normalized)
+    const matchCategory = category === '全部' || item.category === category
+    return matchKeyword && matchCategory
+  }), [category, keyword, remoteWants])
+
+  useEffect(() => {
+    if (!backendEnabled) return
+    let active = true
+    setLoading(true)
+    setLoadError('')
+    wantApi.list({ category: category === '全部' ? 'all' : backendCategoryKey(category), page: 1, pageSize: 20 })
+      .then((result) => {
+        if (active) setRemoteWants(result.list.map(mapBackendWant))
+      })
+      .catch((error: any) => {
+        if (active) setLoadError(error.message || '求购加载失败')
+      })
+      .finally(() => {
+        if (active) setLoading(false)
+      })
+    return () => { active = false }
+  }, [category])
+
+  function changeNavigation(key: BottomNavTab) {
+    if (key === 'wanted') return
+    const routes = {
+      idle: '/pages/home/index',
+      messages: '/pages/messages/index',
+      me: '/pages/mine/index',
+    } as const
+    Taro.reLaunch({ url: routes[key] })
+  }
 
   return (
-    <View className='page-shell want-page'>
-      <SectionHeading eyebrow='NEIGHBOR WANTS' title='求购广场' action='我要求购' onAction={() => Taro.navigateTo({ url: '/pages/request-publish/index' })} />
-      <Text className='want-intro'>你有需求，邻居来响应。发布想买的东西，等待附近的好消息。</Text>
-      <View className='search-box want-search'><Input value={keyword} onInput={(event) => setKeyword(event.detail.value)} placeholder='搜索求购内容' /></View>
-      <View className='category-row'>
-        {categories.map((item) => <Text key={item} className={`category-pill ${category === item ? 'category-pill-active' : ''}`} onClick={() => setCategory(item)}>{item}</Text>)}
+    <View className='want-page'>
+      <View className='want-content'>
+        <SearchLocationBar
+          value={keyword}
+          placeholder='搜索求购'
+          communityName='金水花园'
+          onInput={setKeyword}
+          onSearch={setKeyword}
+        />
+        <CategoryTabs value={category} items={categoryTabs} onChange={setCategory} />
+        <View className='want-list'>
+          {loading && wants.length === 0 ? <View className='want-empty'><Text>正在加载附近求购…</Text></View> : wants.map((item) => (
+            <WantedCard
+              key={item.id}
+              id={item.id}
+              avatar={item.authorAvatar || ''}
+              nickname={item.author}
+              title={item.title}
+              budgetText={item.budget}
+              communityName={item.community}
+              publishedAtText={item.publishedAtText || '刚刚'}
+              description={item.description}
+              onOffer={(id) => {
+                const selected = wants.find((want) => want.id === id)
+                const query = [
+                  `wantId=${encodeURIComponent(id)}`,
+                  `wantTitle=${encodeURIComponent(selected?.title || item.title)}`,
+                  `wantBudget=${encodeURIComponent(selected?.budget || item.budget)}`,
+                  `wantCommunity=${encodeURIComponent(selected?.community || item.community)}`,
+                  `wantAuthor=${encodeURIComponent(selected?.author || item.author)}`,
+                ].join('&')
+                Taro.navigateTo({ url: `/pages/chat/index?${query}` })
+              }}
+            />
+          ))}
+          {!loading && !wants.length && (
+            <View className='want-empty'>
+              <Text>{loadError || '附近暂无这类求购'}</Text>
+              <Text className='want-empty-action' onClick={() => { setLoadError(''); setKeyword(''); setCategory('全部') }}>{loadError ? '重新加载' : '查看全部'}</Text>
+            </View>
+          )}
+        </View>
       </View>
-      <View className='want-list'>
-        {wants.map((item) => (
-          <View className='want-card' key={item.id}>
-            <View className='want-card-top'><Text className='want-card-title'>{item.title}</Text><Text className='want-budget'>{item.budget}</Text></View>
-            <Text className='want-description'>{item.description}</Text>
-            <View className='want-card-bottom'><Text>{item.community} · {item.author}</Text><View className='want-contact' onClick={() => Taro.navigateTo({ url: `/pages/chat/index?wantId=${item.id}` })}>留言响应</View></View>
-          </View>
-        ))}
-      </View>
+      <BottomNav active='wanted' onChange={changeNavigation} onPublish={() => setShowPublishSheet(true)} />
+      <PublishActionSheet
+        open={showPublishSheet}
+        onClose={() => setShowPublishSheet(false)}
+        onPublishProduct={() => Taro.navigateTo({ url: '/pages/publish/index' })}
+        onPublishWanted={() => Taro.navigateTo({ url: '/pages/request-publish/index' })}
+      />
     </View>
   )
 }
-

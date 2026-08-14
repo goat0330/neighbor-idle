@@ -2,7 +2,7 @@
 
 这是一个面向小区内闲置流转的双版本协作仓库：
 
-产品第一原则：**只强调附近买卖闲置**。启动直达附近列表，一级动作只有“卖一件闲置”和“没找到？求购”，底部导航只有“附近 / 卖闲置 / 消息”。
+产品第一原则：**只强调附近买卖闲置**。启动直达附近列表，底部固定五栏为“闲置 / 求购 / 发布 / 消息 / 我的”，发布是中央独立动作。
 
 - `apps/workbuddy-app`：WorkBuddy 原生微信小程序 + CloudBase 业务基线，保留完整云函数、管理能力和数据模型。
 - `apps/codex-taro-app`：最终融合主产品，使用 React + TypeScript + Vite + Taro；已吸收并深化 WorkBuddy 的四个地图组件。
@@ -45,7 +45,15 @@ npm run typecheck
 npm run build:weapp
 ```
 
-将 `dist` 导入微信开发者工具。正式定位需要在 `.env.local` 配置腾讯地图 Key，并在腾讯位置服务控制台绑定小程序 AppID、限制接口与配额。
+将 `dist-weapp` 导入微信开发者工具。手机端 H5 Review 可运行：
+
+```powershell
+npm run dev:codex:h5
+```
+
+然后打开 `http://127.0.0.1:10086/index.html`；固定手机尺寸的静态 review 包在 [`review/`](./review/)。
+
+微信端只需在 `.env.local` 配置 `TARO_APP_CLOUD_ENV`，地图通过 CloudBase `tencentMap` 云函数访问；H5 本地调试才可按需配置腾讯地图 Key。
 
 推荐的本地 worktree：
 
@@ -58,4 +66,4 @@ D:\WorkBuddy\2026-08-13-08-41-12\worktrees\codex
 
 ## 重要安全说明
 
-公开仓库不提交 `project.private.config.json`、环境变量、地图 Key、管理员 openid 或真实客服联系方式。仓库中的 AppID 为游客占位值；上线前按 [`docs/上线说明.md`](./docs/上线说明.md) 完成人工配置、隐私声明、内容安全和提审。
+公开仓库不提交 `project.private.config.json`、环境变量、地图 Key、管理员 openid 或真实客服联系方式。当前微信开发者工具 AppID 已配置为 `wx00edfdef9d44805f`；上线前仍需按 [`docs/上线说明.md`](./docs/上线说明.md) 完成人工配置、隐私声明、内容安全和提审。

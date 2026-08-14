@@ -1,0 +1,75 @@
+.listing-manage-row {
+  position: relative;
+  display: flex;
+  min-height: 192rpx;
+  align-items: center;
+  padding: 16rpx 0;
+  border-bottom: 1px solid $color-border;
+  background: $color-surface-strong;
+}
+
+.listing-manage-row:last-child {
+  border-bottom: 0;
+}
+
+.listing-manage-image {
+  display: block;
+  width: 184rpx;
+  height: 148rpx;
+  flex: 0 0 184rpx;
+  border-radius: 18rpx;
+  background: #ecebe7;
+}
+
+.listing-manage-content {
+  flex: 1;
+  min-width: 0;
+  padding: 0 16rpx;
+}
+
+.listing-manage-title,
+.listing-manage-price,
+.listing-manage-stats {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.listing-manage-title {
+  color: $color-text-primary;
+  font-size: 30rpx;
+  line-height: 1.3;
+}
+
+.listing-manage-price {
+  margin-top: 10rpx;
+  color: $color-brand;
+  font-size: 36rpx;
+  font-weight: 500;
+  line-height: 1.15;
+}
+
+.listing-manage-stats {
+  margin-top: 10rpx;
+  color: $color-text-secondary;
+  font-size: 22rpx;
+  line-height: 1.2;
+}
+
+.listing-manage-action {
+  flex: 0 0 auto;
+  height: 72rpx;
+  padding: 0 28rpx;
+  border-radius: 36rpx;
+  background: $color-brand;
+  color: #fff;
+  font-size: 24rpx;
+  line-height: 72rpx;
+  white-space: nowrap;
+}
+
+.listing-manage-action--sold {
+  background: $color-brand;
+  color: #fff;
+}

@@ -1,0 +1,29 @@
+.contact-exchange-action {
+  display: flex;
+  height: 76rpx;
+  align-items: center;
+  justify-content: center;
+  border: 1rpx solid transparent;
+  border-radius: 38rpx;
+  font-size: 28rpx;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.contact-exchange-action--available {
+  border-color: rgba(255, 116, 51, .32);
+  background: $color-brand-soft;
+  color: $color-brand;
+}
+
+.contact-exchange-action--pending {
+  border-color: $color-border;
+  background: $color-surface;
+  color: $color-text-secondary;
+}
+
+.contact-exchange-action--approved {
+  border-color: rgba(255, 116, 51, .22);
+  background: $color-brand-soft;
+  color: $color-brand-muted;
+}

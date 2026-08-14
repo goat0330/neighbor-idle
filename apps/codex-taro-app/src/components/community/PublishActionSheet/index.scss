@@ -1,0 +1,119 @@
+.publish-sheet-mask {
+  position: fixed;
+  z-index: 40;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: flex-end;
+  background: rgba(34, 34, 34, .38);
+}
+
+.publish-sheet {
+  width: 100%;
+  padding: 14rpx 32rpx calc(34rpx + env(safe-area-inset-bottom));
+  border-radius: 36rpx 36rpx 0 0;
+  background: $color-surface-strong;
+  box-shadow: 0 -8rpx 24rpx rgba(34, 34, 34, .08);
+}
+
+.publish-sheet-handle {
+  width: 72rpx;
+  height: 8rpx;
+  margin: 0 auto 28rpx;
+  border-radius: 8rpx;
+  background: $color-border;
+}
+
+.publish-sheet-title,
+.publish-sheet-copy {
+  display: block;
+  text-align: center;
+}
+
+.publish-sheet-title {
+  color: $color-text-primary;
+  font-size: 34rpx;
+  font-weight: 700;
+}
+
+.publish-sheet-copy {
+  margin-top: 8rpx;
+  color: $color-text-tertiary;
+  font-size: 22rpx;
+}
+
+.publish-sheet-options {
+  display: flex;
+  gap: 20rpx;
+  margin-top: 28rpx;
+}
+
+.publish-sheet-option {
+  display: flex;
+  min-width: 0;
+  height: 128rpx;
+  flex: 1;
+  align-items: center;
+  padding: 0 18rpx;
+  border: 1px solid $color-border;
+  border-radius: 20rpx;
+  background: $color-surface;
+}
+
+.publish-sheet-option-primary {
+  border-color: rgba(255, 116, 51, .42);
+  background: $color-brand-soft;
+}
+
+.publish-sheet-option-icon {
+  display: flex;
+  width: 56rpx;
+  height: 56rpx;
+  flex: 0 0 56rpx;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: $color-text-primary;
+  color: #fff;
+  font-size: 36rpx;
+  line-height: 1;
+}
+
+.publish-sheet-option-primary .publish-sheet-option-icon {
+  background: $color-brand;
+}
+
+.publish-sheet-option-copy {
+  min-width: 0;
+  margin-left: 14rpx;
+}
+
+.publish-sheet-option-title,
+.publish-sheet-option-description {
+  display: block;
+}
+
+.publish-sheet-option-title {
+  color: $color-text-primary;
+  font-size: 28rpx;
+  font-weight: 700;
+}
+
+.publish-sheet-option-primary .publish-sheet-option-title {
+  color: $color-brand;
+}
+
+.publish-sheet-option-description {
+  margin-top: 6rpx;
+  color: $color-text-tertiary;
+  font-size: 19rpx;
+  line-height: 1.25;
+}
+
+.publish-sheet-option-arrow {
+  margin-left: auto;
+  color: $color-text-tertiary;
+  font-size: 34rpx;
+}

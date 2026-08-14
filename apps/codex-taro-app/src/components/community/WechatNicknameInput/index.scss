@@ -1,0 +1,30 @@
+.wechat-nickname-input {
+  display: flex;
+  min-height: 88rpx;
+  align-items: center;
+  gap: 24rpx;
+  border-bottom: 1rpx solid $color-border;
+}
+
+.wechat-nickname-input__label {
+  flex: 0 0 108rpx;
+  color: $color-text-primary;
+  font-size: 28rpx;
+  font-weight: 500;
+}
+
+.wechat-nickname-input__field {
+  min-width: 0;
+  flex: 1;
+  height: 72rpx;
+  color: $color-text-primary;
+  font-size: 28rpx;
+}
+
+.wechat-nickname-input__field::placeholder {
+  color: $color-text-tertiary;
+}
+
+.wechat-nickname-input--disabled {
+  opacity: .56;
+}

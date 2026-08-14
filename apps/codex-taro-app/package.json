@@ -4,6 +4,7 @@
   "private": true,
   "description": "邻里二手小程序 React + TypeScript + Vite + Taro 版本",
   "scripts": {
+    "dev:h5": "taro build --type h5 --watch --port 10086",
     "dev:weapp": "taro build --type weapp --watch",
     "build:weapp": "taro build --type weapp",
     "build:h5": "taro build --type h5",
@@ -21,6 +22,7 @@
     "@tarojs/cli": "4.2.1",
     "@tarojs/helper": "4.2.1",
     "@tarojs/plugin-framework-react": "4.2.1",
+    "@tarojs/plugin-platform-h5": "^4.2.1",
     "@tarojs/plugin-platform-weapp": "4.2.1",
     "@tarojs/vite-runner": "4.2.1",
     "@types/react": "^18.3.18",

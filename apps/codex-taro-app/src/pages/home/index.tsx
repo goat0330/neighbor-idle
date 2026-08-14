@@ -1,80 +1,168 @@
-import { Input, Text, View } from '@tarojs/components'
+import { Text, View } from '@tarojs/components'
 import Taro from '@tarojs/taro'
-import { useMemo, useState } from 'react'
-import ListingCard from '@/components/ListingCard'
+import { useEffect, useMemo, useState } from 'react'
+import {
+  BottomNav,
+  CategoryTabs,
+  ProductCard,
+  PublishActionSheet,
+  SearchLocationBar,
+  type BottomNavTab,
+  type CategoryTab,
+} from '@/components/community'
+import { backendEnabled, itemApi } from '@/services/backend'
+import { mapBackendItem, backendCategoryKey, searchListings } from '@/services/market'
+import type { Listing } from '@/types/market'
 import { requestUserLocation } from '@/services/location'
-import { searchListings } from '@/services/market'
-import { NearbyMap, type NearbyItem } from '@components/Map'
 import './index.scss'
 
-const categories = ['全部', '家具家电', '家居用品', '母婴玩具', '数码产品']
+const categoryTabs: CategoryTab[] = ['全部', '家具', '家电', '数码', '母婴', '图书', '其他'].map((label) => ({ key: label, label }))
+
+const serviceCategoryByTab: Record<string, string> = {
+  全部: '全部',
+  家具: '家具',
+  家电: '家电',
+  数码: '数码',
+  母婴: '母婴',
+  图书: '图书',
+  其他: '其他',
+}
 
 export default function HomePage() {
   const [keyword, setKeyword] = useState('')
   const [category, setCategory] = useState('全部')
-  const [located, setLocated] = useState(false)
-  const [viewMode, setViewMode] = useState<'list' | 'map'>('list')
-  const listings = useMemo(() => searchListings(keyword, category), [keyword, category])
-  const mapItems: NearbyItem[] = listings.map((item) => ({
-    id: item.id,
-    title: item.title,
-    price: item.price,
-    coverImage: item.image,
-    location: { latitude: item.latitude, longitude: item.longitude },
-  }))
+  const [showPublishSheet, setShowPublishSheet] = useState(false)
+  const [soldIds] = useState<string[]>(() => Taro.getStorageSync<string[]>('community_sold_ids') || [])
+  const [remoteListings, setRemoteListings] = useState<Listing[]>([])
+  const [loading, setLoading] = useState(backendEnabled)
+  const [loadError, setLoadError] = useState('')
+  const listings = useMemo(
+    () => {
+      if (!backendEnabled) return searchListings(keyword, serviceCategoryByTab[category] ?? '全部').filter((item) => !soldIds.includes(item.id))
+      const normalized = keyword.trim().toLowerCase()
+      return remoteListings.filter((item) => {
+        const matchKeyword = !normalized || `${item.title}${item.category}${item.description}`.toLowerCase().includes(normalized)
+        const matchCategory = category === '全部' || item.category === category
+        return matchKeyword && matchCategory
+      })
+    },
+    [category, keyword, remoteListings, soldIds],
+  )
+
+  useEffect(() => {
+    if (!backendEnabled) return
+    let active = true
+    const timer = setTimeout(() => {
+      setLoading(true)
+      setLoadError('')
+      const request = keyword.trim()
+        ? itemApi.search({ keyword: keyword.trim(), page: 1, pageSize: 20 })
+        : itemApi.list({ category: category === '全部' ? 'all' : backendCategoryKey(category), page: 1, pageSize: 20 })
+      request
+        .then((result) => {
+          if (active) setRemoteListings(result.list.map(mapBackendItem))
+        })
+        .catch((error: any) => {
+          if (active) setLoadError(error.message || '附近闲置加载失败')
+        })
+        .finally(() => {
+          if (active) setLoading(false)
+        })
+    }, 220)
+    return () => {
+      active = false
+      clearTimeout(timer)
+    }
+  }, [category, keyword])
 
   async function locate() {
     const location = await requestUserLocation()
     if (location) {
-      setLocated(true)
       Taro.showToast({ title: '已更新附近距离', icon: 'success' })
     } else {
-      Taro.showModal({ title: '需要定位权限', content: '授权定位后，商品卡片会显示与你的距离。', confirmText: '去授权' })
+      Taro.showModal({
+        title: '需要定位权限',
+        content: '授权定位后，商品卡片会显示与你的距离。',
+        confirmText: '去授权',
+      })
     }
   }
 
+  function openDetail(id: string) {
+    Taro.navigateTo({ url: `/pages/detail/index?id=${encodeURIComponent(id)}` })
+  }
+
+  function openChat(id: string) {
+    Taro.navigateTo({ url: `/pages/chat/index?listingId=${encodeURIComponent(id)}` })
+  }
+
+  function changeNavigation(key: BottomNavTab) {
+    if (key === 'idle') return
+    const routes = {
+      wanted: '/pages/want/index',
+      messages: '/pages/messages/index',
+      me: '/pages/mine/index',
+    } as const
+    Taro.reLaunch({ url: routes[key] })
+  }
+
+  function publishProduct() {
+    setShowPublishSheet(false)
+    Taro.navigateTo({ url: '/pages/publish/index' })
+  }
+
+  function publishWanted() {
+    setShowPublishSheet(false)
+    Taro.navigateTo({ url: '/pages/request-publish/index' })
+  }
+
   return (
-    <View className='page-shell home-page'>
-      <View className='home-header'>
-        <View>
-          <Text className='page-title'>附近闲置</Text>
-          <Text className='home-promise'>看附近 · 当面验 · 直接拿走</Text>
-        </View>
-        <View className='home-header-actions'>
-          <Text className='home-location' onClick={locate}>{located ? '已定位' : '定位'}</Text>
-          <Text className='home-mine' onClick={() => Taro.navigateTo({ url: '/pages/mine/index' })}>我</Text>
-        </View>
+    <View className='home-page'>
+      <View className='home-content'>
+        <SearchLocationBar
+          value={keyword}
+          communityName='金水花园'
+          onInput={setKeyword}
+          onSearch={setKeyword}
+          onOpenCommunity={() => { void locate() }}
+        />
+        <CategoryTabs value={category} items={categoryTabs} onChange={setCategory} />
+
+        {loading && listings.length === 0 ? (
+          <View className='home-loading-state'><Text>正在加载附近闲置…</Text></View>
+        ) : listings.length > 0 ? (
+          <View className='product-grid'>
+            {listings.map((item) => (
+              <ProductCard
+                key={item.id}
+                id={item.id}
+                image={item.image}
+                title={item.title}
+                price={item.price}
+                seller={{ avatar: item.sellerAvatar || '', nickname: item.seller }}
+                communityName={item.community}
+                distanceM={item.distanceKm === undefined ? undefined : Math.round(item.distanceKm * 1000)}
+                status={item.status === '已售出' ? 'sold' : 'selling'}
+                onOpen={openDetail}
+                onContact={openChat}
+              />
+            ))}
+          </View>
+        ) : (
+          <View className='home-empty-state'>
+            <Text className='home-empty-title'>{loadError || '暂时没有匹配的闲置'}</Text>
+            <Text className='home-empty-copy' onClick={() => { setLoadError(''); setKeyword(''); setCategory('全部') }}>{loadError ? '重新加载' : '清空条件，查看全部'}</Text>
+          </View>
+        )}
       </View>
-      <View className='search-box'>
-        <Text className='search-icon'>⌕</Text>
-        <Input value={keyword} onInput={(event) => setKeyword(event.detail.value)} placeholder='搜索你想要的东西' />
-      </View>
-      <View className='category-row'>
-        {categories.map((item) => <Text key={item} className={`category-pill ${category === item ? 'category-pill-active' : ''}`} onClick={() => setCategory(item)}>{item}</Text>)}
-      </View>
-      <View className='core-actions'>
-        <View className='core-action core-action-primary' onClick={() => Taro.switchTab({ url: '/pages/publish/index' })}>
-          <Text className='core-action-title'>卖一件闲置</Text>
-          <Text className='core-action-copy'>拍照，定价，发布</Text>
-        </View>
-        <View className='core-action core-action-secondary' onClick={() => Taro.navigateTo({ url: '/pages/request-publish/index' })}>
-          <Text className='core-action-title'>没找到？求购</Text>
-          <Text className='core-action-copy'>让邻居来响应</Text>
-        </View>
-      </View>
-      <View className='result-heading'>
-        <View><Text className='result-title'>离你最近</Text><Text className='result-count'>{located ? `${listings.length} 件` : '定位后按距离排序'}</Text></View>
-        <View className='view-switch'>
-          <Text className={viewMode === 'list' ? 'view-switch-active' : ''} onClick={() => setViewMode('list')}>列表</Text>
-          <Text className={viewMode === 'map' ? 'view-switch-active' : ''} onClick={() => setViewMode('map')}>地图</Text>
-        </View>
-      </View>
-      {viewMode === 'list' ? (
-        <View className='listing-grid'>{listings.map((item) => <ListingCard key={item.id} item={item} />)}</View>
-      ) : (
-        <NearbyMap items={mapItems} height='760rpx' onItemClick={(item) => Taro.navigateTo({ url: `/pages/detail/index?id=${item.id}` })} />
-      )}
-      {!listings.length && <View className='empty-state' onClick={() => Taro.navigateTo({ url: '/pages/request-publish/index' })}><Text>没找到？直接发布求购</Text></View>}
+
+      <BottomNav active='idle' onChange={changeNavigation} onPublish={() => setShowPublishSheet(true)} />
+      <PublishActionSheet
+        open={showPublishSheet}
+        onClose={() => setShowPublishSheet(false)}
+        onPublishProduct={publishProduct}
+        onPublishWanted={publishWanted}
+      />
     </View>
   )
 }

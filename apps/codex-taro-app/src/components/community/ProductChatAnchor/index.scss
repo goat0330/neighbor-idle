@@ -1,0 +1,71 @@
+.product-chat-anchor {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 24rpx;
+  padding: 20rpx 28rpx;
+  border: 1rpx solid $color-border;
+  border-radius: 32rpx;
+  background: $color-surface-strong;
+  box-shadow: 0 12rpx 30rpx rgba(34, 34, 34, .04);
+}
+
+.product-chat-anchor__image {
+  display: block;
+  width: 228rpx;
+  height: 156rpx;
+  flex: 0 0 228rpx;
+  border-radius: 22rpx;
+  background: #eeece8;
+}
+
+.product-chat-anchor__copy {
+  min-width: 0;
+  flex: 1;
+}
+
+.product-chat-anchor__title,
+.product-chat-anchor__price,
+.product-chat-anchor__location {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.product-chat-anchor__title {
+  color: $color-text-primary;
+  font-size: 32rpx;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.product-chat-anchor__price {
+  margin-top: 12rpx;
+  color: $color-brand;
+  font-size: 38rpx;
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.product-chat-anchor__location {
+  margin-top: 12rpx;
+  color: $color-text-secondary;
+  font-size: 24rpx;
+  line-height: 1.2;
+}
+
+.product-chat-anchor__action {
+  display: block;
+  flex: 0 0 auto;
+  color: $color-text-secondary;
+  font-size: 24rpx;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+.product-chat-anchor__arrow {
+  margin-left: 4rpx;
+  font-size: 34rpx;
+  vertical-align: -2rpx;
+}

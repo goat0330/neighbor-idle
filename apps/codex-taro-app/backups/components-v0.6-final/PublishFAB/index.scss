@@ -1,0 +1,35 @@
+.publish-fab {
+  display: flex;
+  width: 160rpx;
+  height: 180rpx;
+  flex-direction: column;
+  align-items: center;
+  margin-top: -24rpx;
+  color: $color-text-primary;
+}
+
+.publish-fab-circle {
+  display: flex;
+  width: 148rpx;
+  height: 148rpx;
+  flex: 0 0 148rpx;
+  align-items: center;
+  justify-content: center;
+  border: 4rpx solid $color-page;
+  border-radius: 50%;
+  background: $color-brand;
+  box-shadow: $shadow-fab;
+}
+
+.publish-fab-plus {
+  color: #fff;
+  font-size: 80rpx;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.publish-fab-label {
+  margin-top: 4rpx;
+  font-size: 30rpx;
+  line-height: 1.2;
+}

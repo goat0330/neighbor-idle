@@ -1,11 +1,23 @@
-.request-intro { display: block; margin-top: 16px; color: #718077; font-size: 26px; }
-.request-form { margin-top: 28px; padding: 24px 22px 30px; border: 1px solid #e7e3d9; border-radius: 28px; background: #fffdf8; }
-.request-form .field-label { display: block; margin-bottom: 10px; }
-.request-form input, .request-form .picker-value, .request-form .large-textarea { width: 100%; border: 1px solid #dcded6; border-radius: 18px; background: #fffdf8; color: #173b34; font-size: 27px; }
-.request-form input { height: 82px; padding: 0 20px; }
-.request-form .picker-value { display: flex; align-items: center; justify-content: space-between; height: 82px; padding: 0 20px; }
-.request-form .picker-value text { color: #eb8055; }
-.request-form .large-textarea { min-height: 240px; padding: 18px 20px; line-height: 1.55; }
-.request-form .privacy-note { display: flex; gap: 10px; margin: 26px 0 24px; color: #6f8374; font-size: 21px; }
-.request-form .privacy-note text:first-child { color: #74ac78; }
-
+.request-publish-page { min-height: 100vh; padding-bottom: 148rpx; background: $color-page; color: $color-text-primary; }
+.request-header { display: flex; height: 112rpx; align-items: center; justify-content: space-between; padding: 0 32rpx; }
+.request-back { color: $color-text-primary; font-size: 60rpx; line-height: 1; }
+.request-title { font-size: 38rpx; font-weight: 700; }
+.request-more { color: $color-text-secondary; font-size: 34rpx; letter-spacing: 4rpx; }
+.request-content { padding: 0 32rpx 24rpx; }
+.request-form { padding: 0 24rpx; border-radius: 32rpx; background: $color-surface-strong; }
+.request-field { position: relative; padding: 32rpx 0; border-bottom: 1px solid $color-border; }
+.request-field-label { display: block; color: $color-text-primary; font-size: 30rpx; }
+.request-field input { display: block; width: 100%; height: 72rpx; margin-top: 10rpx; color: $color-text-primary; font-size: 30rpx; line-height: 72rpx; }
+.request-field input::placeholder, .request-description-field textarea::placeholder { color: $color-text-tertiary; }
+.request-counter { position: absolute; top: 36rpx; right: 0; color: $color-text-tertiary; font-size: 22rpx; }
+.request-category-row { display: flex; gap: 18rpx; margin-top: 26rpx; overflow-x: auto; white-space: nowrap; }
+.request-category { padding: 14rpx 26rpx; border: 1px solid $color-border; border-radius: 28rpx; color: $color-text-secondary; font-size: 26rpx; }
+.request-category.is-active { border-color: rgba(255,116,51,.42); background: $color-brand-soft; color: $color-brand; }
+.request-description-field textarea { display: block; width: 100%; min-height: 220rpx; margin-top: 18rpx; color: $color-text-primary; font-size: 27rpx; line-height: 1.55; }
+.request-muted { color: $color-text-tertiary; font-size: 24rpx; }
+.request-description-field .request-counter { top: auto; bottom: 28rpx; }
+.request-location-row { display: flex; align-items: center; justify-content: space-between; padding: 32rpx 0; }
+.request-location-value { color: $color-text-secondary; font-size: 28rpx; }
+.request-submit-wrap { position: fixed; z-index: 20; right: 0; bottom: 0; left: 0; padding: 18rpx 32rpx calc(18rpx + env(safe-area-inset-bottom)); background: rgba(250,250,248,.98); }
+.request-submit { height: 86rpx; margin: 0; border-radius: 43rpx; background: $color-brand; color: #fff; font-size: 30rpx; line-height: 86rpx; }
+.request-submit::after { border: 0; }

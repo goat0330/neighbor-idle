@@ -1,35 +1,125 @@
-.chat-page { display: flex; flex-direction: column; height: 100vh; background: #f7f5ef; }
-.trade-strip { display: flex; justify-content: center; gap: 14px; padding: 18px 20px; background: #e9efdf; color: #89958c; font-size: 21px; }
-.trade-strip-active { color: #173b34; font-weight: 800; }
-.chat-messages { flex: 1; padding: 18px 24px; }
-.chat-safety { margin: 0 auto 20px; padding: 12px 18px; border-radius: 16px; background: #f5e9dc; color: #8a6a58; font-size: 20px; text-align: center; }
-.bubble-row { display: flex; margin-bottom: 16px; }
-.bubble-row-mine { justify-content: flex-end; }
-.bubble { max-width: 72%; padding: 18px 20px; border-radius: 22px; font-size: 26px; line-height: 1.5; }
-.bubble-peer { border-bottom-left-radius: 6px; background: #fffdf8; color: #173b34; }
-.bubble-mine { border-bottom-right-radius: 6px; background: #173b34; color: #fffdf8; }
-.system-message { margin: 18px auto; color: #89938c; font-size: 20px; text-align: center; }
-.contact-panel { margin: 28px 0 120px; padding: 22px; border: 1px solid #dfe4d8; border-radius: 22px; background: #fffdf8; }
-.contact-approved { background: #e8f1e2; }
-.contact-title, .contact-copy, .contact-warning { display: block; }
-.contact-title { color: #173b34; font-size: 28px; font-weight: 800; }
-.contact-copy { margin-top: 8px; color: #708077; font-size: 23px; line-height: 1.5; }
-.contact-warning { margin-top: 12px; color: #96705d; font-size: 19px; }
-.contact-button { margin-top: 18px; border-radius: 14px; background: #173b34; color: #fff; font-size: 24px; line-height: 72px; }
-.contact-button-demo { background: #eb8055; }
-.contact-review-actions { display: flex; gap: 14px; margin-top: 18px; }
-.contact-review-actions button { flex: 1; margin: 0; border-radius: 14px; font-size: 24px; }
-.contact-review-actions .contact-button { color: #fff; background: #173b34; }
-.contact-revoke { display: block; margin-top: 16px; color: #8a6a58; font-size: 21px; text-align: center; }
-.quick-actions { display: flex; gap: 12px; overflow-x: auto; padding: 12px 22px; background: #fffdf8; white-space: nowrap; }
-.quick-actions text { padding: 10px 16px; border: 1px solid #cfd7cf; border-radius: 999px; color: #557064; font-size: 21px; }
-.chat-composer { display: flex; gap: 12px; padding: 14px 20px 24px; background: #fffdf8; }
-.chat-composer input { flex: 1; height: 76px; padding: 0 18px; border-radius: 18px; background: #f1f1eb; font-size: 25px; }
-.chat-composer button { width: 130px; border-radius: 18px; background: #173b34; color: #fff; font-size: 24px; line-height: 76px; }
-.contact-modal-mask { position: fixed; z-index: 20; inset: 0; display: flex; align-items: flex-end; background: rgba(18, 42, 35, .44); }
-.contact-modal { width: 100%; padding: 34px 28px 48px; border-radius: 30px 30px 0 0; background: #fffdf8; }
-.contact-modal-title { display: block; color: #173b34; font-size: 32px; font-weight: 800; }
-.contact-modal input { height: 82px; margin-top: 22px; padding: 0 20px; border: 1px solid #d9ddd5; border-radius: 18px; background: #f7f5ef; font-size: 25px; }
-.contact-modal-actions { display: flex; gap: 16px; margin-top: 24px; }
-.contact-modal-actions button { flex: 1; border-radius: 18px; font-size: 25px; }
-.contact-modal-actions .confirm { color: #fff; background: #173b34; }
+.chat-page {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  background: $color-page;
+}
+
+.chat-header {
+  display: flex;
+  height: 112rpx;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32rpx;
+  border-bottom: 1px solid $color-border;
+  background: $color-page;
+}
+
+.chat-back,
+.chat-more {
+  width: 72rpx;
+  color: $color-text-primary;
+  font-size: 56rpx;
+  line-height: 1;
+}
+
+.chat-more {
+  color: $color-text-secondary;
+  font-size: 34rpx;
+  letter-spacing: 4rpx;
+  text-align: right;
+}
+
+.chat-header-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4rpx;
+}
+
+.chat-header-title text:first-child {
+  color: $color-text-primary;
+  font-size: 34rpx;
+  font-weight: 600;
+}
+
+.chat-header-title text:last-child {
+  color: $color-text-tertiary;
+  font-size: 22rpx;
+}
+
+.chat-messages {
+  min-height: 0;
+  flex: 1;
+  padding: 24rpx 32rpx 18rpx;
+}
+
+.chat-time-label {
+  display: block;
+  margin: 24rpx 0;
+  color: $color-text-tertiary;
+  font-size: 22rpx;
+  text-align: center;
+}
+
+.wanted-chat-anchor {
+  margin: 0 0 28rpx;
+  padding: 24rpx;
+  border: 1px solid $color-border;
+  border-radius: 22rpx;
+  background: $color-surface-strong;
+}
+
+.wanted-chat-anchor-kicker { display: block; color: $color-text-secondary; font-size: 24rpx; }
+.wanted-chat-anchor-title { display: block; margin-top: 12rpx; color: $color-text-primary; font-size: 34rpx; font-weight: 600; }
+.wanted-chat-anchor-meta { display: flex; gap: 24rpx; margin-top: 14rpx; color: $color-brand; font-size: 25rpx; }
+.wanted-chat-anchor-meta text:last-child { color: $color-text-secondary; }
+
+.chat-system-message {
+  margin: 20rpx auto;
+  color: $color-text-tertiary;
+  font-size: 22rpx;
+  text-align: center;
+}
+
+.seller-approval-trigger {
+  margin: 28rpx auto 16rpx;
+  padding: 20rpx 24rpx;
+  border: 1px solid rgba(255, 116, 51, .32);
+  border-radius: 18rpx;
+  background: $color-brand-soft;
+  color: $color-brand;
+  font-size: 26rpx;
+  text-align: center;
+}
+
+.approved-contact-block {
+  margin: 28rpx 0 16rpx;
+  padding: 22rpx;
+  border-radius: 22rpx;
+  background: $color-surface-strong;
+}
+
+.approved-contact-title {
+  display: block;
+  margin-bottom: 16rpx;
+  color: $color-text-primary;
+  font-size: 28rpx;
+  font-weight: 600;
+}
+
+.chat-composer-r2 {
+  flex: 0 0 auto;
+  padding-bottom: env(safe-area-inset-bottom);
+  background: $color-surface-strong;
+}
+
+.quick-question-chips {
+  flex: 0 0 auto;
+  background: $color-surface-strong;
+}
+
+.contact-exchange-action {
+  flex: 0 0 auto;
+  margin: 14rpx 32rpx 20rpx;
+}

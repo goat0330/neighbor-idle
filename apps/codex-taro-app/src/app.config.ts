@@ -2,20 +2,23 @@ export default {
   pages: [
     'pages/home/index',
     'pages/publish/index',
+    'pages/publish-success/index',
     'pages/messages/index',
     'pages/detail/index',
     'pages/chat/index',
+    'pages/chat-preview/index',
     'pages/want/index',
     'pages/request-publish/index',
     'pages/mine/index',
+    'pages/components-preview/index',
     'pages/cover/index',
     'pages/map-demo/index',
   ],
   window: {
-    navigationBarBackgroundColor: '#F7F5EF',
+    navigationBarBackgroundColor: '#F5F5F3',
     navigationBarTextStyle: 'black',
-    navigationBarTitleText: '邻里集市',
-    backgroundColor: '#F7F5EF',
+    navigationBarTitleText: '社区闲置',
+    backgroundColor: '#F5F5F3',
     backgroundTextStyle: 'light',
   },
   permission: {
@@ -24,15 +27,4 @@ export default {
     },
   },
   requiredPrivateInfos: ['getLocation', 'chooseLocation'],
-  tabBar: {
-    color: '#7B817C',
-    selectedColor: '#EB8055',
-    backgroundColor: '#FFFDF8',
-    borderStyle: 'white',
-    list: [
-      { pagePath: 'pages/home/index', text: '附近' },
-      { pagePath: 'pages/publish/index', text: '卖闲置' },
-      { pagePath: 'pages/messages/index', text: '消息' },
-    ],
-  },
 }

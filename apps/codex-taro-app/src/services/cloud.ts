@@ -76,10 +76,10 @@ class CloudService {
    * @param tempPaths 临时文件路径数组
    * @returns fileID 数组
    */
-  async uploadImages(tempPaths: string[]): Promise<string[]> {
+  async uploadImages(tempPaths: string[], folder = 'items'): Promise<string[]> {
     const tasks = tempPaths.map(p => {
       const ext = p.match(/\.(\w+)$/)?.[1] || 'png'
-      const cloudPath = `items/${Date.now()}-${Math.floor(Math.random() * 1e6)}.${ext}`
+      const cloudPath = `${folder}/${Date.now()}-${Math.floor(Math.random() * 1e6)}.${ext}`
       return Taro.cloud.uploadFile({ cloudPath, filePath: p }).then(r => r.fileID)
     })
     return Promise.all(tasks)

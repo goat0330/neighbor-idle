@@ -1,0 +1,68 @@
+.chat-bubble-row {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  align-items: flex-start;
+  gap: 16rpx;
+  margin: 22rpx 0;
+}
+
+.chat-bubble-row.is-outgoing {
+  justify-content: flex-end;
+}
+
+.chat-bubble-row__avatar {
+  display: block;
+  width: 88rpx;
+  height: 88rpx;
+  flex: 0 0 88rpx;
+  border: 1rpx solid rgba(34, 34, 34, .08);
+  border-radius: 50%;
+  background: #eeece8;
+}
+
+.chat-bubble-row__stack {
+  display: flex;
+  min-width: 0;
+  max-width: 72%;
+  flex-direction: column;
+}
+
+.is-outgoing .chat-bubble-row__stack {
+  align-items: flex-end;
+}
+
+.chat-bubble-row__bubble {
+  padding: 20rpx 26rpx;
+  border: 1rpx solid $color-border;
+  border-radius: 26rpx;
+  background: $color-surface-strong;
+  color: $color-text-primary;
+  font-size: 30rpx;
+  line-height: 1.45;
+  word-break: break-word;
+}
+
+.is-incoming .chat-bubble-row__bubble {
+  border-top-left-radius: 10rpx;
+}
+
+.is-outgoing .chat-bubble-row__bubble {
+  border-color: #f6ded1;
+  border-bottom-right-radius: 10rpx;
+  background: $color-brand-soft;
+}
+
+.chat-bubble-row__meta {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-top: 8rpx;
+}
+
+.chat-bubble-row__time,
+.chat-bubble-row__read {
+  color: $color-text-tertiary;
+  font-size: 22rpx;
+  line-height: 1.2;
+}

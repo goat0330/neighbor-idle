@@ -77,6 +77,10 @@ class TencentMapService {
     return Boolean(APP_CONFIG.CLOUD_ENV) && typeof wx !== 'undefined' && Boolean(wx.cloud)
   }
 
+  isAvailable() {
+    return this.useCloudBackend() || Boolean(this.key)
+  }
+
   private assertDirectConfigured() {
     if (!this.key) {
       throw new Error('腾讯地图服务未配置，请设置 TARO_APP_CLOUD_ENV；本地 H5 调试才需要 TARO_APP_TENCENT_MAP_KEY')

@@ -6,7 +6,8 @@
   "scripts": {
     "check:codex": "npm --prefix apps/codex-taro-app run typecheck",
     "build:codex": "npm --prefix apps/codex-taro-app run build:weapp",
+    "build:codex:h5": "npm --prefix apps/codex-taro-app run build:h5",
+    "dev:codex:h5": "npm --prefix apps/codex-taro-app run dev:h5",
     "dev:codex": "npm --prefix apps/codex-taro-app run dev:weapp"
   }
 }
-

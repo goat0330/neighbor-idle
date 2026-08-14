@@ -1,71 +1,228 @@
-import { Button, Input, Text, View } from '@tarojs/components'
+import { Button, Image, Text, View } from '@tarojs/components'
 import Taro from '@tarojs/taro'
-import { useEffect, useState } from 'react'
-import { backendEnabled, userApi, type UserProfile } from '@/services/backend'
+import { useEffect, useMemo, useState } from 'react'
+import {
+  BottomNav,
+  ListingManageRow,
+  PublishActionSheet,
+  WechatContactSetupSheet,
+  WechatQuickProfileSheet,
+  type BottomNavTab,
+} from '@/components/community'
+import { backendEnabled, itemApi, updateProfileWithAvatar, userApi, type UserProfile } from '@/services/backend'
+import { mapBackendItem, seedListings } from '@/services/market'
+import type { Listing } from '@/types/market'
+import avatarOrange from '@/assets/mock/avatar-orange.png'
 import './index.scss'
 
+const defaultProfile: UserProfile = {
+  id: 'demo',
+  nickname: '麦克斯',
+  avatarUrl: avatarOrange,
+  communityId: 'jinshui',
+  communityName: '金水花园',
+  building: '',
+  verificationStatus: 'verified',
+  hasWechat: false,
+  hasPhone: false,
+  phoneMasked: '',
+  creditScore: 100,
+  status: 'active',
+}
+
 const entries = [
-  ['我发布的', '3 件在售 · 1 件已成交'],
-  ['我发起的求购', '2 条进行中'],
-  ['交易评价', '4.9 分 · 爽快 12 · 描述相符 10'],
-  ['隐私与黑名单', '管理联系方式授权和屏蔽用户'],
+  ['我发布的闲置', 'paper-plane'],
+  ['浏览记录', 'clock'],
+  ['帮助与反馈', 'question'],
+  ['社区规则', 'document'],
+  ['关于我们', 'info'],
 ]
 
 export default function MinePage() {
-  const [profile, setProfile] = useState<UserProfile>({ id: 'demo', nickname: '云杉里邻居', avatarUrl: '', communityId: 'demo', communityName: '云杉里小区', building: '3 栋', verificationStatus: 'verified', hasWechat: false, creditScore: 100, status: 'active' })
-  const [showWechatForm, setShowWechatForm] = useState(false)
+  const [profile, setProfile] = useState<UserProfile>(defaultProfile)
+  const [showProfileSheet, setShowProfileSheet] = useState(false)
+  const [showContactSheet, setShowContactSheet] = useState(false)
+  const [showPublishSheet, setShowPublishSheet] = useState(false)
+  const [profileAvatar, setProfileAvatar] = useState(defaultProfile.avatarUrl)
+  const [profileNickname, setProfileNickname] = useState(defaultProfile.nickname)
   const [wechatId, setWechatId] = useState('')
-  const copyServiceWechat = () => Taro.setClipboardData({ data: 'neighbor_service_demo' })
+  const [savingProfile, setSavingProfile] = useState(false)
+  const [savingContact, setSavingContact] = useState(false)
+  const [phoneLoading, setPhoneLoading] = useState(false)
+  const [soldIds, setSoldIds] = useState<string[]>(() => Taro.getStorageSync<string[]>('community_sold_ids') || [])
+  const [remoteListings, setRemoteListings] = useState<Listing[]>([])
+
+  const listings = useMemo<Listing[]>(() => {
+    if (backendEnabled) return remoteListings
+    return ['airpods-07', 'bag-08', 'bicycle-09']
+      .map((id) => seedListings.find((item) => item.id === id))
+      .filter((item): item is Listing => Boolean(item))
+  }, [remoteListings])
+
+  function changeNavigation(key: BottomNavTab) {
+    if (key === 'me') return
+    const routes = {
+      idle: '/pages/home/index',
+      wanted: '/pages/want/index',
+      messages: '/pages/messages/index',
+    } as const
+    Taro.reLaunch({ url: routes[key] })
+  }
 
   useEffect(() => {
     if (!backendEnabled) return
-    userApi.me().then(setProfile).catch((error) => Taro.showToast({ title: error.message || '资料加载失败', icon: 'none' }))
+    Promise.all([userApi.me(), itemApi.my()])
+      .then(([result, itemResult]) => {
+        setProfile(result)
+        setProfileAvatar(result.avatarUrl || avatarOrange)
+        setProfileNickname(result.nickname)
+        setRemoteListings(itemResult.list.map(mapBackendItem))
+      })
+      .catch((error) => Taro.showToast({ title: error.message || '资料加载失败', icon: 'none' }))
   }, [])
 
-  async function saveWechat() {
+  async function completeProfile() {
+    if (!profileNickname.trim()) {
+      Taro.showToast({ title: '请先填写昵称', icon: 'none' })
+      return
+    }
+    setSavingProfile(true)
     try {
-      const result = backendEnabled ? await userApi.setWechat(wechatId) : { hasWechat: Boolean(wechatId.trim()) }
-      setProfile((current) => ({ ...current, hasWechat: result.hasWechat }))
-      setWechatId('')
-      setShowWechatForm(false)
-      Taro.showToast({ title: result.hasWechat ? '交易微信已保存' : '交易微信已清除', icon: 'none' })
+      const result = backendEnabled
+        ? await updateProfileWithAvatar({ avatarUrl: profileAvatar, nickname: profileNickname.trim() })
+        : { ...profile, avatarUrl: profileAvatar, nickname: profileNickname.trim() }
+      setProfile(result)
+      setShowProfileSheet(false)
+      Taro.showToast({ title: '资料已更新', icon: 'success' })
+    } catch (error: any) {
+      Taro.showToast({ title: error.message || '资料保存失败', icon: 'none' })
+    } finally {
+      setSavingProfile(false)
+    }
+  }
+
+  async function receivePhoneCode(code: string) {
+    setPhoneLoading(true)
+    try {
+      const result = backendEnabled ? await userApi.setPhone(code) : { ...profile, hasPhone: true, phoneMasked: '138 **** 5678' }
+      setProfile(result)
+      Taro.showToast({ title: '手机号已授权', icon: 'success' })
+    } catch (error: any) {
+      Taro.showToast({ title: error.message || '手机号授权失败', icon: 'none' })
+    } finally {
+      setPhoneLoading(false)
+    }
+  }
+
+  async function saveWechat() {
+    if (!wechatId.trim() && !profile.hasPhone) {
+      Taro.showToast({ title: '请授权手机号或填写微信号', icon: 'none' })
+      return
+    }
+    setSavingContact(true)
+    try {
+      if (wechatId.trim()) {
+        if (backendEnabled) await userApi.setWechat(wechatId.trim())
+        setProfile((current) => ({ ...current, hasWechat: true }))
+      }
+      setShowContactSheet(false)
+      Taro.showToast({ title: '联系方式已保存', icon: 'success' })
     } catch (error: any) {
       Taro.showToast({ title: error.message || '保存失败', icon: 'none' })
+    } finally {
+      setSavingContact(false)
+    }
+  }
+
+  async function markSold(id: string) {
+    const listing = listings.find((item) => item.id === id)
+    if (!listing || soldIds.includes(id) || listing.status === '已售出') return
+    const confirmation = await Taro.showModal({ title: '标记已出？', content: '标记后会从闲置首页隐藏，之后仍可在我的页面查看。', confirmText: '确认标记' })
+    if (!confirmation.confirm) return
+    try {
+      if (backendEnabled) await itemApi.update(id, { status: 'sold' })
+      setSoldIds((current) => {
+        const next = current.includes(id) ? current : [...current, id]
+        if (!backendEnabled) Taro.setStorageSync('community_sold_ids', next)
+        return next
+      })
+      Taro.showToast({ title: '已标记已出', icon: 'success' })
+    } catch (error: any) {
+      Taro.showToast({ title: error.message || '标记失败', icon: 'none' })
     }
   }
 
   return (
-    <View className='page-shell mine-page'>
-      <Text className='eyebrow'>TRUSTED NEIGHBOR</Text>
-      <View className='profile-card'>
-        <View className='avatar'>邻</View>
-        <View className='profile-main'>
-          <Text className='profile-name'>{profile.nickname}</Text>
-          <Text className='profile-meta'>{profile.verificationStatus === 'verified' ? '已认证' : profile.verificationStatus === 'pending' ? '认证审核中' : '未认证'} · {profile.building || '未填写楼栋'} · 信用 {profile.creditScore}</Text>
+    <View className='mine-page'>
+      <View className='mine-topbar'><Text className='mine-topbar-icon'>⌾</Text><Text className='mine-topbar-icon'>▢</Text></View>
+      <View className='mine-profile-card'>
+        <Image className='mine-avatar' src={profile.avatarUrl || avatarOrange} mode='aspectFill' onClick={() => setShowProfileSheet(true)} />
+        <View className='mine-profile-copy' onClick={() => setShowProfileSheet(true)}>
+          <Text className='mine-name'>{profile.nickname}</Text>
+          <Text className='mine-community'>{profile.communityName || '金水花园'}</Text>
+          <Text className='mine-trust'>诚信交易 · 友善社区</Text>
         </View>
-        <Text className='verified-badge'>{profile.verificationStatus === 'verified' ? '住户认证' : '去认证'}</Text>
+        <Text className='mine-contact-entry' onClick={() => setShowContactSheet(true)}>⌕ 联系方式设置 ›</Text>
       </View>
-      <View className='wechat-setting' onClick={() => setShowWechatForm(true)}><View><Text className='entry-title'>交易微信</Text><Text className='entry-detail'>{profile.hasWechat ? '已安全保存，仅在你同意后向买家展示' : '未设置，同意买家申请前需要填写'}</Text></View><Text className='entry-arrow'>›</Text></View>
-      <View className='trust-row'>
-        <View><Text className='trust-value'>12</Text><Text className='trust-label'>爽快</Text></View>
-        <View><Text className='trust-value'>10</Text><Text className='trust-label'>描述相符</Text></View>
-        <View><Text className='trust-value'>0</Text><Text className='trust-label'>纠纷</Text></View>
+      <View className='mine-stats'>
+        <Stat value='3' label='在售' icon='store' />
+        <Stat value='7' label='已出' icon='check' />
+        <Stat value='28' label='收藏' icon='star' />
       </View>
-      <View className='mine-list'>
-        {entries.map(([title, detail]) => (
-          <View className='mine-entry' key={title}>
-            <View><Text className='entry-title'>{title}</Text><Text className='entry-detail'>{detail}</Text></View>
-            <Text className='entry-arrow'>›</Text>
-          </View>
+      <View className='mine-selling-card'>
+        <View className='mine-section-heading'><Text>我的在售（{listings.filter((item) => !soldIds.includes(item.id) && item.status !== '已售出').length}）</Text><Text className='mine-manage-link'>管理在售 ›</Text></View>
+        {listings.map((item) => (
+          <ListingManageRow
+            key={item.id}
+            id={item.id}
+            image={item.image}
+            title={item.title}
+            price={item.price}
+            views={item.views}
+            favorites={item.favorites}
+            updatedAtText={item.updatedAtText}
+            sold={soldIds.includes(item.id) || item.status === '已售出'}
+            onOpen={(id) => Taro.navigateTo({ url: `/pages/detail/index?id=${id}` })}
+            onMarkSold={(id) => { void markSold(id) }}
+          />
         ))}
       </View>
-      <View className='service-card'>
-        <Text className='service-title'>帮助与反馈</Text>
-        <Text className='service-copy'>客服微信仅用于认证、举报和纠纷处理，不会要求提前付款或索取验证码。</Text>
-        <Button className='service-button' onClick={copyServiceWechat}>复制客服微信</Button>
+      <View className='mine-menu-card'>
+        {entries.map(([label, icon]) => <View className='mine-menu-row' key={label} onClick={() => Taro.showToast({ title: `${label}即将开放`, icon: 'none' })}><Text className={`mine-menu-icon mine-menu-icon-${icon}`} /> <Text>{label}</Text><Text className='mine-menu-arrow'>›</Text></View>)}
       </View>
-      <Button className='map-demo-button' onClick={() => Taro.navigateTo({ url: '/pages/map-demo/index' })}>查看地图组件演示</Button>
-      {showWechatForm && <View className='wechat-modal-mask' onClick={() => setShowWechatForm(false)}><View className='wechat-modal' onClick={(event) => event.stopPropagation()}><Text className='service-title'>设置交易微信</Text><Text className='service-copy'>微信号不会出现在公开资料中，只有你批准具体买家的申请后才会展示。</Text><Input value={wechatId} maxlength={20} onInput={(event) => setWechatId(event.detail.value)} placeholder='输入微信号；留空可清除' /><View className='wechat-modal-actions'><Button onClick={() => setShowWechatForm(false)}>取消</Button><Button className='confirm' onClick={saveWechat}>安全保存</Button></View></View></View>}
+      <BottomNav active='me' onChange={changeNavigation} onPublish={() => setShowPublishSheet(true)} />
+      <PublishActionSheet
+        open={showPublishSheet}
+        onClose={() => setShowPublishSheet(false)}
+        onPublishProduct={() => Taro.navigateTo({ url: '/pages/publish/index' })}
+        onPublishWanted={() => Taro.navigateTo({ url: '/pages/request-publish/index' })}
+      />
+      <WechatQuickProfileSheet
+        open={showProfileSheet}
+        avatarUrl={profileAvatar}
+        nickname={profileNickname}
+        saving={savingProfile}
+        onChooseAvatar={setProfileAvatar}
+        onNicknameChange={setProfileNickname}
+        onComplete={() => { void completeProfile() }}
+        onClose={() => setShowProfileSheet(false)}
+      />
+      <WechatContactSetupSheet
+        open={showContactSheet}
+        phoneMasked={profile.phoneMasked}
+        phoneVerified={Boolean(profile.hasPhone)}
+        wechatId={wechatId}
+        phoneLoading={phoneLoading}
+        saving={savingContact}
+        onPhoneCode={(code) => { void receivePhoneCode(code) }}
+        onWechatIdChange={setWechatId}
+        onSave={() => { void saveWechat() }}
+        onClose={() => setShowContactSheet(false)}
+      />
     </View>
   )
+}
+
+function Stat({ value, label, icon }: { value: string; label: string; icon: string }) {
+  return <View className='mine-stat'><Text className={`mine-stat-icon mine-stat-icon-${icon}`} /> <Text className='mine-stat-value'>{label} {value}</Text></View>
 }
