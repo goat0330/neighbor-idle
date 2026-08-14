@@ -85,7 +85,9 @@ async function unread(OPENID) {
 async function read(event, OPENID) {
   const { id } = event
   if (!id) return fail('参数错误')
-  await messages.doc(id).update({ data: { read: true } })
+  const current = await messages.doc(id).get().catch(() => null)
+  if (!current || !current.data || current.data.toOpenid !== OPENID) return fail('消息不存在或无权操作')
+  await messages.doc(id).update({ data: { read: true, readAt: Date.now() } })
   return ok({ id })
 }
 

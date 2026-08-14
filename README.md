@@ -7,6 +7,8 @@
 - `apps/workbuddy-app`：WorkBuddy 原生微信小程序 + CloudBase 业务基线，保留完整云函数、管理能力和数据模型。
 - `apps/codex-taro-app`：最终融合主产品，使用 React + TypeScript + Vite + Taro；已吸收并深化 WorkBuddy 的四个地图组件。
 
+CloudBase 后端现已覆盖私有用户资料、双向会话、消息未读和“买家申请—卖家批准—展示/撤回微信号”授权流程；详细接口见 [`docs/数据模型与接口.md`](./docs/数据模型与接口.md)。
+
 ## 目录
 
 ```text

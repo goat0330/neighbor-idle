@@ -10,6 +10,8 @@
 .trust-value { color: #eb8055; font-size: 34rpx; font-weight: 700; }
 .trust-label { color: #59645f; font-size: 22rpx; }
 .mine-list { overflow: hidden; border-radius: 28rpx; background: #fffdf8; }
+.wechat-setting { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28rpx; padding: 26rpx 30rpx; border: 2rpx solid #cfdbd2; border-radius: 26rpx; background: #fffdf8; }
+.wechat-setting > view { display: flex; flex: 1; flex-direction: column; gap: 6rpx; }
 .mine-entry { display: flex; align-items: center; justify-content: space-between; padding: 28rpx 30rpx; border-bottom: 1rpx solid #eee9df; }
 .mine-entry > view { display: flex; flex-direction: column; gap: 6rpx; }
 .entry-title { color: #244a3f; font-size: 28rpx; font-weight: 600; }
@@ -18,3 +20,9 @@
 .service-title { color: #244a3f; font-size: 30rpx; font-weight: 700; }
 .service-button, .map-demo-button { margin: 0; border: 0; border-radius: 22rpx; color: #fff; background: #285044; font-size: 26rpx; }
 .map-demo-button { margin-top: 24rpx; background: #eb8055; }
+.wechat-modal-mask { position: fixed; z-index: 30; inset: 0; display: flex; align-items: flex-end; background: rgba(18, 42, 35, .44); }
+.wechat-modal { width: 100%; padding: 36rpx 30rpx 56rpx; border-radius: 36rpx 36rpx 0 0; background: #fffdf8; }
+.wechat-modal input { height: 88rpx; margin-top: 24rpx; padding: 0 22rpx; border: 2rpx solid #d9ddd5; border-radius: 20rpx; background: #f7f5ef; font-size: 26rpx; }
+.wechat-modal-actions { display: flex; gap: 18rpx; margin-top: 24rpx; }
+.wechat-modal-actions button { flex: 1; border-radius: 18rpx; font-size: 25rpx; }
+.wechat-modal-actions .confirm { color: #fff; background: #173b34; }

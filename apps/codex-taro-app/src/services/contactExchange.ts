@@ -1,50 +1,54 @@
-import Taro from '@tarojs/taro'
+import { backendEnabled } from './backend'
+import { cloud } from './cloud'
 
-export type ContactRequestStatus = 'idle' | 'pending' | 'approved' | 'rejected' | 'revoked'
+export type ContactRequestStatus = 'pending' | 'approved' | 'rejected' | 'revoked'
 
 export type ContactRequest = {
+  id: string
   conversationId: string
-  requesterId: string
-  sellerId: string
+  itemId?: string
   status: ContactRequestStatus
+  role: 'buyer' | 'seller'
   reason: string
   wechatId?: string
+  createdAt: number
   updatedAt: number
 }
 
-const storageKey = 'neighbor-contact-requests-v1'
-
-function readAll(): ContactRequest[] {
-  return Taro.getStorageSync<ContactRequest[]>(storageKey) || []
-}
-
-function save(request: ContactRequest) {
-  const records = readAll().filter((item) => item.conversationId !== request.conversationId)
-  Taro.setStorageSync(storageKey, [request, ...records])
-  return request
-}
+const demoRecords = new Map<string, ContactRequest>()
 
 export const contactExchange = {
-  get(conversationId: string) {
-    return readAll().find((item) => item.conversationId === conversationId)
+  async get(conversationId: string) {
+    if (backendEnabled) return cloud.call<ContactRequest | null>('contact', 'get', { conversationId })
+    return demoRecords.get(conversationId)
   },
-  request(conversationId: string, reason: string) {
-    return save({ conversationId, requesterId: 'buyer-demo', sellerId: 'seller-demo', status: 'pending', reason, updatedAt: Date.now() })
+
+  async request(conversationId: string, reason: string) {
+    if (backendEnabled) return cloud.call<ContactRequest>('contact', 'request', { conversationId, reason })
+    const now = Date.now()
+    const record: ContactRequest = { id: `demo-${now}`, conversationId, status: 'pending', role: 'buyer', reason, createdAt: now, updatedAt: now }
+    demoRecords.set(conversationId, record)
+    return record
   },
-  approve(conversationId: string) {
-    const current = this.get(conversationId)
-    if (!current) throw new Error('申请不存在')
-    return save({ ...current, status: 'approved', wechatId: 'linli_demo_wechat', updatedAt: Date.now() })
+
+  async approve(request: ContactRequest) {
+    if (backendEnabled) return cloud.call<ContactRequest>('contact', 'respond', { requestId: request.id, approved: true })
+    const updated = { ...request, status: 'approved' as const, wechatId: 'neighbor_demo_only', updatedAt: Date.now() }
+    demoRecords.set(request.conversationId, updated)
+    return updated
   },
-  reject(conversationId: string) {
-    const current = this.get(conversationId)
-    if (!current) throw new Error('申请不存在')
-    return save({ ...current, status: 'rejected', updatedAt: Date.now() })
+
+  async reject(request: ContactRequest) {
+    if (backendEnabled) return cloud.call<ContactRequest>('contact', 'respond', { requestId: request.id, approved: false })
+    const updated = { ...request, status: 'rejected' as const, updatedAt: Date.now() }
+    demoRecords.set(request.conversationId, updated)
+    return updated
   },
-  revoke(conversationId: string) {
-    const current = this.get(conversationId)
-    if (!current) throw new Error('申请不存在')
-    return save({ ...current, status: 'revoked', wechatId: undefined, updatedAt: Date.now() })
+
+  async revoke(request: ContactRequest) {
+    if (backendEnabled) return cloud.call<ContactRequest>('contact', 'revoke', { requestId: request.id })
+    const updated = { ...request, status: 'revoked' as const, wechatId: undefined, updatedAt: Date.now() }
+    demoRecords.set(request.conversationId, updated)
+    return updated
   },
 }
-

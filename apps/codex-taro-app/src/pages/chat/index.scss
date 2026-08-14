@@ -8,6 +8,7 @@
 .bubble { max-width: 72%; padding: 18px 20px; border-radius: 22px; font-size: 26px; line-height: 1.5; }
 .bubble-peer { border-bottom-left-radius: 6px; background: #fffdf8; color: #173b34; }
 .bubble-mine { border-bottom-right-radius: 6px; background: #173b34; color: #fffdf8; }
+.system-message { margin: 18px auto; color: #89938c; font-size: 20px; text-align: center; }
 .contact-panel { margin: 28px 0 120px; padding: 22px; border: 1px solid #dfe4d8; border-radius: 22px; background: #fffdf8; }
 .contact-approved { background: #e8f1e2; }
 .contact-title, .contact-copy, .contact-warning { display: block; }
@@ -16,6 +17,10 @@
 .contact-warning { margin-top: 12px; color: #96705d; font-size: 19px; }
 .contact-button { margin-top: 18px; border-radius: 14px; background: #173b34; color: #fff; font-size: 24px; line-height: 72px; }
 .contact-button-demo { background: #eb8055; }
+.contact-review-actions { display: flex; gap: 14px; margin-top: 18px; }
+.contact-review-actions button { flex: 1; margin: 0; border-radius: 14px; font-size: 24px; }
+.contact-review-actions .contact-button { color: #fff; background: #173b34; }
+.contact-revoke { display: block; margin-top: 16px; color: #8a6a58; font-size: 21px; text-align: center; }
 .quick-actions { display: flex; gap: 12px; overflow-x: auto; padding: 12px 22px; background: #fffdf8; white-space: nowrap; }
 .quick-actions text { padding: 10px 16px; border: 1px solid #cfd7cf; border-radius: 999px; color: #557064; font-size: 21px; }
 .chat-composer { display: flex; gap: 12px; padding: 14px 20px 24px; background: #fffdf8; }

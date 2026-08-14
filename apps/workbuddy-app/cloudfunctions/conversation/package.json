@@ -1,0 +1,7 @@
+{
+  "name": "conversation",
+  "version": "1.0.0",
+  "description": "闲置交易会话、双向消息和未读数",
+  "main": "index.js",
+  "dependencies": { "wx-server-sdk": "~2.6.3" }
+}

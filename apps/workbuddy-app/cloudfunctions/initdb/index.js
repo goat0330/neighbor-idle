@@ -7,7 +7,7 @@ cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV })
 const db = cloud.database()
 
 exports.main = async () => {
-  const collections = ['users', 'communities', 'items', 'favorites', 'messages', 'wants']
+  const collections = ['users', 'communities', 'items', 'favorites', 'conversations', 'messages', 'contact_requests', 'wants', 'transactions', 'reviews', 'reports']
   const results = {}
   for (const name of collections) {
     try {

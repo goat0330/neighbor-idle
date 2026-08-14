@@ -1,0 +1,7 @@
+{
+  "name": "user",
+  "version": "1.0.0",
+  "description": "用户私有资料、社区认证和联系方式管理",
+  "main": "index.js",
+  "dependencies": { "wx-server-sdk": "~2.6.3" }
+}

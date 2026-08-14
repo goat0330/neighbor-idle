@@ -2,62 +2,123 @@ const cloud = require('wx-server-sdk')
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV })
 const db = cloud.database()
 const requests = db.collection('contact_requests')
-const items = db.collection('items')
+const conversations = db.collection('conversations')
+const messages = db.collection('messages')
 const users = db.collection('users')
 
-const ok = data => ({ success: true, data })
-const fail = message => ({ success: false, message })
+const ok = data => ({ code: 0, data })
+const fail = msg => ({ code: -1, msg })
 
-exports.main = async (event) => {
+exports.main = async event => {
   const { OPENID } = cloud.getWXContext()
   if (!OPENID) return fail('请先登录')
-  const action = event.action || 'get'
-  if (action === 'request') return createRequest(event, OPENID)
-  if (action === 'respond') return respond(event, OPENID)
-  if (action === 'revoke') return revoke(event, OPENID)
-  return getRequest(event, OPENID)
+  try {
+    if (event.action === 'request') return createRequest(event, OPENID)
+    if (event.action === 'respond') return respond(event, OPENID)
+    if (event.action === 'revoke') return revoke(event, OPENID)
+    if (event.action === 'listPending') return listPending(OPENID)
+    return getRequest(event, OPENID)
+  } catch (error) {
+    console.error('[contact]', error)
+    return fail('联系方式服务暂时不可用')
+  }
 }
 
-async function createRequest({ itemId, reason = '' }, buyerOpenid) {
-  if (!itemId) return fail('缺少商品参数')
-  const itemRes = await items.doc(itemId).get().catch(() => null)
-  const item = itemRes && itemRes.data
-  if (!item) return fail('商品不存在')
-  if (item.openid === buyerOpenid) return fail('不能向自己申请联系方式')
-  const existing = await requests.where({ itemId, buyerOpenid, status: 'pending' }).limit(1).get()
-  if (existing.data.length) return ok(publicView(existing.data[0], buyerOpenid))
+async function createRequest({ conversationId, reason = '' }, buyerOpenid) {
+  const conversation = await getConversation(conversationId)
+  if (!conversation) return fail('会话不存在')
+  if (conversation.buyerOpenid !== buyerOpenid) return fail('只有买家可以发起申请')
+  const previous = await requests.where({ conversationId, buyerOpenid }).orderBy('createdAt', 'desc').limit(1).get()
+  if (previous.data[0] && ['pending', 'approved'].includes(previous.data[0].status)) {
+    return ok(await secureView(previous.data[0], buyerOpenid))
+  }
+  const text = cleanText(reason, 60)
   const now = Date.now()
-  const doc = { itemId, buyerOpenid, sellerOpenid: item.openid, reason: String(reason).slice(0, 60), status: 'pending', createdAt: now, updatedAt: now }
+  const doc = {
+    conversationId,
+    itemId: conversation.itemId,
+    buyerOpenid,
+    sellerOpenid: conversation.sellerOpenid,
+    reason: text || '方便自提时联系',
+    status: 'pending',
+    createdAt: now,
+    updatedAt: now
+  }
   const added = await requests.add({ data: doc })
-  return ok(publicView({ ...doc, _id: added._id }, buyerOpenid))
+  await addSystemMessage(conversationId, buyerOpenid, conversation.sellerOpenid, '买家申请交换微信，请确认是否同意')
+  return ok(await secureView({ ...doc, _id: added._id }, buyerOpenid))
 }
 
 async function respond({ requestId, approved }, sellerOpenid) {
   const current = await getById(requestId)
   if (!current) return fail('申请不存在')
   if (current.sellerOpenid !== sellerOpenid) return fail('只有卖家可以处理申请')
-  if (current.status !== 'pending') return fail('申请已处理')
+  if (current.status !== 'pending') return fail('申请已经处理')
+  if (approved) {
+    const sellerResult = await users.where({ openid: sellerOpenid }).limit(1).get()
+    if (!sellerResult.data[0] || !sellerResult.data[0].wechatId) return fail('请先在个人中心填写微信号')
+  }
   const status = approved ? 'approved' : 'rejected'
-  await requests.doc(requestId).update({ data: { status, updatedAt: Date.now() } })
-  return getRequest({ requestId }, sellerOpenid)
+  const now = Date.now()
+  await requests.doc(requestId).update({ data: { status, respondedAt: now, updatedAt: now } })
+  await addSystemMessage(current.conversationId, sellerOpenid, current.buyerOpenid, approved ? '卖家已同意交换微信' : '卖家暂未同意交换微信')
+  return ok(await secureView({ ...current, status, respondedAt: now, updatedAt: now }, sellerOpenid))
 }
 
 async function revoke({ requestId }, openid) {
   const current = await getById(requestId)
-  if (!current || !isParticipant(current, openid)) return fail('无权操作')
-  await requests.doc(requestId).update({ data: { status: 'revoked', updatedAt: Date.now() } })
-  return ok({ requestId, status: 'revoked' })
+  if (!current || !isParticipant(current, openid)) return fail('申请不存在或无权操作')
+  if (current.status === 'revoked') return ok(await secureView(current, openid))
+  const now = Date.now()
+  await requests.doc(requestId).update({ data: { status: 'revoked', revokedByRole: current.sellerOpenid === openid ? 'seller' : 'buyer', updatedAt: now } })
+  return ok(await secureView({ ...current, status: 'revoked', updatedAt: now }, openid))
 }
 
-async function getRequest({ requestId }, openid) {
-  const current = await getById(requestId)
-  if (!current || !isParticipant(current, openid)) return fail('申请不存在或无权查看')
-  const view = publicView(current, openid)
-  if (current.status === 'approved') {
-    const seller = await users.where({ openid: current.sellerOpenid }).limit(1).get()
-    view.wechatId = seller.data[0] && seller.data[0].wechatId ? seller.data[0].wechatId : ''
+async function getRequest({ requestId, conversationId }, openid) {
+  let current = requestId ? await getById(requestId) : null
+  if (!current && conversationId) {
+    const result = await requests.where({ conversationId }).orderBy('createdAt', 'desc').limit(1).get()
+    current = result.data[0] || null
   }
-  return ok(view)
+  if (!current) return ok(null)
+  if (!isParticipant(current, openid)) return fail('无权查看该申请')
+  return ok(await secureView(current, openid))
+}
+
+async function listPending(sellerOpenid) {
+  const result = await requests.where({ sellerOpenid, status: 'pending' }).orderBy('createdAt', 'desc').limit(50).get()
+  return ok({ list: await Promise.all(result.data.map(item => secureView(item, sellerOpenid))) })
+}
+
+async function secureView(request, viewerOpenid) {
+  const role = request.sellerOpenid === viewerOpenid ? 'seller' : 'buyer'
+  const view = {
+    id: request._id,
+    conversationId: request.conversationId,
+    itemId: request.itemId,
+    reason: request.reason,
+    status: request.status,
+    role,
+    createdAt: request.createdAt,
+    updatedAt: request.updatedAt
+  }
+  if (request.status === 'approved') {
+    const sellerResult = await users.where({ openid: request.sellerOpenid }).limit(1).get()
+    view.wechatId = sellerResult.data[0] && sellerResult.data[0].wechatId ? sellerResult.data[0].wechatId : ''
+  }
+  return view
+}
+
+async function addSystemMessage(conversationId, senderOpenid, recipientOpenid, content) {
+  const now = Date.now()
+  await messages.add({ data: { conversationId, senderOpenid, recipientOpenid, type: 'system', content, read: false, createdAt: now } })
+  await conversations.doc(conversationId).update({ data: { lastMessage: content, lastMessageAt: now, updatedAt: now } })
+}
+
+async function getConversation(id) {
+  if (!id) return null
+  const result = await conversations.doc(id).get().catch(() => null)
+  return result && result.data
 }
 
 async function getById(id) {
@@ -70,6 +131,6 @@ function isParticipant(request, openid) {
   return request.buyerOpenid === openid || request.sellerOpenid === openid
 }
 
-function publicView(request, viewerOpenid) {
-  return { id: request._id, itemId: request.itemId, reason: request.reason, status: request.status, role: request.sellerOpenid === viewerOpenid ? 'seller' : 'buyer', createdAt: request.createdAt, updatedAt: request.updatedAt }
+function cleanText(value, maxLength) {
+  return String(value || '').replace(/[<>]/g, '').trim().slice(0, maxLength)
 }

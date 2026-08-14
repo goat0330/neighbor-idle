@@ -40,7 +40,8 @@ async function doLogin(OPENID) {
     communityId: '',
     communityName: '',
     building: '',
-    phone: '',
+    wechatId: '',
+    verificationStatus: 'unverified',
     creditScore: 100,
     status: 'active',
     createdAt: now,
@@ -69,12 +70,11 @@ async function bindCommunity(OPENID, event) {
   return ok(await getUser(OPENID))
 }
 
-// 更新昵称/头像/手机号
+// 更新昵称/头像。微信号由 user 云函数的专用接口管理,不会随公开资料返回。
 async function updateProfile(OPENID, event) {
   const data = { updatedAt: Date.now() }
   if (event.nickname && event.nickname.trim()) data.nickname = event.nickname.trim().slice(0, 20)
   if (event.avatarUrl) data.avatarUrl = event.avatarUrl
-  if (event.phone) data.phone = String(event.phone).trim()
   await users.where({ openid: OPENID }).update({ data })
   return ok(await getUser(OPENID))
 }

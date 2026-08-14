@@ -12,4 +12,4 @@
 .conversation-listing { margin-top: 6px; color: #68776e; font-size: 22px; }
 .conversation-preview { margin-top: 8px; color: #8b958e; font-size: 24px; }
 .unread-badge { position: absolute; right: 4px; bottom: 22px; min-width: 34px; height: 34px; padding: 0 8px; border-radius: 999px; background: #eb8055; color: #fff; font-size: 20px; line-height: 34px; text-align: center; }
-
+.conversation-empty { display: flex; flex-direction: column; gap: 12px; padding: 120px 24px; color: #8a938d; font-size: 24px; text-align: center; }
