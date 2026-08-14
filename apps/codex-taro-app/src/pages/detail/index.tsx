@@ -17,11 +17,15 @@ export default function DetailPage() {
 
   useEffect(() => {
     setItem(seedItem)
-    if (!backendEnabled || !router.params.id) return
-    itemApi.detail(router.params.id)
+    const storedFavoriteIds = Taro.getStorageSync<string[]>('community_favorite_ids') || []
+    setFavorite(storedFavoriteIds.includes(seedItem.id))
+    const listingId = router.params.id
+    if (!backendEnabled || !listingId) return
+    itemApi.detail(listingId)
       .then((result) => {
         setItem(mapBackendItem(result.item))
         setFavorite(result.isFavorite)
+        updateLocalFavorite(listingId, result.isFavorite)
         setIsMine(result.isMine)
       })
       .catch((error: any) => Taro.showToast({ title: error.message || '商品加载失败', icon: 'none' }))
@@ -38,6 +42,7 @@ export default function DetailPage() {
       try {
         const result = await favoriteApi.toggle(router.params.id)
         setFavorite(result.favorited)
+        updateLocalFavorite(router.params.id, result.favorited)
         Taro.showToast({ title: result.favorited ? '已收藏' : '已取消收藏', icon: 'none' })
       } catch (error: any) {
         Taro.showToast({ title: error.message || '收藏失败', icon: 'none' })
@@ -45,6 +50,7 @@ export default function DetailPage() {
       return
     }
     setFavorite(next)
+    updateLocalFavorite(item.id, next)
     Taro.showToast({ title: next ? '已收藏' : '已取消收藏', icon: 'none' })
   }
 
@@ -106,6 +112,12 @@ export default function DetailPage() {
       </View>
     </View>
   )
+}
+
+function updateLocalFavorite(id: string, favorited: boolean) {
+  const current = Taro.getStorageSync<string[]>('community_favorite_ids') || []
+  const next = favorited ? Array.from(new Set([...current, id])) : current.filter((favoriteId) => favoriteId !== id)
+  Taro.setStorageSync('community_favorite_ids', next)
 }
 
 function formatDistance(distanceKm?: number) {

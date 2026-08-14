@@ -1,5 +1,5 @@
 import { Image, Text, View } from '@tarojs/components'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './index.scss'
 
 export type ProductStatus = 'selling' | 'sold'
@@ -16,8 +16,10 @@ export type ProductCardProps = {
   communityName: string
   distanceM?: number
   status: ProductStatus
+  favorited?: boolean
   onOpen: (id: string) => void
   onContact: (id: string) => void
+  onFavorite?: (id: string, favorited: boolean) => void
 }
 
 function formatDistance(distanceM?: number) {
@@ -35,18 +37,35 @@ export default function ProductCard({
   communityName,
   distanceM,
   status,
+  favorited = false,
   onOpen,
   onContact,
+  onFavorite,
 }: ProductCardProps) {
   const sold = status === 'sold'
   const fallbackAvatar = seller.nickname.slice(0, 1) || '邻'
   const [imageFailed, setImageFailed] = useState(false)
+  const [isFavorited, setIsFavorited] = useState(favorited)
+
+  useEffect(() => {
+    setIsFavorited(favorited)
+  }, [favorited])
+
+  function toggleFavorite(event: any) {
+    event.stopPropagation()
+    const next = !isFavorited
+    setIsFavorited(next)
+    onFavorite?.(id, next)
+  }
 
   return (
     <View className={`product-card ${sold ? 'product-card-sold' : ''}`} onClick={() => onOpen(id)}>
       {image && !imageFailed
         ? <Image className='product-card-image' src={image} mode='aspectFill' lazyLoad onError={() => setImageFailed(true)} />
         : <View className='product-card-image product-card-image-empty'><Text>邻里闲置</Text></View>}
+      <View className={`product-card-favorite ${isFavorited ? 'product-card-favorite-active' : ''}`} onClick={toggleFavorite}>
+        <Text>{isFavorited ? '★' : '☆'}</Text>
+      </View>
       <View className='product-card-body'>
         <Text className='product-card-title'>{title}</Text>
         <Text className='product-card-price'>¥{price}</Text>

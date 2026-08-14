@@ -25,6 +25,27 @@
   letter-spacing: 2rpx;
 }
 
+.product-card-favorite {
+  position: absolute;
+  z-index: 2;
+  top: 14rpx;
+  right: 14rpx;
+  display: flex;
+  width: 52rpx;
+  height: 52rpx;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .92);
+  color: $color-text-secondary;
+  font-size: 32rpx;
+  line-height: 1;
+}
+
+.product-card-favorite-active {
+  color: $color-brand;
+}
+
 .product-card-body {
   padding: 18rpx 18rpx 16rpx;
 }

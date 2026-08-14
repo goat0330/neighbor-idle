@@ -10,7 +10,7 @@ import {
   type BottomNavTab,
   type CategoryTab,
 } from '@/components/community'
-import { backendEnabled, itemApi } from '@/services/backend'
+import { backendEnabled, favoriteApi, itemApi } from '@/services/backend'
 import { mapBackendItem, backendCategoryKey, searchListings } from '@/services/market'
 import type { Listing } from '@/types/market'
 import { requestUserLocation } from '@/services/location'
@@ -33,6 +33,7 @@ export default function HomePage() {
   const [category, setCategory] = useState('全部')
   const [showPublishSheet, setShowPublishSheet] = useState(false)
   const [soldIds] = useState<string[]>(() => Taro.getStorageSync<string[]>('community_sold_ids') || [])
+  const [favoriteIds, setFavoriteIds] = useState<string[]>(() => Taro.getStorageSync<string[]>('community_favorite_ids') || [])
   const [remoteListings, setRemoteListings] = useState<Listing[]>([])
   const [loading, setLoading] = useState(backendEnabled)
   const [loadError, setLoadError] = useState('')
@@ -96,6 +97,35 @@ export default function HomePage() {
     Taro.navigateTo({ url: `/pages/chat/index?listingId=${encodeURIComponent(id)}` })
   }
 
+  async function toggleFavorite(id: string, next: boolean) {
+    setFavoriteIds((current) => {
+      const nextIds = next ? Array.from(new Set([...current, id])) : current.filter((favoriteId) => favoriteId !== id)
+      Taro.setStorageSync('community_favorite_ids', nextIds)
+      return nextIds
+    })
+    if (!backendEnabled) {
+      Taro.showToast({ title: next ? '已收藏' : '已取消收藏', icon: 'none' })
+      return
+    }
+    try {
+      const result = await favoriteApi.toggle(id)
+      setFavoriteIds((current) => {
+        const nextIds = result.favorited ? Array.from(new Set([...current, id])) : current.filter((favoriteId) => favoriteId !== id)
+        Taro.setStorageSync('community_favorite_ids', nextIds)
+        return nextIds
+      })
+      Taro.showToast({ title: result.favorited ? '已收藏' : '已取消收藏', icon: 'none' })
+    } catch (error: any) {
+      setFavoriteIds((current) => {
+        const previous = !next
+        const nextIds = previous ? Array.from(new Set([...current, id])) : current.filter((favoriteId) => favoriteId !== id)
+        Taro.setStorageSync('community_favorite_ids', nextIds)
+        return nextIds
+      })
+      Taro.showToast({ title: error.message || '收藏失败', icon: 'none' })
+    }
+  }
+
   function changeNavigation(key: BottomNavTab) {
     if (key === 'idle') return
     const routes = {
@@ -143,8 +173,10 @@ export default function HomePage() {
                 communityName={item.community}
                 distanceM={item.distanceKm === undefined ? undefined : Math.round(item.distanceKm * 1000)}
                 status={item.status === '已售出' ? 'sold' : 'selling'}
+                favorited={favoriteIds.includes(item.id)}
                 onOpen={openDetail}
                 onContact={openChat}
+                onFavorite={(id, next) => { void toggleFavorite(id, next) }}
               />
             ))}
           </View>
