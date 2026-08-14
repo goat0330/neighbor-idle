@@ -42,7 +42,8 @@ async function list(event) {
   uRes.data.forEach(u => { uMap[u.openid] = u })
   const list = res.data.map(w => {
     const u = uMap[w.openid] || {}
-    return { ...w, publisher: { nickname: u.nickname || '', communityName: u.communityName || '' } }
+    const { openid, phone, ...safe } = w
+    return { ...safe, publisher: { nickname: u.nickname || '', communityName: u.communityName || '' } }
   })
   return ok({ list, page: Number(page), hasMore: res.data.length === pageSize })
 }

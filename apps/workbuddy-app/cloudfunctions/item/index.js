@@ -80,7 +80,7 @@ async function detail(event, OPENID) {
     const fav = await favorites.where({ openid: OPENID, itemId: id }).get()
     isFavorite = fav.data.length > 0
   }
-  return ok({ item, isFavorite, isMine })
+  return ok({ item: publicItemView(item), isFavorite, isMine })
 }
 
 // 发布闲置
@@ -222,7 +222,7 @@ async function enrichItems(list) {
   return list.map(i => {
     const u = uMap[i.openid] || {}
     return {
-      ...i,
+      ...publicItemView(i),
       seller: {
         nickname: u.nickname || '',
         avatarUrl: u.avatarUrl || '',
@@ -231,6 +231,11 @@ async function enrichItems(list) {
       }
     }
   })
+}
+
+function publicItemView(item) {
+  const { openid, phone, ...safe } = item
+  return safe
 }
 
 function isAdmin(openid) {
