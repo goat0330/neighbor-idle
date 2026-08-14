@@ -12,6 +12,8 @@ export type UserProfile = {
   building: string
   verificationStatus: 'unverified' | 'pending' | 'verified' | 'rejected'
   hasWechat: boolean
+  hasPhone?: boolean
+  phoneMasked?: string
   creditScore: number
   status: string
 }
@@ -43,6 +45,7 @@ export const userApi = {
   me: () => cloud.call<UserProfile>('user', 'me'),
   updateProfile: (data: { nickname?: string; avatarUrl?: string }) => cloud.call<UserProfile>('user', 'updateProfile', data),
   setWechat: (wechatId: string) => cloud.call<{ hasWechat: boolean }>('user', 'setWechat', { wechatId }),
+  setPhone: (code: string) => cloud.call<UserProfile>('user', 'setPhone', { code }),
   bindCommunity: (data: { communityId: string; communityName: string; building?: string }) => cloud.call<UserProfile>('user', 'bindCommunity', data),
 }
 

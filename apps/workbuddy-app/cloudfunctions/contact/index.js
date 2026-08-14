@@ -45,7 +45,7 @@ async function createRequest({ conversationId, reason = '' }, buyerOpenid) {
     updatedAt: now
   }
   const added = await requests.add({ data: doc })
-  await addSystemMessage(conversationId, buyerOpenid, conversation.sellerOpenid, '买家申请交换微信，请确认是否同意')
+  await addSystemMessage(conversationId, buyerOpenid, conversation.sellerOpenid, '买家申请交换联系方式，请确认是否同意')
   return ok(await secureView({ ...doc, _id: added._id }, buyerOpenid))
 }
 
@@ -56,12 +56,13 @@ async function respond({ requestId, approved }, sellerOpenid) {
   if (current.status !== 'pending') return fail('申请已经处理')
   if (approved) {
     const sellerResult = await users.where({ openid: sellerOpenid }).limit(1).get()
-    if (!sellerResult.data[0] || !sellerResult.data[0].wechatId) return fail('请先在个人中心填写微信号')
+    const seller = sellerResult.data[0]
+    if (!seller || (!seller.wechatId && !seller.phoneNumber)) return fail('请先授权手机号或填写微信号')
   }
   const status = approved ? 'approved' : 'rejected'
   const now = Date.now()
   await requests.doc(requestId).update({ data: { status, respondedAt: now, updatedAt: now } })
-  await addSystemMessage(current.conversationId, sellerOpenid, current.buyerOpenid, approved ? '卖家已同意交换微信' : '卖家暂未同意交换微信')
+  await addSystemMessage(current.conversationId, sellerOpenid, current.buyerOpenid, approved ? '卖家已同意交换联系方式' : '卖家暂未同意交换联系方式')
   return ok(await secureView({ ...current, status, respondedAt: now, updatedAt: now }, sellerOpenid))
 }
 
@@ -104,7 +105,10 @@ async function secureView(request, viewerOpenid) {
   }
   if (request.status === 'approved') {
     const sellerResult = await users.where({ openid: request.sellerOpenid }).limit(1).get()
-    view.wechatId = sellerResult.data[0] && sellerResult.data[0].wechatId ? sellerResult.data[0].wechatId : ''
+    const seller = sellerResult.data[0] || {}
+    view.wechatId = seller.wechatId || ''
+    view.phoneNumber = seller.phoneNumber || ''
+    view.phoneMasked = maskPhone(seller.phoneNumber || '')
   }
   return view
 }
@@ -133,4 +137,10 @@ function isParticipant(request, openid) {
 
 function cleanText(value, maxLength) {
   return String(value || '').replace(/[<>]/g, '').trim().slice(0, maxLength)
+}
+
+function maskPhone(phone) {
+  const normalized = String(phone || '')
+  if (normalized.length < 7) return normalized
+  return normalized.slice(0, 3) + '****' + normalized.slice(-4)
 }

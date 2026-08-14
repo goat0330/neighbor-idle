@@ -11,6 +11,8 @@ export type ContactRequest = {
   role: 'buyer' | 'seller'
   reason: string
   wechatId?: string
+  phoneNumber?: string
+  phoneMasked?: string
   createdAt: number
   updatedAt: number
 }

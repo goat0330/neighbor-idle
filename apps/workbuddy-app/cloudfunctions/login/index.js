@@ -41,6 +41,8 @@ async function doLogin(OPENID) {
     communityName: '',
     building: '',
     wechatId: '',
+    phoneNumber: '',
+    countryCode: '',
     verificationStatus: 'unverified',
     creditScore: 100,
     status: 'active',

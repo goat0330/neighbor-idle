@@ -12,11 +12,12 @@ exports.main = async event => {
   try {
     if (event.action === 'updateProfile') return updateProfile(OPENID, event)
     if (event.action === 'setWechat') return setWechat(OPENID, event)
+    if (event.action === 'setPhone') return setPhone(OPENID, event)
     if (event.action === 'bindCommunity') return bindCommunity(OPENID, event)
     if (event.action === 'publicProfile') return publicProfile(event.userId)
     return me(OPENID)
   } catch (error) {
-    console.error('[user]', error)
+    logError(event && event.action, error)
     return fail('用户服务暂时不可用')
   }
 }
@@ -51,6 +52,36 @@ async function setWechat(openid, event) {
   }
   await users.where({ openid }).update({ data: { wechatId, updatedAt: Date.now() } })
   return ok({ hasWechat: Boolean(wechatId) })
+}
+
+async function setPhone(openid, event) {
+  const code = event && event.code
+  if (typeof code !== 'string' || !code.trim()) return fail('缺少手机号授权凭证')
+
+  let phoneInfo
+  try {
+    const result = await cloud.openapi.phonenumber.getPhoneNumber({ code })
+    phoneInfo = result && result.phoneInfo
+  } catch (error) {
+    logError('setPhone', error)
+    return fail('手机号授权失败，请重新授权')
+  }
+
+  const phoneNumber = String((phoneInfo && (phoneInfo.purePhoneNumber || phoneInfo.phoneNumber)) || '').trim()
+  const countryCode = String((phoneInfo && phoneInfo.countryCode) || '').trim()
+  if (!phoneNumber) {
+    logError('setPhone', { name: 'invalid_phone_info' })
+    return fail('手机号授权失败，请重新授权')
+  }
+
+  const now = Date.now()
+  await users.where({ openid }).update({ data: {
+    phoneNumber,
+    countryCode,
+    phoneUpdatedAt: now,
+    updatedAt: now
+  } })
+  return me(openid)
 }
 
 async function bindCommunity(openid, event) {
@@ -94,6 +125,8 @@ async function createUser(openid) {
     building: '',
     verificationStatus: 'unverified',
     wechatId: '',
+    phoneNumber: '',
+    countryCode: '',
     creditScore: 100,
     status: 'active',
     createdAt: now,
@@ -118,9 +151,26 @@ function privateView(user) {
     building: user.building || '',
     verificationStatus: user.verificationStatus || 'unverified',
     hasWechat: Boolean(user.wechatId),
+    hasPhone: Boolean(user.phoneNumber),
+    phoneMasked: maskPhone(user.phoneNumber),
     creditScore: Number(user.creditScore || 100),
     status: user.status || 'active'
   }
+}
+
+function maskPhone(phoneNumber) {
+  const digits = String(phoneNumber || '').replace(/\D/g, '')
+  if (!digits) return ''
+  if (digits.length <= 7) return '****'
+  return `${digits.slice(0, 3)}****${digits.slice(-4)}`
+}
+
+function logError(action, error) {
+  const safeAction = typeof action === 'string' ? action.slice(0, 32) : 'unknown'
+  const safeSummary = error && typeof error.name === 'string' && error.name
+    ? error.name.slice(0, 64)
+    : 'unknown_error'
+  console.error('[user]', safeAction, safeSummary)
 }
 
 function cleanText(value, maxLength) {
