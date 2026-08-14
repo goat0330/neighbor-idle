@@ -2,7 +2,6 @@ import { Input, Text, View } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import { useMemo, useState } from 'react'
 import ListingCard from '@/components/ListingCard'
-import SectionHeading from '@/components/SectionHeading'
 import { requestUserLocation } from '@/services/location'
 import { searchListings } from '@/services/market'
 import { NearbyMap, type NearbyItem } from '@components/Map'
@@ -38,10 +37,13 @@ export default function HomePage() {
     <View className='page-shell home-page'>
       <View className='home-header'>
         <View>
-          <Text className='eyebrow'>NEIGHBOR · MARKET</Text>
           <Text className='page-title'>附近闲置</Text>
+          <Text className='home-promise'>看附近 · 当面验 · 直接拿走</Text>
         </View>
-        <Text className='home-location' onClick={locate}>{located ? '已定位' : '定位'} ↗</Text>
+        <View className='home-header-actions'>
+          <Text className='home-location' onClick={locate}>{located ? '已定位' : '定位'}</Text>
+          <Text className='home-mine' onClick={() => Taro.navigateTo({ url: '/pages/mine/index' })}>我</Text>
+        </View>
       </View>
       <View className='search-box'>
         <Text className='search-icon'>⌕</Text>
@@ -50,22 +52,29 @@ export default function HomePage() {
       <View className='category-row'>
         {categories.map((item) => <Text key={item} className={`category-pill ${category === item ? 'category-pill-active' : ''}`} onClick={() => setCategory(item)}>{item}</Text>)}
       </View>
-      <View className='trust-banner'>
-        <Text className='trust-dot'>●</Text>
-        <Text>{located ? '已按距离排序，优先展示附近邻居' : '开启定位，显示“同小区 / 距你 800m”'}</Text>
-        {!located && <Text className='trust-link' onClick={locate}>开启</Text>}
+      <View className='core-actions'>
+        <View className='core-action core-action-primary' onClick={() => Taro.switchTab({ url: '/pages/publish/index' })}>
+          <Text className='core-action-title'>卖一件闲置</Text>
+          <Text className='core-action-copy'>拍照，定价，发布</Text>
+        </View>
+        <View className='core-action core-action-secondary' onClick={() => Taro.navigateTo({ url: '/pages/request-publish/index' })}>
+          <Text className='core-action-title'>没找到？求购</Text>
+          <Text className='core-action-copy'>让邻居来响应</Text>
+        </View>
       </View>
-      <SectionHeading eyebrow='TODAY · NEARBY' title={`${listings.length} 件好东西`} action='发布闲置' onAction={() => Taro.switchTab({ url: '/pages/publish/index' })} />
-      <View className='view-switch'>
-        <Text className={viewMode === 'list' ? 'view-switch-active' : ''} onClick={() => setViewMode('list')}>双列列表</Text>
-        <Text className={viewMode === 'map' ? 'view-switch-active' : ''} onClick={() => setViewMode('map')}>地图找货</Text>
+      <View className='result-heading'>
+        <View><Text className='result-title'>离你最近</Text><Text className='result-count'>{located ? `${listings.length} 件` : '定位后按距离排序'}</Text></View>
+        <View className='view-switch'>
+          <Text className={viewMode === 'list' ? 'view-switch-active' : ''} onClick={() => setViewMode('list')}>列表</Text>
+          <Text className={viewMode === 'map' ? 'view-switch-active' : ''} onClick={() => setViewMode('map')}>地图</Text>
+        </View>
       </View>
       {viewMode === 'list' ? (
         <View className='listing-grid'>{listings.map((item) => <ListingCard key={item.id} item={item} />)}</View>
       ) : (
         <NearbyMap items={mapItems} height='760rpx' onItemClick={(item) => Taro.navigateTo({ url: `/pages/detail/index?id=${item.id}` })} />
       )}
-      {!listings.length && <View className='empty-state'><Text>暂时没有匹配的闲置，去求购广场发布需求？</Text></View>}
+      {!listings.length && <View className='empty-state' onClick={() => Taro.navigateTo({ url: '/pages/request-publish/index' })}><Text>没找到？直接发布求购</Text></View>}
     </View>
   )
 }

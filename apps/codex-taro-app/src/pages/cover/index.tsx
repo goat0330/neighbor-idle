@@ -9,9 +9,9 @@ export default function CoverPage() {
       <View className='cover-orb cover-orb-two' />
       <View className='cover-topbar'>邻里集市</View>
       <View className='cover-copy fade-in'>
-        <Text className='cover-label'>LOCAL LOOP · 01</Text>
-        <Text className='cover-title'>闲置置换，<Text className='cover-title-accent'>就在附近。</Text></Text>
-        <Text className='cover-subtitle'>邻居之间，今天就能拿走的好东西。</Text>
+        <Text className='cover-label'>邻里集市</Text>
+        <Text className='cover-title'>买卖闲置，<Text className='cover-title-accent'>就在附近。</Text></Text>
+        <Text className='cover-subtitle'>只做一件事：让附近邻居更快完成一次闲置交易。</Text>
       </View>
       <View className='cover-actions fade-in'>
         <View className='cover-location'>
@@ -22,10 +22,9 @@ export default function CoverPage() {
           </View>
           <Text className='cover-location-arrow'>↗</Text>
         </View>
-        <Button className='cover-button' onClick={() => Taro.switchTab({ url: '/pages/home/index' })}>逛逛附近闲置</Button>
-        <Text className='cover-note'>小区认证后，可发布、留言和约定自提</Text>
+        <Button className='cover-button' onClick={() => Taro.switchTab({ url: '/pages/home/index' })}>进入附近闲置</Button>
+        <Text className='cover-note'>看闲置 · 聊价格 · 约自提</Text>
       </View>
     </View>
   )
 }
-

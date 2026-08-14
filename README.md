@@ -2,6 +2,8 @@
 
 这是一个面向小区内闲置流转的双版本协作仓库：
 
+产品第一原则：**只强调附近买卖闲置**。启动直达附近列表，一级动作只有“卖一件闲置”和“没找到？求购”，底部导航只有“附近 / 卖闲置 / 消息”。
+
 - `apps/workbuddy-app`：WorkBuddy 原生微信小程序 + CloudBase 业务基线，保留完整云函数、管理能力和数据模型。
 - `apps/codex-taro-app`：最终融合主产品，使用 React + TypeScript + Vite + Taro；已吸收并深化 WorkBuddy 的四个地图组件。
 
