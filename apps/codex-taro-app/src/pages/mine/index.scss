@@ -1,4 +1,4 @@
-.mine-page { min-height: 100vh; padding: 24rpx 32rpx calc(172rpx + env(safe-area-inset-bottom)); background: $color-page; color: $color-text-primary; }
+.mine-page { min-height: 100vh; padding: 16rpx 32rpx calc(148rpx + env(safe-area-inset-bottom)); background: $color-page; color: $color-text-primary; }
 .mine-topbar { display: flex; justify-content: flex-end; gap: 34rpx; height: 70rpx; align-items: center; }
 .mine-topbar-icon { color: $color-text-primary; font-size: 38rpx; }
 .mine-profile-card { display: flex; min-height: 206rpx; align-items: center; gap: 24rpx; padding: 30rpx; border-radius: 32rpx; background: $color-surface-strong; }

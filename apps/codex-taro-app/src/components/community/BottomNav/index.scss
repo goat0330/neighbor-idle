@@ -4,8 +4,8 @@
   right: 0;
   bottom: 0;
   left: 0;
-  height: 180rpx;
-  padding: 8rpx 16rpx calc(8rpx + env(safe-area-inset-bottom));
+  height: 148rpx;
+  padding: 4rpx 12rpx calc(4rpx + env(safe-area-inset-bottom));
   border-top: 1px solid $color-border;
   background: rgba(250, 250, 248, .97);
   box-shadow: $shadow-subtle;
@@ -20,20 +20,21 @@
 
 .bottom-nav-item {
   display: flex;
-  width: 132rpx;
-  height: 144rpx;
+  width: auto;
+  height: 116rpx;
+  flex: 1;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: $color-text-secondary;
+  color: $color-text-tertiary;
 }
 
 .bottom-nav-icon {
   position: relative;
   display: block;
-  width: 52rpx;
-  height: 52rpx;
-  color: $color-text-secondary;
+  width: 44rpx;
+  height: 44rpx;
+  color: $color-text-tertiary;
 }
 
 .bottom-nav-icon-idle {
@@ -131,14 +132,14 @@
 
 .bottom-nav-label {
   display: block;
-  margin-top: 4rpx;
-  font-size: 30rpx;
+  margin-top: 2rpx;
+  font-size: 24rpx;
   line-height: 1.2;
 }
 
 .bottom-nav-item-active {
-  color: $color-text-primary;
-  font-weight: 600;
+  color: $color-brand;
+  font-weight: 500;
 }
 
 .bottom-nav-item-active .bottom-nav-icon {
