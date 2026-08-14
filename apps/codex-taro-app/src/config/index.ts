@@ -1,11 +1,13 @@
 /**
  * 公开仓库配置。
- * 腾讯地图浏览器端 Key 会进入编译产物，因此必须在腾讯位置服务控制台限制授权 AppID、接口和配额。
- * 真实 Key 只写入本机 `.env.local`，该文件已由 Git 忽略。
+ * 腾讯地图 Key 只允许在 H5 本地预览时进入编译产物；微信小程序一律通过 CloudBase 云函数访问。
+ * 真实 Key 只写入本机 `.env.local` 或云函数环境变量，该文件已由 Git 忽略。
  */
 
+const isH5Build = process.env.TARO_ENV === 'h5'
+
 export const APP_CONFIG = {
-  TENCENT_MAP_KEY: process.env.TARO_APP_TENCENT_MAP_KEY ?? '',
+  TENCENT_MAP_KEY: isH5Build ? process.env.TARO_APP_TENCENT_MAP_KEY ?? '' : '',
   TENCENT_MAP_BASE: 'https://apis.map.qq.com',
   CLOUD_ENV: process.env.TARO_APP_CLOUD_ENV ?? '',
   NEARBY_RADIUS: 5000,

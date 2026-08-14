@@ -25,5 +25,4 @@ npm run dev:weapp
 - `src/services`：后端接口和本地 mock 的边界
 - `src/design`：Figma 决策契约对应的设计 Token
 
-当前 mock 数据用于把页面和交易闭环跑起来。后续接入 CloudBase 时，只替换 `src/services`，不改页面组件中的交互结构。
-
+当前 mock 数据用于把页面和交易闭环跑起来。接入 CloudBase 后，只替换 `src/services`，不改页面组件中的交互结构。地图服务在微信端通过 `tencentMap` 云函数访问腾讯位置服务；真实 Key 只配置在云函数环境变量 `TENCENT_MAP_KEY`，详见 [`docs/腾讯地图后端接入.md`](../../docs/腾讯地图后端接入.md)。

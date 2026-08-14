@@ -12,12 +12,13 @@
  *   const result = await tencentMap.reverseGeocode(39.98, 116.30)
  *
  * 注意:
- *   小程序需在后台配置 request 合法域名: https://apis.map.qq.com
- *   Key 申请地址: https://lbs.qq.com → 控制台 → 应用管理 → 创建应用 → 添加 Key
+ *   微信小程序生产环境通过 tencentMap CloudBase 云函数访问腾讯接口，Key 只在云函数环境变量中配置。
+ *   未配置 CloudBase 时，H5 本地预览可使用 TARO_APP_TENCENT_MAP_KEY 直连调试。
  */
 
 import Taro from '@tarojs/taro'
 import { APP_CONFIG } from '@config/index'
+import { cloud } from './cloud'
 
 // ---- 类型定义 ----
 
@@ -72,9 +73,13 @@ class TencentMapService {
     this.baseUrl = APP_CONFIG.TENCENT_MAP_BASE
   }
 
-  private assertConfigured() {
+  private useCloudBackend() {
+    return Boolean(APP_CONFIG.CLOUD_ENV) && typeof wx !== 'undefined' && Boolean(wx.cloud)
+  }
+
+  private assertDirectConfigured() {
     if (!this.key) {
-      throw new Error('腾讯地图 Key 未配置，请复制 src/config/local.example.ts 为 local.ts 并填写受 AppID 限制的 Key')
+      throw new Error('腾讯地图服务未配置，请设置 TARO_APP_CLOUD_ENV；本地 H5 调试才需要 TARO_APP_TENCENT_MAP_KEY')
     }
   }
 
@@ -83,7 +88,11 @@ class TencentMapService {
    * 文档: https://lbs.qq.com/service/webService/webServiceGuide/webServiceGcoder
    */
   async reverseGeocode(lat: number, lng: number): Promise<ReverseGeocodeResult> {
-    this.assertConfigured()
+    if (this.useCloudBackend()) {
+      return cloud.call<ReverseGeocodeResult>('tencentMap', 'reverseGeocode', { latitude: lat, longitude: lng })
+    }
+
+    this.assertDirectConfigured()
     const location = `${lat},${lng}`
     const params = { location, key: this.key, get_poi: '1' }
 
@@ -140,7 +149,17 @@ class TencentMapService {
     radius: number = APP_CONFIG.NEARBY_RADIUS,
     page: number = 1
   ): Promise<{ list: POIItem[]; total: number }> {
-    this.assertConfigured()
+    if (this.useCloudBackend()) {
+      return cloud.call<{ list: POIItem[]; total: number }>('tencentMap', 'searchPOI', {
+        latitude: lat,
+        longitude: lng,
+        keyword,
+        radius,
+        page
+      })
+    }
+
+    this.assertDirectConfigured()
     const location = `${lat},${lng}`
     const params = {
       boundary: `nearby(${location},${radius})`,
@@ -195,7 +214,14 @@ class TencentMapService {
     lat?: number,
     lng?: number
   ): Promise<SuggestItem[]> {
-    this.assertConfigured()
+    if (this.useCloudBackend()) {
+      return cloud.call<SuggestItem[]>('tencentMap', 'searchKeyword', {
+        keyword,
+        ...(lat !== undefined && lng !== undefined ? { latitude: lat, longitude: lng } : {})
+      })
+    }
+
+    this.assertDirectConfigured()
     const params: Record<string, string> = {
       keyword,
       page_size: '10',
@@ -246,7 +272,14 @@ class TencentMapService {
     lat?: number,
     lng?: number
   ): Promise<SuggestItem[]> {
-    this.assertConfigured()
+    if (this.useCloudBackend()) {
+      return cloud.call<SuggestItem[]>('tencentMap', 'suggestAddress', {
+        keyword,
+        ...(lat !== undefined && lng !== undefined ? { latitude: lat, longitude: lng } : {})
+      })
+    }
+
+    this.assertDirectConfigured()
     const params: Record<string, string> = {
       keyword,
       key: this.key,

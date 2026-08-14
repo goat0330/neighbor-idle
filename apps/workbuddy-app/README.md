@@ -16,12 +16,13 @@
 | `community` | 小区数据 |
 | `message` | 原生版旧留言/系统通知兼容接口 |
 | `initdb` | 创建全部集合和演示小区 |
+| `tencentMap` | 服务端代理腾讯位置服务，Key 只读云函数环境变量 |
 
 ## 部署
 
 1. 在微信开发者工具导入本目录，把 `project.config.json` 的 `touristappid` 替换为正式 AppID。
 2. 开通 CloudBase 环境，在 `app.js` 写入环境 ID。
-3. 对 `cloudfunctions` 下每个目录执行“上传并部署：云端安装依赖”。
+3. 对 `cloudfunctions` 下每个目录执行“上传并部署：云端安装依赖”；其中 `tencentMap` 还要在 CloudBase 云函数配置中设置 `TENCENT_MAP_KEY`。
 4. 云端运行一次 `initdb`，创建集合。
 5. 数据库客户端权限统一设为“所有用户不可读写”；所有业务读写只允许经过云函数。仓库内的 `database.rules.json` 是拒绝客户端直连的基线。
 6. 在控制台按 `docs/数据模型与接口.md` 创建复合索引，然后用两个真实微信账号进行端到端测试。
@@ -40,7 +41,6 @@
 
 ```text
 TARO_APP_CLOUD_ENV=你的云环境ID
-TARO_APP_TENCENT_MAP_KEY=受AppID限制的腾讯地图Key
 ```
 
-配置后，Taro 的消息中心、聊天、用户资料和交换微信自动调用云函数；未配置环境时只运行不持久化敏感信息的演示模式。
+配置后，Taro 的消息中心、聊天、用户资料、交换微信和地图服务自动调用云函数；地图 Key 不放在 Taro 环境变量中，而配置在 `tencentMap` 云函数的 `TENCENT_MAP_KEY` 中。未配置环境时只运行不持久化敏感信息的演示模式。
