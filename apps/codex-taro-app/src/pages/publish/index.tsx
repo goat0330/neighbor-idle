@@ -12,11 +12,20 @@ import avatarOrange from '@/assets/mock/avatar-orange.png'
 import './index.scss'
 
 const categories = ['家具', '家电', '图书', '数码', '母婴', '其他']
+const conditions = ['全新', '9成新', '8成新', '7成新', '6成新']
+const conditionKeyByLabel: Record<string, string> = {
+  全新: 'new',
+  '9成新': 'almost',
+  '8成新': 'good',
+  '7成新': 'used',
+  '6成新': 'used',
+}
 
 export default function PublishPage() {
   const [title, setTitle] = useState('')
   const [price, setPrice] = useState('')
   const [category, setCategory] = useState(categories[0])
+  const [condition, setCondition] = useState('9成新')
   const [description, setDescription] = useState('')
   const [images, setImages] = useState<string[]>([])
   const [showMapPicker, setShowMapPicker] = useState(false)
@@ -103,7 +112,7 @@ export default function PublishPage() {
             desc: description.trim(),
             images: imageUrls,
             price: Number(price),
-            condition: 'almost',
+            condition: conditionKeyByLabel[condition] || 'almost',
             category: backendCategoryKey(category),
             communityId: 'jinshui',
             communityName: pickupLocation?.name || '金水花园',
@@ -148,7 +157,7 @@ export default function PublishPage() {
           <FormField label='标题' counter={`${title.length}/30`}><Input maxlength={30} value={title} onInput={(event) => setTitle(event.detail.value)} placeholder='例如：宜家书桌' /></FormField>
           <FormField label='价格'><Input type='digit' value={price} onInput={(event) => setPrice(event.detail.value)} placeholder='¥ 0' /></FormField>
           <View className='publish-field'><Text className='publish-field-label'>分类</Text><View className='publish-category-row'>{categories.map((item) => <Text key={item} className={`publish-category ${category === item ? 'is-active' : ''}`} onClick={() => setCategory(item)}>{item}</Text>)}</View></View>
-          <FormField label='成色' value='9成新' />
+          <View className='publish-field'><Text className='publish-field-label'>成色</Text><View className='publish-condition-row'>{conditions.map((item) => <Text key={item} className={`publish-condition ${condition === item ? 'is-active' : ''}`} onClick={() => setCondition(item)}>{item}</Text>)}</View></View>
           <View className='publish-field'><Text className='publish-field-label'>补充描述 <Text className='publish-field-muted'>（选填）</Text></Text><Textarea className='publish-textarea' value={description} onInput={(event) => setDescription(event.detail.value)} maxlength={500} placeholder='写清楚成色、尺寸和交易方式，方便邻居直接判断' /><Text className='publish-counter'>{description.length}/500</Text></View>
           <View className='publish-location-row' onClick={() => setShowMapPicker(true)}><Text className='publish-field-label'>所在地</Text><Text className='publish-location-value'>{pickupLocation?.name || '金水花园'} ›</Text></View>
         </View>

@@ -34,9 +34,12 @@
 .publish-field-muted, .publish-counter { color: $color-text-tertiary; font-size: 22rpx; }
 .publish-field input, .publish-field-value { display: block; width: 100%; height: 72rpx; margin-top: 12rpx; color: $color-text-primary; font-size: 30rpx; line-height: 72rpx; }
 .publish-field input::placeholder, .publish-textarea::placeholder { color: $color-text-tertiary; }
-.publish-category-row { display: flex; gap: 18rpx; margin-top: 24rpx; overflow-x: auto; white-space: nowrap; }
-.publish-category { padding: 14rpx 26rpx; border: 1px solid $color-border; border-radius: 28rpx; color: $color-text-secondary; font-size: 26rpx; }
-.publish-category.is-active { border-color: rgba(255,116,51,.42); background: $color-brand-soft; color: $color-brand; }
+.publish-category-row, .publish-condition-row { display: grid; gap: 8rpx; margin-top: 24rpx; }
+.publish-category-row { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.publish-condition-row { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.publish-category, .publish-condition { display: block; min-width: 0; padding: 14rpx 0; border: 1px solid $color-border; border-radius: 28rpx; color: $color-text-secondary; font-size: 22rpx; line-height: 1.2; text-align: center; white-space: nowrap; }
+.publish-condition { font-size: 20rpx; }
+.publish-category.is-active, .publish-condition.is-active { border-color: rgba(255,116,51,.42); background: $color-brand-soft; color: $color-brand; }
 .publish-textarea { display: block; width: 100%; min-height: 194rpx; margin-top: 18rpx; color: $color-text-primary; font-size: 27rpx; line-height: 1.55; }
 .publish-field > .publish-counter { position: absolute; right: 0; bottom: 28rpx; }
 .publish-location-row { display: flex; align-items: center; justify-content: space-between; padding: 30rpx 0; }

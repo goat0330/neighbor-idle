@@ -12,10 +12,11 @@ export default function PublishSuccessPage() {
   const image = decodeRouteParam(router.params.image) || productDesk
   const itemId = decodeRouteParam(router.params.id)
   const needsAudit = router.params.audit === '1'
+  const shareTitle = `${title} · ¥${price}`
   const sharePath = useMemo(() => itemId ? `/pages/detail/index?id=${encodeURIComponent(itemId)}` : '/pages/home/index', [itemId])
 
   useShareAppMessage(() => ({
-    title: `${title} · ¥${price}`,
+    title: shareTitle,
     path: sharePath,
     imageUrl: image,
   }))
@@ -37,12 +38,12 @@ export default function PublishSuccessPage() {
         </View>
       </View>
       <Text className='publish-success-share-heading'>分享预览</Text>
-      <Text className='publish-success-share-copy'>分享给社区群，附近邻居更容易看到</Text>
+      <Text className='publish-success-share-copy'>分享卡片会带上商品名称、价格和社区位置</Text>
       <View className='publish-success-preview'>
         <View className='publish-success-preview-head'><Text>⌂</Text><Text>金水花园社区群</Text><Text className='publish-success-mini-program'>小程序</Text></View>
         <View className='publish-success-preview-card'><Image src={image} mode='aspectFill' /><View><Text>{title}</Text><Text className='publish-success-preview-price'>¥{price}</Text><Text>金水花园 · 点击查看</Text></View></View>
       </View>
-      <Button className='publish-success-share' openType='share'>⌘&nbsp; 分享到社区群</Button>
+      <Button className='publish-success-share' openType='share'>分享到社区群</Button>
       <Text className='publish-success-later' onClick={() => Taro.reLaunch({ url: '/pages/home/index' })}>稍后再说</Text>
     </View>
   )
