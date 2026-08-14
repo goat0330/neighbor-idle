@@ -154,7 +154,6 @@ export default function MinePage() {
 
   return (
     <View className='mine-page'>
-      <View className='mine-topbar'><Text className='mine-topbar-icon'>⌾</Text><Text className='mine-topbar-icon'>▢</Text></View>
       <View className='mine-profile-card'>
         <Image className='mine-avatar' src={profile.avatarUrl || avatarOrange} mode='aspectFill' onClick={() => setShowProfileSheet(true)} />
         <View className='mine-profile-copy' onClick={() => setShowProfileSheet(true)}>
@@ -162,7 +161,11 @@ export default function MinePage() {
           <Text className='mine-community'>{profile.communityName || '金水花园'}</Text>
           <Text className='mine-trust'>诚信交易 · 友善社区</Text>
         </View>
-        <Text className='mine-contact-entry' onClick={() => setShowContactSheet(true)}>⌕ 联系方式设置 ›</Text>
+        <View className='mine-contact-entry' onClick={() => setShowContactSheet(true)}>
+          <View className='mine-contact-icon' />
+          <Text className='mine-contact-label'>联系方式设置</Text>
+          <Text className='mine-contact-arrow'>›</Text>
+        </View>
       </View>
       <View className='mine-stats'>
         <Stat value='3' label='在售' icon='store' />
