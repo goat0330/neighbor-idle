@@ -13,10 +13,10 @@
 ```bash
 npm install
 npm run typecheck
-npm run dev:weapp
+npm run build:weapp:check
 ```
 
-微信小程序编译生成物在 `dist-weapp/`，用微信开发者工具导入本目录即可。当前项目 AppID 为 `wx00edfdef9d44805f`；个人开发者配置文件不提交到 GitHub。
+微信小程序编译生成物统一在 `dist-weapp/`，H5 生成物统一在 `dist-h5/`。用微信开发者工具导入本目录（不是 `src/`、`dist/` 或 `dist-h5/`）；根目录的 `project.config.json` 会把 `miniprogramRoot` 指向 `dist-weapp/`。每次切换分支或更新代码后，先运行 `npm run build:weapp:check`，再在开发者工具中清除编译缓存并重新打开项目。当前项目 AppID 为 `wx00edfdef9d44805f`；个人开发者配置文件不提交到 GitHub。
 
 ## 手机端 H5 Review
 
