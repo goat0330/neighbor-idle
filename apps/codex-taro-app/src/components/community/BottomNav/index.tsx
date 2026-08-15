@@ -1,5 +1,13 @@
-import { Text, View } from '@tarojs/components'
+import { Image, Text, View } from '@tarojs/components'
 import PublishFAB from '../PublishFAB'
+import shoppingBagIcon from '@/assets/icons/shopping-bag.svg'
+import shoppingBagActiveIcon from '@/assets/icons/shopping-bag-active.svg'
+import searchIcon from '@/assets/icons/search.svg'
+import searchActiveIcon from '@/assets/icons/search-active.svg'
+import messageIcon from '@/assets/icons/message-circle.svg'
+import messageActiveIcon from '@/assets/icons/message-circle-active.svg'
+import userIcon from '@/assets/icons/user-round.svg'
+import userActiveIcon from '@/assets/icons/user-round-active.svg'
 import './index.scss'
 
 export type TabKey = 'idle' | 'wanted' | 'publish' | 'messages' | 'me'
@@ -9,6 +17,13 @@ export type BottomNavProps = {
   active: BottomNavTab
   onChange: (key: BottomNavTab) => void
   onPublish: () => void
+}
+
+const navIcons: Record<BottomNavTab, { normal: string; active: string }> = {
+  idle: { normal: shoppingBagIcon, active: shoppingBagActiveIcon },
+  wanted: { normal: searchIcon, active: searchActiveIcon },
+  messages: { normal: messageIcon, active: messageActiveIcon },
+  me: { normal: userIcon, active: userActiveIcon },
 }
 
 type NavItemProps = {
@@ -35,7 +50,7 @@ export default function BottomNav({ active, onChange, onPublish }: BottomNavProp
 function NavItem({ label, icon, active, onClick }: NavItemProps) {
   return (
     <View className={`bottom-nav-item ${active ? 'bottom-nav-item-active' : ''}`} onClick={onClick}>
-      <View className={`bottom-nav-icon bottom-nav-icon-${icon}`} />
+      <Image className='bottom-nav-icon' src={navIcons[icon][active ? 'active' : 'normal']} mode='aspectFit' />
       <Text className='bottom-nav-label'>{label}</Text>
     </View>
   )

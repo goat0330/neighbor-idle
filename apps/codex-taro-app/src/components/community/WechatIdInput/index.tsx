@@ -9,7 +9,7 @@ export type WechatIdInputProps = {
 
 export default function WechatIdInput({
   value,
-  placeholder = '填写微信号（选填）',
+  placeholder = '请手动填写微信号（选填）',
   onChange,
 }: WechatIdInputProps) {
   return (
@@ -25,7 +25,7 @@ export default function WechatIdInput({
           onInput={(event) => onChange(event.detail.value)}
         />
       </View>
-      <Text className='wechat-id-input__hint'>用于双方同意交换联系方式后展示</Text>
+      <Text className='wechat-id-input__hint'>微信号无法由小程序自动读取，仅在双方同意后展示</Text>
     </View>
   )
 }

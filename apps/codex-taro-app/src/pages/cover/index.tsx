@@ -7,9 +7,9 @@ export default function CoverPage() {
     <View className='cover-page'>
       <View className='cover-orb cover-orb-one' />
       <View className='cover-orb cover-orb-two' />
-      <View className='cover-topbar'>邻里集市</View>
+      <View className='cover-topbar'>邻里闲置</View>
       <View className='cover-copy fade-in'>
-        <Text className='cover-label'>邻里集市</Text>
+        <Text className='cover-label'>邻里闲置</Text>
         <Text className='cover-title'>买卖闲置，<Text className='cover-title-accent'>就在附近。</Text></Text>
         <Text className='cover-subtitle'>只做一件事：让附近邻居更快完成一次闲置交易。</Text>
       </View>

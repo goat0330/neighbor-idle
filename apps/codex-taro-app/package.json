@@ -2,14 +2,14 @@
   "name": "codex-taro-app",
   "version": "0.1.0",
   "private": true,
-  "description": "邻里二手小程序 React + TypeScript + Vite + Taro 版本",
+  "description": "邻里闲置小程序 React + TypeScript + Vite + Taro 版本",
   "scripts": {
-    "dev:h5": "taro build --type h5 --watch --port 10086",
+    "dev:h5": "taro build --type h5 --watch",
     "dev:weapp": "taro build --type weapp --watch",
-    "build:weapp": "taro build --type weapp",
-    "verify:weapp": "node scripts/verify-weapp-output.mjs",
-    "build:weapp:check": "npm run build:weapp && npm run verify:weapp",
+    "build:weapp": "taro build --type weapp && node scripts/prepare-weapp-devtools.mjs && node scripts/weapp-doctor.mjs",
     "build:h5": "taro build --type h5",
+    "setup:wechat-devtools": "node scripts/setup-wechat-devtools.mjs",
+    "weapp:doctor": "node scripts/weapp-doctor.mjs",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

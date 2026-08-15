@@ -12,6 +12,7 @@ import './index.scss'
 const categories = ['家具', '家电', '图书', '数码', '母婴', '其他']
 
 export default function RequestPublishPage() {
+  const isWechatMiniProgram = process.env.TARO_ENV === 'weapp'
   const [category, setCategory] = useState(categories[0])
   const [title, setTitle] = useState('')
   const [budget, setBudget] = useState('')
@@ -82,8 +83,8 @@ export default function RequestPublishPage() {
   }
 
   return (
-    <View className='request-publish-page'>
-      <View className='request-header'><Text className='request-back' onClick={() => Taro.navigateBack()}>‹</Text><Text className='request-title'>发布求购</Text><Text className='request-more'>···</Text></View>
+      <View className='request-publish-page'>
+      {!isWechatMiniProgram && <View className='request-header'><Text className='request-back' onClick={() => Taro.navigateBack()}>‹</Text><Text className='request-title'>发布求购</Text><Text className='request-more'>···</Text></View>}
       <View className='request-content'>
         <View className='request-form'>
           <View className='request-field request-title-field'><Text className='request-field-label'>标题</Text><Input maxlength={30} value={title} onInput={(event) => setTitle(event.detail.value)} placeholder='求一个小书桌' /><Text className='request-counter'>{title.length}/30</Text></View>

@@ -51,3 +51,6 @@ export type { ContactCardProps } from './ContactCard'
 
 export { default as ProfileCompletionPanel } from './ProfileCompletionPanel'
 export type { ProfileCompletionPanelProps } from './ProfileCompletionPanel'
+
+export { default as NearbyGroupCard } from './NearbyGroupCard'
+export type { NearbyGroupCardProps } from './NearbyGroupCard'

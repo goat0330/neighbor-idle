@@ -11,6 +11,7 @@ export type WantedCardProps = {
   publishedAtText: string
   description?: string
   onOffer: (id: string) => void
+  onOpen?: (id: string) => void
 }
 
 export default function WantedCard({
@@ -23,12 +24,15 @@ export default function WantedCard({
   publishedAtText,
   description,
   onOffer,
+  onOpen,
 }: WantedCardProps) {
   return (
-    <View className='wanted-card'>
-      {avatar
-        ? <Image className='wanted-card-avatar' src={avatar} mode='aspectFill' />
-        : <View className='wanted-card-avatar wanted-card-avatar-fallback'>{nickname.slice(0, 1) || '邻'}</View>}
+    <View className='wanted-card' onClick={() => onOpen?.(id)}>
+      <View className={`wanted-card-avatar ${avatar && needsMockAvatarCrop(avatar) ? 'wanted-card-avatar-crop' : ''}`}>
+        {avatar
+          ? <Image className='wanted-card-avatar-image' src={avatar} mode='aspectFill' />
+          : <Text className='wanted-card-avatar-fallback'>{nickname.slice(0, 1) || '邻'}</Text>}
+      </View>
       <View className='wanted-card-content'>
         <View className='wanted-card-meta'>
           <Text className='wanted-card-nickname'>{nickname}</Text>
@@ -41,10 +45,14 @@ export default function WantedCard({
         </View>
         {description && <Text className='wanted-card-description'>{description}</Text>}
       </View>
-      <View className='wanted-card-offer' onClick={() => onOffer(id)}>
+      <View className='wanted-card-offer' onClick={(event) => { event.stopPropagation(); onOffer(id) }}>
         <Text>我有这个</Text>
       </View>
-      <Text className='wanted-card-chevron'>›</Text>
+      <Text className='wanted-card-chevron' onClick={(event) => { event.stopPropagation(); onOpen?.(id) }}>›</Text>
     </View>
   )
+}
+
+function needsMockAvatarCrop(avatar: string) {
+  return avatar.includes('avatar-blue') || avatar.includes('avatar-brown')
 }

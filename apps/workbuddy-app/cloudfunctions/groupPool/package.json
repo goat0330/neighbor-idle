@@ -1,0 +1,9 @@
+{
+  "name": "group-pool",
+  "version": "1.0.0",
+  "description": "邻里集市-地理生活圈与企业微信群池入口",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

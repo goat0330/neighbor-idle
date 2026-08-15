@@ -14,6 +14,7 @@
 .publish-success-heading { font-size: 42rpx; font-weight: 700; }
 .publish-success-subtitle { margin-top: 10rpx; color: $color-text-secondary; font-size: 28rpx; }
 .publish-success-card { display: flex; margin: 0 32rpx 34rpx; padding: 24rpx; border: 1px solid $color-border; border-radius: 28rpx; background: $color-surface-strong; }
+.publish-success-group-wrap { margin: 0 32rpx; }
 .publish-success-card image { width: 224rpx; height: 190rpx; flex: 0 0 224rpx; border-radius: 20rpx; }
 .publish-success-card-copy { display: flex; min-width: 0; flex-direction: column; justify-content: center; padding-left: 24rpx; }
 .publish-success-item-title { overflow: hidden; font-size: 34rpx; text-overflow: ellipsis; white-space: nowrap; }

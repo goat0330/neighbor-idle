@@ -12,20 +12,21 @@ import avatarOrange from '@/assets/mock/avatar-orange.png'
 import './index.scss'
 
 const categories = ['家具', '家电', '图书', '数码', '母婴', '其他']
-const conditions = ['全新', '9成新', '8成新', '7成新', '6成新']
+const conditions = ['全新', '几乎全新', '成色不错', '有使用痕迹', '有瑕疵']
 const conditionKeyByLabel: Record<string, string> = {
   全新: 'new',
-  '9成新': 'almost',
-  '8成新': 'good',
-  '7成新': 'used',
-  '6成新': 'used',
+  几乎全新: 'almost',
+  成色不错: 'good',
+  有使用痕迹: 'used',
+  有瑕疵: 'flaw',
 }
 
 export default function PublishPage() {
+  const isWechatMiniProgram = process.env.TARO_ENV === 'weapp'
   const [title, setTitle] = useState('')
   const [price, setPrice] = useState('')
   const [category, setCategory] = useState(categories[0])
-  const [condition, setCondition] = useState('9成新')
+  const [condition, setCondition] = useState('几乎全新')
   const [description, setDescription] = useState('')
   const [images, setImages] = useState<string[]>([])
   const [showMapPicker, setShowMapPicker] = useState(false)
@@ -141,7 +142,7 @@ export default function PublishPage() {
 
   return (
     <View className='publish-page'>
-      <View className='publish-header'><Text className='publish-back' onClick={() => Taro.navigateBack()}>‹</Text><Text className='publish-title'>发布闲置</Text><Text className='publish-more'>···</Text></View>
+      {!isWechatMiniProgram && <View className='publish-header'><Text className='publish-back' onClick={() => Taro.navigateBack()}>‹</Text><Text className='publish-title'>发布闲置</Text><Text className='publish-more'>···</Text></View>}
       <View className='publish-content'>
         <Text className='publish-tip'>先上传真实照片，更容易卖出</Text>
         <View className='publish-photo-grid'>

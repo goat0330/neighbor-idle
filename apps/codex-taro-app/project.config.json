@@ -1,5 +1,5 @@
 {
-  "description": "邻里二手小程序 Codex Taro 版本",
+  "description": "邻里闲置小程序 Codex Taro 版本",
   "packOptions": {
     "ignore": [],
     "include": []
@@ -32,8 +32,8 @@
   "compileType": "miniprogram",
   "libVersion": "3.7.3",
   "appid": "wx00edfdef9d44805f",
-  "projectname": "neighbor-secondhand-codex",
-  "miniprogramRoot": "dist-weapp/",
+  "projectname": "neighbor-idle-codex",
+  "miniprogramRoot": "dist/weapp/",
   "simulatorPluginLibVersion": {},
   "editorSetting": {}
 }

@@ -1,12 +1,18 @@
 import { Button, Image, Swiper, SwiperItem, Text, View } from '@tarojs/components'
-import Taro, { useRouter } from '@tarojs/taro'
+import Taro, { useRouter, useShareAppMessage } from '@tarojs/taro'
 import { useEffect, useMemo, useState } from 'react'
+import shareIcon from '@/assets/icons/share.svg'
+import starActiveIcon from '@/assets/icons/star-active.svg'
+import starIcon from '@/assets/icons/star.svg'
+import { NearbyGroupCard } from '@/components/community'
 import { backendEnabled, favoriteApi, itemApi } from '@/services/backend'
+import { getEntry } from '@/services/groupPool'
 import { mapBackendItem, seedListings } from '@/services/market'
 import type { Listing } from '@/types/market'
 import './index.scss'
 
 const quickQuestions = ['还在吗？', '今天方便拿吗？', '能便宜点吗？', '尺寸多大？']
+const isWechatMiniProgram = process.env.TARO_ENV === 'weapp'
 
 export default function DetailPage() {
   const router = useRouter()
@@ -55,16 +61,23 @@ export default function DetailPage() {
   }
 
   const galleryImages = item.images || [item.image]
+  const nearbyGroupEntry = useMemo(() => getEntry({
+    geoCircleId: item.geoCircleId,
+    geoCircleName: item.geoCircleName,
+    communityName: item.community,
+    distance: item.distance ?? formatDistance(item.distanceKm),
+    locationLabel: item.locationLabel || item.location,
+  }), [item.community, item.distance, item.distanceKm, item.geoCircleId, item.geoCircleName, item.location, item.locationLabel])
+
+  useShareAppMessage(() => ({
+    title: `${item.title} · ¥${item.price}`,
+    path: `/pages/detail/index?id=${encodeURIComponent(item.id)}`,
+    imageUrl: galleryImages[0],
+  }))
 
   return (
     <View className='detail-page'>
-      <View className='detail-topbar'>
-        <Text className='detail-back' onClick={() => Taro.navigateBack()}>‹</Text>
-        <View className='detail-top-actions'>
-          <Text onClick={() => { void toggleFavorite() }}>{favorite ? '★' : '☆'}</Text>
-          <Text>↗</Text>
-        </View>
-      </View>
+      {!isWechatMiniProgram && <View className='detail-topbar'><Text className='detail-back' onClick={() => Taro.navigateBack()}>‹</Text></View>}
       <View className='detail-gallery'>
         <Swiper className='detail-swiper' circular={galleryImages.length > 1} indicatorDots={galleryImages.length > 1} indicatorColor='rgba(34,34,34,.2)' indicatorActiveColor='#FF7433'>
           {galleryImages.map((image, index) => <SwiperItem key={`${image}-${index}`}><Image className='detail-image' src={image} mode='aspectFill' /></SwiperItem>)}
@@ -101,13 +114,23 @@ export default function DetailPage() {
           <View><Text className='detail-section-title'>面交位置</Text><Text className='detail-description'>{item.community} · {item.location} · 距你约 {formatDistance(item.distanceKm)}</Text></View>
           <Text className='detail-location-arrow'>›</Text>
         </View>
+        <NearbyGroupCard entry={nearbyGroupEntry} />
         <View className='detail-quick-row'>
           <Text className='detail-quick-label'>快速提问</Text>
           {quickQuestions.map((question) => <Text key={question} className='detail-quick-chip' onClick={() => openChat(question)}>{question}</Text>)}
         </View>
       </View>
       <View className='detail-bottom-action'>
-        <Text className='detail-bottom-favorite' onClick={() => { void toggleFavorite() }}>{favorite ? '★' : '☆'}<Text>收藏</Text></Text>
+        <View className='detail-bottom-actions-left'>
+          <Button className='detail-bottom-icon-action' onClick={() => { void toggleFavorite() }}>
+            <Image className='detail-bottom-icon' src={favorite ? starActiveIcon : starIcon} mode='aspectFit' />
+            <Text>收藏</Text>
+          </Button>
+          <Button className='detail-bottom-icon-action' openType='share' onClick={() => { if (!isWechatMiniProgram) Taro.showToast({ title: '请在微信中分享商品', icon: 'none' }) }}>
+            <Image className='detail-bottom-icon' src={shareIcon} mode='aspectFit' />
+            <Text>分享</Text>
+          </Button>
+        </View>
         <Button className='detail-chat-button' onClick={() => isMine ? Taro.navigateTo({ url: '/pages/mine/index' }) : openChat()}>{isMine ? '管理闲置' : '问问卖家'}</Button>
       </View>
     </View>

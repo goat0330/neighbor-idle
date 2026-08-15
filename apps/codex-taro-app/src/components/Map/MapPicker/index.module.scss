@@ -4,6 +4,8 @@
   left: 0;
   right: 0;
   bottom: 0;
+  width: 100%;
+  overflow: hidden;
   z-index: $z-index-modal;
   background: $color-bg-page;
   display: flex;
@@ -13,6 +15,8 @@
 /* ---- 搜索栏 ---- */
 .searchBar {
   display: flex;
+  width: 100%;
+  box-sizing: border-box;
   align-items: center;
   padding: $space-sm $space-md;
   background: $color-bg-card;
@@ -102,6 +106,8 @@
 
 /* ---- 底部信息面板 ---- */
 .bottomPanel {
+  width: 100%;
+  box-sizing: border-box;
   background: $color-bg-card;
   border-radius: $radius-xl $radius-xl 0 0;
   box-shadow: $shadow-lg;
@@ -181,6 +187,8 @@
 /* ---- 操作按钮 ---- */
 .actions {
   display: flex;
+  width: 100%;
+  box-sizing: border-box;
   gap: $space-sm;
   padding: $space-md $space-lg;
   @include safe-bottom;
@@ -199,6 +207,7 @@
 
 .confirmBtn {
   flex: 1;
+  min-width: 0;
   height: 88rpx;
   @include flex-center;
   font-size: $font-size-md;

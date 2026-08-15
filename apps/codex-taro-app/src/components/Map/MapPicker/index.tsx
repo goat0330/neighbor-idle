@@ -96,10 +96,10 @@ export function MapPicker({ visible, initialCenter, onClose, onConfirm }: MapPic
   }
 
   /** 自动定位 */
-  const autoLocate = async () => {
+  const autoLocate = async (force = false) => {
     setLoading(true)
     try {
-      const loc = await locationService.getCurrentLocation()
+      const loc = await locationService.getCurrentLocation(force)
       setCenter(loc)
       if (tencentMap.isAvailable()) {
         await loadNearby(loc.latitude, loc.longitude)
@@ -108,16 +108,16 @@ export function MapPicker({ visible, initialCenter, onClose, onConfirm }: MapPic
         setSelectedAddress(geo.address)
         setSelectedName(geo.community || '')
       } else {
-        setSelectedAddress('仅显示社区级位置，保护隐私安全')
-        setSelectedName('金水花园')
+        setSelectedAddress('已定位；地图服务未连接，暂无法探索附近小区')
+        setSelectedName('当前位置')
       }
     } catch (err: any) {
       if (tencentMap.isAvailable()) console.warn('[MapPicker] autoLocate', err)
-      // 预览或未授权时使用当前产品的社区级默认位置；真机授权后会被真实位置替换。
+      // 仅保留可视化预览中心，不把演示坐标伪装成用户的真实位置。
       const fallback: LatLng = { latitude: 31.2304, longitude: 121.4737 }
       setCenter(fallback)
-      setSelectedName('金水花园')
-      setSelectedAddress('仅显示社区级位置，保护隐私安全')
+      setSelectedName('请选择位置')
+      setSelectedAddress('定位失败，请授权定位或搜索小区')
       if (tencentMap.isAvailable()) await loadNearby(fallback.latitude, fallback.longitude)
     } finally {
       setLoading(false)
@@ -261,7 +261,7 @@ export function MapPicker({ visible, initialCenter, onClose, onConfirm }: MapPic
           ) : (
             <View className='map map-placeholder'>
               <Text>地图预览</Text>
-              <Text>金水花园</Text>
+              <Text>{tencentMap.isAvailable() ? '正在加载附近位置' : '微信端配置地图服务后可探索附近小区'}</Text>
             </View>
           )}
           {/* 中心十字标 */}
@@ -303,7 +303,7 @@ export function MapPicker({ visible, initialCenter, onClose, onConfirm }: MapPic
 
         {/* 操作按钮 */}
         <View className='actions'>
-          <View className='relocateBtn' onClick={autoLocate}>
+          <View className='relocateBtn' onClick={() => { void autoLocate(true) }}>
             <Text>📍 重新定位</Text>
           </View>
           <View className='confirmBtn' onClick={handleConfirm}>

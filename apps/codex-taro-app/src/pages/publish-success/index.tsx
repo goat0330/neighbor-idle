@@ -1,7 +1,9 @@
 import { Button, Image, Text, View } from '@tarojs/components'
 import Taro, { useRouter, useShareAppMessage } from '@tarojs/taro'
 import { useMemo } from 'react'
-import productDesk from '@/assets/mock/product-desk.png'
+import { NearbyGroupCard } from '@/components/community'
+import productDesk from '@/assets/mock-optimized/product-desk.jpg'
+import { getEntry } from '@/services/groupPool'
 import './index.scss'
 
 export default function PublishSuccessPage() {
@@ -14,6 +16,7 @@ export default function PublishSuccessPage() {
   const needsAudit = router.params.audit === '1'
   const shareTitle = `${title} · ¥${price}`
   const sharePath = useMemo(() => itemId ? `/pages/detail/index?id=${encodeURIComponent(itemId)}` : '/pages/home/index', [itemId])
+  const nearbyGroupEntry = useMemo(() => getEntry({ geoCircleName: location, locationLabel: location }), [location])
 
   useShareAppMessage(() => ({
     title: shareTitle,
@@ -36,6 +39,9 @@ export default function PublishSuccessPage() {
           <Text className='publish-success-price'>¥{price}</Text>
           <Text className='publish-success-location'>⌾ {location}</Text>
         </View>
+      </View>
+      <View className='publish-success-group-wrap'>
+        <NearbyGroupCard entry={nearbyGroupEntry} />
       </View>
       <Text className='publish-success-share-heading'>分享预览</Text>
       <Text className='publish-success-share-copy'>分享卡片会带上商品名称、价格和社区位置</Text>

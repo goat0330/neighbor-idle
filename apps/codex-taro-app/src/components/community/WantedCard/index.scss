@@ -2,6 +2,7 @@
   position: relative;
   display: flex;
   min-height: 210rpx;
+  align-items: center;
   padding: 24rpx;
   border: 1px solid $color-border;
   border-radius: 34rpx;
@@ -9,7 +10,8 @@
 }
 
 .wanted-card-avatar {
-  display: block;
+  display: flex;
+  overflow: hidden;
   width: 100rpx;
   height: 100rpx;
   flex: 0 0 100rpx;
@@ -17,7 +19,21 @@
   background: $color-brand-soft;
 }
 
+.wanted-card-avatar-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.wanted-card-avatar-crop .wanted-card-avatar-image {
+  transform: scale(1.45);
+  transform-origin: center top;
+}
+
 .wanted-card-avatar-fallback {
+  display: block;
+  width: 100%;
+  height: 100%;
   color: $color-brand-muted;
   font-size: 32rpx;
   line-height: 100rpx;

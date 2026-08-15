@@ -11,11 +11,13 @@ const fail = msg => ({ code: -1, msg })
 
 exports.main = async (event) => {
   const { OPENID } = cloud.getWXContext()
+  if (!OPENID) return fail('请先登录')
   const action = event.action
   try {
     switch (action) {
       case 'toggle': return await toggle(event, OPENID)
       case 'list': return await list(event, OPENID)
+      case 'stats': return await stats(OPENID)
       default: return fail('未知操作: ' + action)
     }
   } catch (e) {
@@ -55,6 +57,16 @@ async function list(event, OPENID) {
   }
   const list = res.data
     .filter(f => itemMap[f.itemId])
-    .map(f => ({ ...itemMap[f.itemId], favId: f._id }))
+    .map(f => ({ ...publicItemView(itemMap[f.itemId]), favId: f._id }))
   return ok({ list, page: Number(page), hasMore: res.data.length === pageSize })
+}
+
+async function stats(OPENID) {
+  const result = await favorites.where({ openid: OPENID }).count()
+  return ok({ count: result.total })
+}
+
+function publicItemView(item) {
+  const { openid, phone, phoneNumber, phoneMasked, countryCode, wechatId, ...safe } = item
+  return safe
 }

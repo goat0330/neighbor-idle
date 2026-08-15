@@ -2,7 +2,7 @@ import { defineConfig } from '@tarojs/cli'
 import path from 'path'
 
 export default defineConfig({
-  projectName: 'neighbor-secondhand-codex',
+  projectName: 'neighbor-idle-codex',
   date: '2026-08-14',
   designWidth: 750,
   deviceRatio: {
@@ -11,7 +11,7 @@ export default defineConfig({
     828: 1.81 / 2,
   },
   sourceRoot: 'src',
-  outputRoot: process.env.TARO_ENV === 'h5' ? 'dist-h5' : 'dist-weapp',
+  outputRoot: `dist/${process.env.TARO_ENV}`,
   framework: 'react',
   compiler: 'vite',
   alias: {
@@ -29,6 +29,10 @@ export default defineConfig({
     ],
   },
   mini: {
+    imageUrlLoaderOption: {
+      limit: 0,
+      name: (moduleId: string) => `assets/${path.basename(moduleId)}`,
+    },
     postcss: {
       autoprefixer: {
         enable: true,

@@ -1,5 +1,6 @@
 .publish-page {
   min-height: 100vh;
+  overflow: visible;
   padding-bottom: 148rpx;
   background: $color-page;
   color: $color-text-primary;
@@ -16,7 +17,7 @@
 .publish-back { color: $color-text-primary; font-size: 60rpx; line-height: 1; }
 .publish-title { font-size: 38rpx; font-weight: 700; }
 .publish-more { color: $color-text-secondary; font-size: 34rpx; letter-spacing: 4rpx; }
-.publish-content { padding: 0 32rpx 24rpx; }
+.publish-content { overflow: visible; padding: 0 32rpx 24rpx; }
 .publish-tip { display: block; padding: 16rpx 0 22rpx; color: $color-text-secondary; font-size: 26rpx; }
 .publish-tip::first-letter { color: $color-brand; }
 

@@ -10,10 +10,16 @@ export type Listing = {
   category: string
   condition: string
   community: string
+  communityId?: string
+  communityName?: string
   location: string
   latitude: number
   longitude: number
   distanceKm?: number
+  geoCircleId?: string
+  geoCircleName?: string
+  distance?: string | number
+  locationLabel?: string
   seller: string
   sellerAvatar?: string
   sellerCredit: number

@@ -9,7 +9,6 @@
   display: flex;
   height: 112rpx;
   align-items: center;
-  justify-content: space-between;
   padding: 0 32rpx;
 }
 
@@ -17,13 +16,6 @@
   color: $color-text-primary;
   font-size: 60rpx;
   line-height: 1;
-}
-
-.detail-top-actions {
-  display: flex;
-  gap: 32rpx;
-  color: $color-text-primary;
-  font-size: 42rpx;
 }
 
 .detail-gallery {
@@ -237,20 +229,51 @@
   background: rgba(250, 250, 248, .98);
 }
 
-.detail-bottom-favorite {
+.detail-bottom-actions-left {
   display: flex;
-  width: 92rpx;
-  flex: 0 0 92rpx;
+  flex: 0 0 auto;
+  gap: 20rpx;
+}
+
+.detail-bottom-icon-action {
+  display: flex;
+  width: 52rpx;
+  min-height: 0;
+  flex: 0 0 52rpx;
   flex-direction: column;
   align-items: center;
-  color: $color-text-primary;
-  font-size: 40rpx;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: $color-text-secondary;
+  font-size: 20rpx;
   line-height: 1;
 }
 
-.detail-bottom-favorite text:last-child {
-  margin-top: 6rpx;
-  font-size: 21rpx;
+.detail-bottom-icon-action::after {
+  border: 0;
+}
+
+.detail-bottom-icon-action:active {
+  opacity: .68;
+  transform: scale(.97);
+}
+
+.detail-bottom-icon {
+  display: block;
+  width: 38rpx;
+  height: 38rpx;
+  margin-bottom: 5rpx;
+}
+
+.detail-bottom-icon-action text {
+  display: block;
+  color: inherit;
+  font-size: 20rpx;
+  line-height: 1.2;
 }
 
 .detail-chat-button {

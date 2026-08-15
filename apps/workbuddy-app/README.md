@@ -1,4 +1,4 @@
-# 邻里集市 CloudBase 后端与原生基线
+# 邻里闲置 CloudBase 后端与原生基线
 
 该目录既保留 WorkBuddy 原生微信小程序，也承载融合版 Taro 前端共用的 CloudBase 后端。
 
@@ -14,6 +14,7 @@
 | `want` | 求购发布与管理 |
 | `favorite` | 收藏管理 |
 | `community` | 小区数据 |
+| `groupPool` | 地理生活圈解析与安全的群池入口展示 |
 | `message` | 原生版旧留言/系统通知兼容接口 |
 | `initdb` | 创建全部集合和演示小区 |
 | `tencentMap` | 服务端代理腾讯位置服务，Key 只读云函数环境变量 |
@@ -26,6 +27,8 @@
 4. 云端运行一次 `initdb`，创建集合。
 5. 数据库客户端权限统一设为“所有用户不可读写”；所有业务读写只允许经过云函数。仓库内的 `database.rules.json` 是拒绝客户端直连的基线。
 6. 在控制台按 `docs/数据模型与接口.md` 创建复合索引，然后用两个真实微信账号进行端到端测试。
+
+`groupPool` 当前只提供 `resolveNearby` / `getEntry` 的安全业务接口。真实企业微信入群参数需在 WeCom Bridge Spike 完成后写入 `group_join_ways.publicEntry`；不要把 `corpsecret`、`access_token`、`chat_id` 或 `config_id` 写入小程序或仓库。
 
 ## 核心安全边界
 

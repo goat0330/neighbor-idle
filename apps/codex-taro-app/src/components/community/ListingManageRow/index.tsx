@@ -41,7 +41,7 @@ export default function ListingManageRow({
         {stats && <Text className='listing-manage-stats'>{stats}</Text>}
       </View>
       <View className={`listing-manage-action ${sold ? 'listing-manage-action--sold' : ''}`} onClick={(event) => { event.stopPropagation(); onMarkSold(id) }}>
-        <Text>{sold ? '已标记已出' : '标记已出'}</Text>
+        <Text>{sold ? '取消标记' : '标记已出'}</Text>
       </View>
     </View>
   )

@@ -1,6 +1,8 @@
 .chat-bubble-row {
   display: flex;
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   min-width: 0;
   align-items: flex-start;
   gap: 16rpx;
@@ -23,8 +25,11 @@
 
 .chat-bubble-row__stack {
   display: flex;
+  width: 72%;
   min-width: 0;
-  max-width: 72%;
+  max-width: calc(100% - 104rpx);
+  flex: 0 1 72%;
+  overflow: hidden;
   flex-direction: column;
 }
 
@@ -33,6 +38,9 @@
 }
 
 .chat-bubble-row__bubble {
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
   padding: 20rpx 26rpx;
   border: 1rpx solid $color-border;
   border-radius: 26rpx;
@@ -40,7 +48,7 @@
   color: $color-text-primary;
   font-size: 30rpx;
   line-height: 1.45;
-  word-break: break-word;
+  word-break: break-all;
 }
 
 .is-incoming .chat-bubble-row__bubble {

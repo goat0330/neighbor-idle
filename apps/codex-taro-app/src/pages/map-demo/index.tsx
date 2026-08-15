@@ -7,7 +7,7 @@
  * 3. MapPicker — 定位选点弹层
  *
  * 运行方式:
- *   npm run dev:weapp → 微信开发者工具打开项目根目录，project.config.json 指向 dist-weapp/
+ *   npm run build:weapp && npm run setup:wechat-devtools → 微信开发者工具打开 D:\\wxdev\\community-idle
  */
 
 import { useState, useCallback } from 'react'

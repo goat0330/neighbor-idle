@@ -6,6 +6,8 @@ import { backendEnabled, conversationApi, type ConversationSummary } from '@/ser
 import { seedConversations, seedListings } from '@/services/market'
 import './index.scss'
 
+const isWechatMiniProgram = process.env.TARO_ENV === 'weapp'
+
 export default function MessagesPage() {
   const [conversations, setConversations] = useState<ConversationSummary[]>(() => demoConversations())
   const [showPublishSheet, setShowPublishSheet] = useState(false)
@@ -30,10 +32,10 @@ export default function MessagesPage() {
   return (
     <View className='messages-page'>
       <View className='messages-content'>
-        <View className='messages-title-row'>
+        {!isWechatMiniProgram && <View className='messages-title-row'>
           <Text className='messages-title'>消息</Text>
           <Text className='messages-title-action'>···</Text>
-        </View>
+        </View>}
         <View className='conversation-list'>
           {conversations.map((item) => (
             <View

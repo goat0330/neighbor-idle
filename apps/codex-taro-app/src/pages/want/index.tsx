@@ -59,6 +59,30 @@ export default function WantPage() {
     Taro.reLaunch({ url: routes[key] })
   }
 
+  function getSelectedWant(id: string) {
+    return wants.find((want) => want.id === id)
+  }
+
+  function buildWantQuery(want: WantPost) {
+    return [
+      `wantId=${encodeURIComponent(want.id)}`,
+      `wantTitle=${encodeURIComponent(want.title)}`,
+      `wantBudget=${encodeURIComponent(want.budget)}`,
+      `wantCommunity=${encodeURIComponent(want.community)}`,
+      `wantAuthor=${encodeURIComponent(want.author)}`,
+      `wantCategory=${encodeURIComponent(want.category)}`,
+      `wantDescription=${encodeURIComponent(want.description)}`,
+      `wantAvatar=${encodeURIComponent(want.authorAvatar || '')}`,
+      `wantTime=${encodeURIComponent(want.publishedAtText || '刚刚')}`,
+    ].join('&')
+  }
+
+  function openWantDetail(id: string) {
+    const selected = getSelectedWant(id)
+    if (!selected) return
+    Taro.navigateTo({ url: `/pages/want-detail/index?${buildWantQuery(selected)}` })
+  }
+
   return (
     <View className='want-page'>
       <View className='want-content'>
@@ -82,8 +106,9 @@ export default function WantPage() {
               communityName={item.community}
               publishedAtText={item.publishedAtText || '刚刚'}
               description={item.description}
+              onOpen={openWantDetail}
               onOffer={(id) => {
-                const selected = wants.find((want) => want.id === id)
+                const selected = getSelectedWant(id)
                 const query = [
                   `wantId=${encodeURIComponent(id)}`,
                   `wantTitle=${encodeURIComponent(selected?.title || item.title)}`,

@@ -32,9 +32,9 @@
 
 .chat-header-title {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4rpx;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 12rpx;
 }
 
 .chat-header-title text:first-child {
@@ -49,6 +49,9 @@
 }
 
 .chat-messages {
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
   min-height: 0;
   flex: 1;
   padding: 24rpx 32rpx 18rpx;

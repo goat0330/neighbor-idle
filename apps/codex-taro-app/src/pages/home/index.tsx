@@ -1,9 +1,10 @@
 import { Text, View } from '@tarojs/components'
-import Taro from '@tarojs/taro'
+import Taro, { useDidShow } from '@tarojs/taro'
 import { useEffect, useMemo, useState } from 'react'
 import {
   BottomNav,
   CategoryTabs,
+  NearbyGroupCard,
   ProductCard,
   PublishActionSheet,
   SearchLocationBar,
@@ -11,9 +12,11 @@ import {
   type CategoryTab,
 } from '@/components/community'
 import { backendEnabled, favoriteApi, itemApi } from '@/services/backend'
+import { getEntry } from '@/services/groupPool'
 import { mapBackendItem, backendCategoryKey, searchListings } from '@/services/market'
 import type { Listing } from '@/types/market'
-import { requestUserLocation } from '@/services/location'
+import { locationService, type UserLocation } from '@/services/location'
+import { distanceMeters } from '@/utils/distance'
 import './index.scss'
 
 const categoryTabs: CategoryTab[] = ['全部', '家具', '家电', '数码', '母婴', '图书', '其他'].map((label) => ({ key: label, label }))
@@ -28,6 +31,13 @@ const serviceCategoryByTab: Record<string, string> = {
   其他: '其他',
 }
 
+const nearbyGroupEntry = getEntry({
+  geoCircleName: '金水花园附近',
+  communityName: '金水花园',
+  distance: '约3km',
+  locationLabel: '金水花园',
+})
+
 export default function HomePage() {
   const [keyword, setKeyword] = useState('')
   const [category, setCategory] = useState('全部')
@@ -37,6 +47,7 @@ export default function HomePage() {
   const [remoteListings, setRemoteListings] = useState<Listing[]>([])
   const [loading, setLoading] = useState(backendEnabled)
   const [loadError, setLoadError] = useState('')
+  const [userLocation, setUserLocation] = useState<UserLocation | null>(null)
   const listings = useMemo(
     () => {
       if (!backendEnabled) return searchListings(keyword, serviceCategoryByTab[category] ?? '全部').filter((item) => !soldIds.includes(item.id))
@@ -76,11 +87,24 @@ export default function HomePage() {
     }
   }, [category, keyword])
 
+  useDidShow(() => {
+    if (!backendEnabled) return
+    favoriteApi.list({ page: 1, pageSize: 100 })
+      .then((result) => {
+        const ids = result.list.map((item) => item.id || item._id).filter((id): id is string => Boolean(id))
+        setFavoriteIds(ids)
+        Taro.setStorageSync('community_favorite_ids', ids)
+      })
+      .catch(() => undefined)
+  })
+
   async function locate() {
-    const location = await requestUserLocation()
-    if (location) {
+    try {
+      // 首页点击定位时主动刷新，避免继续使用旧的 5 分钟位置缓存。
+      const location = await locationService.getCurrentLocation(true)
+      setUserLocation(location)
       Taro.showToast({ title: '已更新附近距离', icon: 'success' })
-    } else {
+    } catch {
       Taro.showModal({
         title: '需要定位权限',
         content: '授权定位后，商品卡片会显示与你的距离。',
@@ -163,6 +187,13 @@ export default function HomePage() {
         ) : listings.length > 0 ? (
           <View className='product-grid'>
             {listings.map((item) => (
+              (() => {
+                const hasItemLocation = Number.isFinite(item.latitude) && Number.isFinite(item.longitude)
+                  && item.latitude !== 0 && item.longitude !== 0
+                const distanceM = userLocation && hasItemLocation
+                  ? distanceMeters(userLocation, { latitude: item.latitude, longitude: item.longitude })
+                  : item.distanceKm === undefined ? undefined : Math.round(item.distanceKm * 1000)
+                return (
               <ProductCard
                 key={item.id}
                 id={item.id}
@@ -171,13 +202,15 @@ export default function HomePage() {
                 price={item.price}
                 seller={{ avatar: item.sellerAvatar || '', nickname: item.seller }}
                 communityName={item.community}
-                distanceM={item.distanceKm === undefined ? undefined : Math.round(item.distanceKm * 1000)}
+                distanceM={distanceM}
                 status={item.status === '已售出' ? 'sold' : 'selling'}
                 favorited={favoriteIds.includes(item.id)}
                 onOpen={openDetail}
                 onContact={openChat}
                 onFavorite={(id, next) => { void toggleFavorite(id, next) }}
               />
+                )
+              })()
             ))}
           </View>
         ) : (
@@ -186,6 +219,7 @@ export default function HomePage() {
             <Text className='home-empty-copy' onClick={() => { setLoadError(''); setKeyword(''); setCategory('全部') }}>{loadError ? '重新加载' : '清空条件，查看全部'}</Text>
           </View>
         )}
+        <NearbyGroupCard entry={nearbyGroupEntry} />
       </View>
 
       <BottomNav active='idle' onChange={changeNavigation} onPublish={() => setShowPublishSheet(true)} />

@@ -1,14 +1,14 @@
 import { Conversation, Listing, ListingStatus, WantPost } from '@/types/market'
 import type { BackendItem, BackendWant } from './backend'
-import productAirpods from '@/assets/mock/product-airpods.png'
-import productBag from '@/assets/mock/product-bag.png'
-import productBicycle from '@/assets/mock/product-bicycle.png'
-import productBooks from '@/assets/mock/product-books.png'
-import productDesk from '@/assets/mock/product-desk.png'
-import productRiceCooker from '@/assets/mock/product-rice-cooker.png'
-import productSofa from '@/assets/mock/product-sofa.png'
-import productStroller from '@/assets/mock/product-stroller.png'
-import productWasher from '@/assets/mock/product-washer.png'
+import productAirpods from '@/assets/mock-optimized/product-airpods.jpg'
+import productBag from '@/assets/mock-optimized/product-bag.jpg'
+import productBicycle from '@/assets/mock-optimized/product-bicycle.jpg'
+import productBooks from '@/assets/mock-optimized/product-books.jpg'
+import productDesk from '@/assets/mock-optimized/product-desk.jpg'
+import productRiceCooker from '@/assets/mock-optimized/product-rice-cooker.jpg'
+import productSofa from '@/assets/mock-optimized/product-sofa.jpg'
+import productStroller from '@/assets/mock-optimized/product-stroller.jpg'
+import productWasher from '@/assets/mock-optimized/product-washer.jpg'
 import avatarBlue from '@/assets/mock/avatar-blue.png'
 import avatarBrown from '@/assets/mock/avatar-brown.png'
 import avatarGreen from '@/assets/mock/avatar-green.png'
@@ -22,7 +22,7 @@ export const seedListings: Listing[] = [
     originalPrice: 399,
     image: productDesk,
     category: '家具',
-    condition: '9成新',
+    condition: '几乎全新',
     community: '金水花园',
     location: '周末全天自提',
     latitude: 31.2304,
@@ -43,7 +43,7 @@ export const seedListings: Listing[] = [
     price: 300,
     image: productWasher,
     category: '家电',
-    condition: '9成新',
+    condition: '几乎全新',
     community: '金水花园',
     location: '金水花园二期',
     latitude: 31.235,
@@ -64,7 +64,7 @@ export const seedListings: Listing[] = [
     price: 120,
     image: productSofa,
     category: '家具',
-    condition: '8成新',
+    condition: '成色不错',
     community: '金水花园',
     location: '金水花园',
     latitude: 31.224,
@@ -106,7 +106,7 @@ export const seedListings: Listing[] = [
     price: 60,
     image: productRiceCooker,
     category: '家电',
-    condition: '9成新',
+    condition: '几乎全新',
     community: '金水花园',
     location: '金水花园',
     latitude: 31.229,
@@ -127,7 +127,7 @@ export const seedListings: Listing[] = [
     price: 80,
     image: productStroller,
     category: '母婴',
-    condition: '8成新',
+    condition: '成色不错',
     community: '金水花园二期',
     location: '金水花园二期',
     latitude: 31.229,
@@ -148,7 +148,7 @@ export const seedListings: Listing[] = [
     price: 900,
     image: productAirpods,
     category: '数码',
-    condition: '9成新',
+    condition: '几乎全新',
     community: '金水花园',
     location: '金水花园',
     latitude: 31.229,
@@ -169,7 +169,7 @@ export const seedListings: Listing[] = [
     price: 65,
     image: productBag,
     category: '其他',
-    condition: '8成新',
+    condition: '成色不错',
     community: '金水花园',
     location: '金水花园',
     latitude: 31.229,
@@ -190,7 +190,7 @@ export const seedListings: Listing[] = [
     price: 900,
     image: productBicycle,
     category: '其他',
-    condition: '8成新',
+    condition: '成色不错',
     community: '金水花园',
     location: '金水花园',
     latitude: 31.229,
@@ -261,7 +261,10 @@ const conditionLabels: Record<string, string> = {
   used: '有使用痕迹',
   flaw: '有瑕疵',
   全新: '全新',
-  '9成新': '9成新',
+  '9成新': '几乎全新',
+  '8成新': '成色不错',
+  '7成新': '有使用痕迹',
+  '6成新': '有瑕疵',
 }
 
 export function backendCategoryKey(label: string) {
@@ -284,9 +287,15 @@ export function mapBackendItem(item: BackendItem): Listing {
     category: categoryLabels[item.category] || item.category || '其他',
     condition: conditionLabels[item.condition || ''] || item.condition || '成色不错',
     community,
+    communityId: item.communityId,
+    communityName: item.communityName || community,
     location: item.location || '社区公共点自提',
     latitude: Number(item.latitude || 0),
     longitude: Number(item.longitude || 0),
+    geoCircleId: item.geoCircleId,
+    geoCircleName: item.geoCircleName,
+    distance: item.distance,
+    locationLabel: item.locationLabel,
     seller: sellerName,
     sellerAvatar: item.seller?.avatarUrl || avatarOrange,
     sellerCredit: Number(item.seller?.creditScore || 100),

@@ -1,0 +1,110 @@
+{
+  "community": {
+    "id": "jinshui-garden",
+    "name": "金水花园"
+  },
+  "categories": [
+    "全部",
+    "家具",
+    "家电",
+    "数码",
+    "母婴",
+    "图书",
+    "其他"
+  ],
+  "products": [
+    {
+      "id": "p001",
+      "title": "宜家书桌",
+      "price": 50,
+      "image": "/mock/products/desk.jpg",
+      "seller": {
+        "id": "u001",
+        "nickname": "小橘子",
+        "avatar": "/mock/avatars/u001.png"
+      },
+      "communityName": "金水花园",
+      "distanceM": 320,
+      "status": "selling"
+    },
+    {
+      "id": "p002",
+      "title": "小天鹅洗衣机 6.5kg",
+      "price": 300,
+      "image": "/mock/products/washer.jpg",
+      "seller": {
+        "id": "u002",
+        "nickname": "阿青",
+        "avatar": "/mock/avatars/u002.png"
+      },
+      "communityName": "金水花园二期",
+      "distanceM": 450,
+      "status": "selling"
+    },
+    {
+      "id": "p003",
+      "title": "双人布艺沙发",
+      "price": 120,
+      "image": "/mock/products/sofa.jpg",
+      "seller": {
+        "id": "u003",
+        "nickname": "木木",
+        "avatar": "/mock/avatars/u003.png"
+      },
+      "communityName": "金水花园",
+      "distanceM": 280,
+      "status": "selling"
+    }
+  ],
+  "wanted": [
+    {
+      "id": "w001",
+      "title": "求一个小书桌",
+      "budgetText": "预算 ¥50–100",
+      "nickname": "小橘子",
+      "avatar": "/mock/avatars/u001.png",
+      "communityName": "金水花园",
+      "publishedAtText": "今天",
+      "status": "open"
+    },
+    {
+      "id": "w002",
+      "title": "求儿童自行车",
+      "budgetText": "预算 ¥200以内",
+      "nickname": "阿青",
+      "avatar": "/mock/avatars/u002.png",
+      "communityName": "金水花园二期",
+      "publishedAtText": "1小时前",
+      "status": "open"
+    }
+  ],
+  "messageThreads": [
+    {
+      "id": "t001",
+      "productId": "p001",
+      "productTitle": "宜家书桌",
+      "price": 50,
+      "counterpart": {
+        "nickname": "小橘子",
+        "avatar": "/mock/avatars/u001.png"
+      },
+      "lastMessage": "请问书桌还在吗？",
+      "timestamp": "18:36",
+      "intentStatus": "chatting",
+      "unreadCount": 1
+    },
+    {
+      "id": "t002",
+      "productTitle": "Apple AirPods Pro 2代",
+      "price": 900,
+      "counterpart": {
+        "nickname": "科技宅小明",
+        "avatar": "/mock/avatars/u004.png"
+      },
+      "lastMessage": "可以交换微信吗？方便细聊",
+      "timestamp": "昨天 21:34",
+      "intentStatus": "contact_exchanged",
+      "unreadCount": 0
+    }
+  ]
+}

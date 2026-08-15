@@ -21,6 +21,8 @@ import avatarOrange from '@/assets/mock/avatar-orange.png'
 import avatarBlue from '@/assets/mock/avatar-blue.png'
 import './index.scss'
 
+const isWechatMiniProgram = process.env.TARO_ENV === 'weapp'
+
 const demoMessages: ConversationMessage[] = [
   { id: '1', side: 'peer', type: 'text', text: '请问书桌还在吗？', read: true, createdAt: Date.now() - 180000 },
   { id: '2', side: 'mine', type: 'text', text: '还在的，成色很新，可以自提。', read: true, createdAt: Date.now() - 120000 },
@@ -79,6 +81,12 @@ export default function ChatPage() {
   useEffect(() => {
     void initialize()
   }, [])
+
+  useEffect(() => {
+    const counterpart = wanted ? wanted.author : role === 'buyer' ? item.seller : '小橘子'
+    const community = wanted?.community || item.community
+    void Taro.setNavigationBarTitle({ title: `${counterpart}  ${community}` })
+  }, [item.community, item.seller, role, wanted])
 
   useEffect(() => {
     if (!backendEnabled || !cloudConversationReady) return
@@ -238,11 +246,11 @@ export default function ChatPage() {
 
   return (
     <View className='chat-page'>
-      <View className='chat-header'>
+      {!isWechatMiniProgram && <View className='chat-header'>
         <Text className='chat-back' onClick={() => Taro.navigateBack()}>‹</Text>
         <View className='chat-header-title'><Text>{wanted ? wanted.author : role === 'buyer' ? item.seller : '小橘子'}</Text><Text>{wanted?.community || item.community}</Text></View>
         <Text className='chat-more'>···</Text>
-      </View>
+      </View>}
       <ScrollView scrollY className='chat-messages'>
         {wanted ? <WantedChatAnchor title={wanted.title} budget={wanted.budget} communityName={wanted.community} /> : <ProductChatAnchor image={item.image} title={item.title} price={item.price} communityName={item.community} onOpen={() => Taro.navigateTo({ url: `/pages/detail/index?id=${item.id}` })} />}
         <Text className='chat-time-label'>今天 {formatTime(Date.now())}</Text>

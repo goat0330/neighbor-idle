@@ -39,9 +39,10 @@ exports.main = async (event) => {
 
 // 商品列表(在售,按时间倒序;附近排序可后续建地理索引)
 async function list(event) {
-  const { page = 1, pageSize = 10, category = 'all' } = event
+  const { page = 1, pageSize = 10, category = 'all', geoCircleId } = event
   const where = { status: 'on_sale' }
   if (category && category !== 'all') where.category = category
+  if (geoCircleId) where.geoCircleId = geoCircleId
   const res = await items.where(where)
     .orderBy('createdAt', 'desc')
     .skip((page - 1) * pageSize)
@@ -85,7 +86,11 @@ async function detail(event, OPENID) {
 
 // 发布闲置
 async function create(event, OPENID) {
-  const { title, desc, images = [], price, originalPrice, condition, category, communityId, communityName, location, latitude, longitude, free } = event
+  const {
+    title, desc, images = [], price, originalPrice, condition, category,
+    communityId, communityName, geoCircleId, geoCircleName,
+    location, locationLabel, latitude, longitude, free
+  } = event
   if (!title || title.trim().length < 4) return fail('标题请至少填写4个字')
   if (images.length === 0) return fail('请至少上传一张实物图片')
   if (category === 'all' || !category) return fail('请选择分类')
@@ -107,7 +112,10 @@ async function create(event, OPENID) {
     category: category || 'other',
     communityId: communityId || user.communityId || '',
     communityName: communityName || user.communityName || '',
+    geoCircleId: geoCircleId || '',
+    geoCircleName: geoCircleName || '',
     location: location || '',
+    locationLabel: locationLabel || location || '',
     latitude: latitude || null,
     longitude: longitude || null,
     status: auditOn ? 'pending' : 'on_sale',
@@ -127,12 +135,19 @@ async function update(event, OPENID) {
   const item = await getItem(id)
   if (!item) return fail('商品不存在')
   if (item.openid !== OPENID && !isAdmin(OPENID)) return fail('无权操作')
+  if (event.status !== undefined && !['on_sale', 'sold', 'off'].includes(event.status)) {
+    return fail('商品状态无效')
+  }
 
-  const allowed = ['title', 'desc', 'images', 'price', 'originalPrice', 'condition', 'category', 'status', 'location', 'latitude', 'longitude']
+  const allowed = [
+    'title', 'desc', 'images', 'price', 'originalPrice', 'condition', 'category', 'status',
+    'communityId', 'communityName', 'geoCircleId', 'geoCircleName',
+    'location', 'locationLabel', 'latitude', 'longitude'
+  ]
   const data = { updatedAt: Date.now() }
   allowed.forEach(k => { if (event[k] !== undefined) data[k] = event[k] })
   await items.doc(id).update({ data })
-  return ok({ id })
+  return ok({ id, status: data.status || item.status })
 }
 
 // 删除(仅本人或管理员)
@@ -148,24 +163,40 @@ async function remove(event, OPENID) {
 
 // 我的发布
 async function my(event, OPENID) {
+  if (!OPENID) return fail('请先登录')
   const { page = 1, pageSize = 10 } = event
-  const res = await items.where({ openid: OPENID })
-    .orderBy('createdAt', 'desc')
-    .skip((page - 1) * pageSize)
-    .limit(pageSize)
-    .get()
-  return ok({ list: res.data, page: Number(page), hasMore: res.data.length === pageSize })
+  const query = items.where({ openid: OPENID })
+  const [res, onSale, sold] = await Promise.all([
+    query.orderBy('createdAt', 'desc')
+      .skip((page - 1) * pageSize)
+      .limit(pageSize)
+      .get(),
+    items.where({ openid: OPENID, status: 'on_sale' }).count(),
+    items.where({ openid: OPENID, status: 'sold' }).count()
+  ])
+  return ok({
+    list: res.data.map(publicItemView),
+    page: Number(page),
+    hasMore: res.data.length === pageSize,
+    stats: { onSale: onSale.total, sold: sold.total }
+  })
 }
 
 // 关键词搜索(标题/描述)
 async function search(event) {
-  const { keyword = '', page = 1, pageSize = 10 } = event
+  const { keyword = '', page = 1, pageSize = 10, geoCircleId } = event
   if (!keyword.trim()) return ok({ list: [], hasMore: false })
   const reg = db.RegExp({ regexp: keyword.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), options: 'i' })
-  const res = await items.where(_.or([
-    { title: reg, status: 'on_sale' },
-    { desc: reg, status: 'on_sale' }
-  ]))
+  const searchWhere = geoCircleId
+    ? _.or([
+      { title: reg, status: 'on_sale', geoCircleId },
+      { desc: reg, status: 'on_sale', geoCircleId }
+    ])
+    : _.or([
+      { title: reg, status: 'on_sale' },
+      { desc: reg, status: 'on_sale' }
+    ])
+  const res = await items.where(searchWhere)
     .orderBy('createdAt', 'desc')
     .skip((page - 1) * pageSize)
     .limit(pageSize)
@@ -234,7 +265,7 @@ async function enrichItems(list) {
 }
 
 function publicItemView(item) {
-  const { openid, phone, ...safe } = item
+  const { openid, phone, phoneNumber, phoneMasked, countryCode, wechatId, ...safe } = item
   return safe
 }
 

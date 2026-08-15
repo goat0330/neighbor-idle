@@ -61,6 +61,7 @@
   flex: 0 0 auto;
   height: 72rpx;
   padding: 0 28rpx;
+  border: 1px solid transparent;
   border-radius: 36rpx;
   background: $color-brand;
   color: #fff;
@@ -70,6 +71,7 @@
 }
 
 .listing-manage-action--sold {
-  background: $color-brand;
-  color: #fff;
+  border-color: rgba(255, 116, 51, .4);
+  background: $color-surface;
+  color: $color-brand;
 }

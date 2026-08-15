@@ -52,6 +52,21 @@
   border: 0;
 }
 
+.wechat-phone-authorize-button__unavailable {
+  width: 100%;
+  min-height: 76rpx;
+  margin-top: 20rpx;
+  box-sizing: border-box;
+  padding: 22rpx 24rpx;
+  border: 1rpx solid $color-border;
+  border-radius: 38rpx;
+  background: $color-surface;
+  color: $color-text-tertiary;
+  font-size: 24rpx;
+  line-height: 1.3;
+  text-align: center;
+}
+
 .wechat-phone-authorize-button--disabled {
   opacity: .56;
 }

@@ -1,6 +1,6 @@
 # Codex Taro 小程序
 
-这是邻里二手项目的 React 版本，技术栈固定为：
+这是邻里闲置项目的 React 版本，技术栈固定为：
 
 - React 18
 - TypeScript
@@ -13,10 +13,10 @@
 ```bash
 npm install
 npm run typecheck
-npm run build:weapp:check
+npm run build:weapp
 ```
 
-微信小程序编译生成物统一在 `dist-weapp/`，H5 生成物统一在 `dist-h5/`。用微信开发者工具导入本目录（不是 `src/`、`dist/` 或 `dist-h5/`）；根目录的 `project.config.json` 会把 `miniprogramRoot` 指向 `dist-weapp/`。每次切换分支或更新代码后，先运行 `npm run build:weapp:check`，再在开发者工具中清除编译缓存并重新打开项目。当前项目 AppID 为 `wx00edfdef9d44805f`；个人开发者配置文件不提交到 GitHub。
+微信小程序编译生成物唯一为 `dist/weapp/`，H5 生成物唯一为 `dist/h5/`。每次切换分支或更新代码后运行 `npm run build:weapp`，构建会生成可直接打开的小程序工程并自动执行 `weapp:doctor`；随后运行 `npm run setup:wechat-devtools`。微信开发者工具唯一打开 `D:\wxdev\community-idle`，它是指向当前 `dist/weapp/` 的 directory junction，不要导入本目录、`src/`、`dist/` 或其他 worktree。`dist/weapp/project.config.json` 的 `miniprogramRoot` 固定为 `./`。当前项目 AppID 为 `wx00edfdef9d44805f`；个人开发者配置文件不提交到 GitHub。
 
 ## 手机端 H5 Review
 
@@ -24,7 +24,7 @@ npm run build:weapp:check
 npm run dev:h5
 ```
 
-浏览器打开 `http://127.0.0.1:10086/index.html`。H5 开发服务固定使用手机端入口，建议按 390 × 844 视口检查；静态 review 包在仓库根目录的 `review/`。
+浏览器打开 `http://127.0.0.1:10086/index.html`。H5 开发服务固定使用手机端入口，建议按 390 × 844 视口检查；正式交互验收以微信开发者工具为准，静态 review 不作为发布代码。
 
 ## 代码分层
 

@@ -54,6 +54,10 @@ export type BackendItem = {
   condition?: string
   communityId?: string
   communityName?: string
+  geoCircleId?: string
+  geoCircleName?: string
+  distance?: string | number
+  locationLabel?: string
   location?: string
   latitude?: number | null
   longitude?: number | null
@@ -98,6 +102,8 @@ export type ItemCreateInput = {
   category: string
   communityId?: string
   communityName?: string
+  geoCircleId?: string
+  geoCircleName?: string
   location?: string
   latitude?: number
   longitude?: number
@@ -150,7 +156,7 @@ export const itemApi = {
   create: (data: ItemCreateInput) => cloud.call<{ id: string; status: string; needAudit: boolean }>('item', 'create', data),
   update: (id: string, data: Partial<ItemCreateInput> & { status?: string }) => cloud.call<{ id: string }>('item', 'update', { id, ...data }),
   my: (data: { page?: number; pageSize?: number } = {}) =>
-    cloud.call<{ list: BackendItem[]; page: number; hasMore: boolean }>('item', 'my', data),
+    cloud.call<{ list: BackendItem[]; page: number; hasMore: boolean; stats: { onSale: number; sold: number } }>('item', 'my', data),
 }
 
 export const wantApi = {
@@ -163,4 +169,7 @@ export const wantApi = {
 
 export const favoriteApi = {
   toggle: (itemId: string) => cloud.call<{ favorited: boolean }>('favorite', 'toggle', { itemId }),
+  list: (data: { page?: number; pageSize?: number } = {}) =>
+    cloud.call<{ list: BackendItem[]; page: number; hasMore: boolean }>('favorite', 'list', data),
+  stats: () => cloud.call<{ count: number }>('favorite', 'stats'),
 }

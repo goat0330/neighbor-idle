@@ -7,7 +7,11 @@ cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV })
 const db = cloud.database()
 
 exports.main = async () => {
-  const collections = ['users', 'communities', 'items', 'favorites', 'conversations', 'messages', 'contact_requests', 'wants', 'transactions', 'reviews', 'reports']
+  const collections = [
+    'users', 'communities', 'items', 'favorites', 'conversations', 'messages',
+    'contact_requests', 'wants', 'transactions', 'reviews', 'reports',
+    'geo_circles', 'group_pools', 'wecom_groups', 'group_join_ways', 'identity_mappings'
+  ]
   const results = {}
   for (const name of collections) {
     try {
@@ -38,8 +42,49 @@ exports.main = async () => {
     }
   }
 
+  // 生活圈只作为安全的本地演示数据；未配置真实入群入口，因此不会展示可用的加入按钮。
+  const circleCount = await db.collection('geo_circles').count()
+  let geoCirclesInserted = 0
+  if (circleCount.total === 0) {
+    await db.collection('geo_circles').add({
+      data: {
+        name: '金水花园附近',
+        locationLabel: '金水花园附近',
+        center: { latitude: 31.2304, longitude: 121.4737 },
+        radiusM: 3000,
+        status: 'active',
+        createdAt: Date.now(),
+        updatedAt: Date.now()
+      }
+    })
+    geoCirclesInserted = 1
+  }
+
+  const circleResult = await db.collection('geo_circles').where({ name: '金水花园附近' }).limit(1).get()
+  const sampleCircle = circleResult.data[0]
+  const poolCount = await db.collection('group_pools').count()
+  let groupPoolsInserted = 0
+  if (sampleCircle && poolCount.total === 0) {
+    await db.collection('group_pools').add({
+      data: {
+        geoCircleId: sampleCircle._id,
+        displayName: '附近生活群',
+        subtitle: '附近生活群入群入口准备中',
+        status: 'pending',
+        createdAt: Date.now(),
+        updatedAt: Date.now()
+      }
+    })
+    groupPoolsInserted = 1
+  }
+
   return {
     code: 0,
-    data: { collections: results, sampleCommunitiesInserted: inserted }
+    data: {
+      collections: results,
+      sampleCommunitiesInserted: inserted,
+      geoCirclesInserted,
+      groupPoolsInserted
+    }
   }
 }

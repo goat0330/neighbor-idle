@@ -1,7 +1,5 @@
 **/node_modules/
 **/dist/
-**/dist-h5/
-**/dist-weapp/
 **/.taro/
 **/.swc/
 **/project.private.config.json
@@ -11,3 +9,7 @@
 .env.*
 !.env.example
 **/src/config/local.ts
+review/
+review*.zip
+docs/community_visual_prototype_support_v0.3/
+docs/community_visual_prototype_support_v0.5/
