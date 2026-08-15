@@ -37,11 +37,16 @@
   background: #f0efec;
   color: $color-text-tertiary;
   font-size: 26rpx;
+  transition: background-color 140ms ease-out, transform 120ms cubic-bezier(.23, 1, .32, 1);
 }
 
 .chat-composer-r2__send.is-enabled {
   background: $color-brand;
   color: #fff;
+}
+
+.chat-composer-r2__send.is-enabled:active {
+  transform: scale(.93);
 }
 
 .chat-composer-r2 .contact-exchange-action {

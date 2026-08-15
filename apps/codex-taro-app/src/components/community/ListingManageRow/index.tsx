@@ -33,7 +33,7 @@ export default function ListingManageRow({
   ].filter(Boolean).join(' · ')
 
   return (
-    <View className='listing-manage-row' onClick={() => onOpen(id)}>
+    <View className={`listing-manage-row ${sold ? 'listing-manage-row--sold' : ''}`} onClick={() => onOpen(id)}>
       <Image className='listing-manage-image' src={image} mode='aspectFill' />
       <View className='listing-manage-content'>
         <Text className='listing-manage-title'>{title}</Text>

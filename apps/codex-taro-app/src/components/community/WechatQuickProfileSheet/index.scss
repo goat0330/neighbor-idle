@@ -16,6 +16,13 @@
   bottom: 0;
   left: 0;
   background: rgba(34, 34, 34, .36);
+  opacity: 0;
+  transition: opacity 200ms ease-out;
+}
+
+.wechat-quick-profile-sheet--entered .wechat-quick-profile-sheet__overlay,
+.wechat-contact-setup-sheet--entered .wechat-contact-setup-sheet__overlay {
+  opacity: 1;
 }
 
 .wechat-quick-profile-sheet__panel,
@@ -27,6 +34,13 @@
   padding: 16rpx 32rpx calc(34rpx + env(safe-area-inset-bottom));
   border-radius: 40rpx 40rpx 0 0;
   background: $color-surface-strong;
+  transform: translateY(102%);
+  transition: transform 220ms cubic-bezier(.23, 1, .32, 1);
+}
+
+.wechat-quick-profile-sheet--entered .wechat-quick-profile-sheet__panel,
+.wechat-contact-setup-sheet--entered .wechat-contact-setup-sheet__panel {
+  transform: translateY(0);
 }
 
 .wechat-quick-profile-sheet__handle,
@@ -81,4 +95,18 @@
 .wechat-quick-profile-sheet__submit::after,
 .wechat-contact-setup-sheet__submit::after {
   border: 0;
+}
+
+.wechat-quick-profile-sheet__submit:active,
+.wechat-contact-setup-sheet__submit:active {
+  opacity: .82;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wechat-quick-profile-sheet__overlay,
+  .wechat-contact-setup-sheet__overlay,
+  .wechat-quick-profile-sheet__panel,
+  .wechat-contact-setup-sheet__panel {
+    transition: none;
+  }
 }

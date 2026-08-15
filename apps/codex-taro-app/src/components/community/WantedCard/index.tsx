@@ -28,7 +28,7 @@ export default function WantedCard({
 }: WantedCardProps) {
   return (
     <View className='wanted-card' onClick={() => onOpen?.(id)}>
-      <View className={`wanted-card-avatar ${avatar && needsMockAvatarCrop(avatar) ? 'wanted-card-avatar-crop' : ''}`}>
+      <View className='wanted-card-avatar'>
         {avatar
           ? <Image className='wanted-card-avatar-image' src={avatar} mode='aspectFill' />
           : <Text className='wanted-card-avatar-fallback'>{nickname.slice(0, 1) || '邻'}</Text>}
@@ -51,8 +51,4 @@ export default function WantedCard({
       <Text className='wanted-card-chevron' onClick={(event) => { event.stopPropagation(); onOpen?.(id) }}>›</Text>
     </View>
   )
-}
-
-function needsMockAvatarCrop(avatar: string) {
-  return avatar.includes('avatar-blue') || avatar.includes('avatar-brown')
 }

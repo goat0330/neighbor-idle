@@ -14,6 +14,12 @@
   bottom: 0;
   left: 0;
   background: rgba(34, 34, 34, .34);
+  opacity: 0;
+  transition: opacity 200ms ease-out;
+}
+
+.contact-exchange-sheet--entered .contact-exchange-sheet__overlay {
+  opacity: 1;
 }
 
 .contact-exchange-sheet__panel {
@@ -25,6 +31,12 @@
   border-radius: 40rpx 40rpx 0 0;
   background: $color-surface-strong;
   box-shadow: 0 -12rpx 32rpx rgba(34, 34, 34, .08);
+  transform: translateY(102%);
+  transition: transform 220ms cubic-bezier(.23, 1, .32, 1);
+}
+
+.contact-exchange-sheet--entered .contact-exchange-sheet__panel {
+  transform: translateY(0);
 }
 
 .contact-exchange-sheet__handle {
@@ -125,6 +137,12 @@
   border-radius: 46rpx;
   font-size: 30rpx;
   font-weight: 600;
+  transition: opacity 120ms ease-out, transform 120ms cubic-bezier(.23, 1, .32, 1);
+}
+
+.contact-exchange-sheet__button:active {
+  opacity: .78;
+  transform: scale(.97);
 }
 
 .contact-exchange-sheet__button--secondary {
@@ -136,4 +154,12 @@
 .contact-exchange-sheet__button--primary {
   background: #FF7433;
   color: #fff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-exchange-sheet__overlay,
+  .contact-exchange-sheet__panel,
+  .contact-exchange-sheet__button {
+    transition: none;
+  }
 }

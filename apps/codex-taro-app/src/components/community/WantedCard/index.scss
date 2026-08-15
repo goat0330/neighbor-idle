@@ -7,6 +7,11 @@
   border: 1px solid $color-border;
   border-radius: 34rpx;
   background: $color-surface-strong;
+  transition: background-color 120ms ease-out;
+}
+
+.wanted-card:active {
+  background: #f4f4f0;
 }
 
 .wanted-card-avatar {
@@ -23,11 +28,6 @@
   display: block;
   width: 100%;
   height: 100%;
-}
-
-.wanted-card-avatar-crop .wanted-card-avatar-image {
-  transform: scale(1.45);
-  transform-origin: center top;
 }
 
 .wanted-card-avatar-fallback {
@@ -114,7 +114,20 @@
   color: $color-brand;
   font-size: 26rpx;
   line-height: 72rpx;
+  transition: background-color 120ms ease-out, transform 120ms cubic-bezier(.23, 1, .32, 1);
   white-space: nowrap;
+}
+
+.wanted-card-offer:active {
+  background: $color-brand-soft;
+  transform: scale(.95);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wanted-card,
+  .wanted-card-offer {
+    transition: none;
+  }
 }
 
 .wanted-card-chevron {

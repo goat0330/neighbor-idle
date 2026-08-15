@@ -6,6 +6,20 @@
   padding: 16rpx 0;
   border-bottom: 1px solid $color-border;
   background: $color-surface-strong;
+  transition: background-color 120ms ease-out;
+}
+
+.listing-manage-row:active {
+  background: #f4f4f0;
+}
+
+.listing-manage-row--sold .listing-manage-image {
+  opacity: .62;
+}
+
+.listing-manage-row--sold .listing-manage-title,
+.listing-manage-row--sold .listing-manage-price {
+  color: $color-text-tertiary;
 }
 
 .listing-manage-row:last-child {
@@ -67,11 +81,24 @@
   color: #fff;
   font-size: 24rpx;
   line-height: 72rpx;
+  transition: opacity 120ms ease-out, transform 120ms cubic-bezier(.23, 1, .32, 1);
   white-space: nowrap;
+}
+
+.listing-manage-action:active {
+  opacity: .78;
+  transform: scale(.95);
 }
 
 .listing-manage-action--sold {
   border-color: rgba(255, 116, 51, .4);
   background: $color-surface;
   color: $color-brand;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .listing-manage-row,
+  .listing-manage-action {
+    transition: none;
+  }
 }

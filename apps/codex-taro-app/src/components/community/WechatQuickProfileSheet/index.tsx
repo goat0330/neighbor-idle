@@ -1,6 +1,7 @@
 import { Button, Text, View } from '@tarojs/components'
 import WechatAvatarPicker from '../WechatAvatarPicker'
 import WechatNicknameInput from '../WechatNicknameInput'
+import { useSheetMotion } from '../useSheetMotion'
 import './index.scss'
 
 export type WechatQuickProfileSheetProps = {
@@ -24,10 +25,11 @@ export default function WechatQuickProfileSheet({
   onComplete,
   onClose,
 }: WechatQuickProfileSheetProps) {
-  if (!open) return null
+  const { rendered, entered } = useSheetMotion(open)
+  if (!rendered) return null
 
   return (
-    <View className='wechat-quick-profile-sheet'>
+    <View className={`wechat-quick-profile-sheet ${entered ? 'wechat-quick-profile-sheet--entered' : ''}`}>
       <View className='wechat-quick-profile-sheet__overlay' onClick={onClose} />
       <View className='wechat-quick-profile-sheet__panel' onClick={(event) => event.stopPropagation()}>
         <View className='wechat-quick-profile-sheet__handle' />

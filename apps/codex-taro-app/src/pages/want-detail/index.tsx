@@ -44,7 +44,7 @@ export default function WantDetailPage() {
       <View className='want-detail-content'>
         <View className='want-detail-card'>
           <View className='want-detail-profile'>
-            <View className={`want-detail-avatar ${want.authorAvatar && needsMockAvatarCrop(want.authorAvatar) ? 'want-detail-avatar-crop' : ''}`}>
+            <View className='want-detail-avatar'>
               {want.authorAvatar
                 ? <Image className='want-detail-avatar-image' src={want.authorAvatar} mode='aspectFill' />
                 : <Text className='want-detail-avatar-fallback'>{want.author.slice(0, 1) || '邻'}</Text>}
@@ -76,10 +76,6 @@ export default function WantDetailPage() {
       </View>
     </View>
   )
-}
-
-function needsMockAvatarCrop(avatar: string) {
-  return avatar.includes('avatar-blue') || avatar.includes('avatar-brown')
 }
 
 function resolveWant(params: Record<string, string | undefined>): WantPost {

@@ -7,6 +7,11 @@
   left: 0;
   display: flex;
   align-items: flex-end;
+  background: rgba(34, 34, 34, 0);
+  transition: background-color 200ms ease-out;
+}
+
+.publish-sheet-mask--entered {
   background: rgba(34, 34, 34, .38);
 }
 
@@ -16,6 +21,12 @@
   border-radius: 36rpx 36rpx 0 0;
   background: $color-surface-strong;
   box-shadow: 0 -8rpx 24rpx rgba(34, 34, 34, .08);
+  transform: translateY(102%);
+  transition: transform 220ms cubic-bezier(.23, 1, .32, 1);
+}
+
+.publish-sheet-mask--entered .publish-sheet {
+  transform: translateY(0);
 }
 
 .publish-sheet-handle {
@@ -60,6 +71,12 @@
   border: 1px solid $color-border;
   border-radius: 20rpx;
   background: $color-surface;
+  transition: transform 120ms cubic-bezier(.23, 1, .32, 1), opacity 120ms ease-out;
+}
+
+.publish-sheet-option:active {
+  opacity: .72;
+  transform: scale(.97);
 }
 
 .publish-sheet-option-primary {
@@ -116,4 +133,12 @@
   margin-left: auto;
   color: $color-text-tertiary;
   font-size: 34rpx;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .publish-sheet-mask,
+  .publish-sheet,
+  .publish-sheet-option {
+    transition: none;
+  }
 }

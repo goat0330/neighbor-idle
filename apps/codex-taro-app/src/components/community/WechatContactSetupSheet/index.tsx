@@ -2,6 +2,7 @@ import { Button, Text, View } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import WechatIdInput from '../WechatIdInput'
 import WechatPhoneAuthorizeButton from '../WechatPhoneAuthorizeButton'
+import { useSheetMotion } from '../useSheetMotion'
 import './index.scss'
 
 export type WechatContactSetupSheetProps = {
@@ -31,10 +32,11 @@ export default function WechatContactSetupSheet({
   onSave,
   onClose,
 }: WechatContactSetupSheetProps) {
-  if (!open) return null
+  const { rendered, entered } = useSheetMotion(open)
+  if (!rendered) return null
 
   return (
-    <View className='wechat-contact-setup-sheet'>
+    <View className={`wechat-contact-setup-sheet ${entered ? 'wechat-contact-setup-sheet--entered' : ''}`}>
       <View className='wechat-contact-setup-sheet__overlay' onClick={onClose} />
       <View className='wechat-contact-setup-sheet__panel' onClick={(event) => event.stopPropagation()}>
         <View className='wechat-contact-setup-sheet__handle' />

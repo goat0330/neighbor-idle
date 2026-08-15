@@ -8,6 +8,12 @@
   font-size: 28rpx;
   font-weight: 500;
   line-height: 1;
+  transition: opacity 120ms ease-out, transform 120ms cubic-bezier(.23, 1, .32, 1);
+}
+
+.contact-exchange-action:active {
+  opacity: .74;
+  transform: scale(.98);
 }
 
 .contact-exchange-action--available {

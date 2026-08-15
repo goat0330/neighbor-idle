@@ -20,5 +20,11 @@
   background: $color-surface-strong;
   color: $color-text-primary;
   font-size: 24rpx;
+  transition: background-color 120ms ease-out, border-color 120ms ease-out;
   white-space: nowrap;
+}
+
+.quick-question-chips__item:active {
+  border-color: rgba(255, 116, 51, .32);
+  background: $color-brand-soft;
 }

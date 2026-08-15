@@ -1,4 +1,5 @@
 import { Text, View } from '@tarojs/components'
+import { useSheetMotion } from '../useSheetMotion'
 import './index.scss'
 
 export type ContactExchangeSheetProps = {
@@ -20,10 +21,11 @@ export default function ContactExchangeSheet({
   onApprove,
   onClose,
 }: ContactExchangeSheetProps) {
-  if (!open) return null
+  const { rendered, entered } = useSheetMotion(open)
+  if (!rendered) return null
 
   return (
-    <View className='contact-exchange-sheet'>
+    <View className={`contact-exchange-sheet ${entered ? 'contact-exchange-sheet--entered' : ''}`}>
       <View className='contact-exchange-sheet__overlay' onClick={onClose} />
       <View className='contact-exchange-sheet__panel' onClick={(event) => event.stopPropagation()}>
         <View className='contact-exchange-sheet__handle' />

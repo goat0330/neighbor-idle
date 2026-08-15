@@ -2,37 +2,37 @@
   display: flex;
   align-items: center;
   gap: 12rpx;
-  min-height: 88rpx;
+  min-height: 72rpx;
 }
 
 .search-location-input-wrap {
   display: flex;
   min-width: 0;
-  height: 84rpx;
+  height: 72rpx;
   flex: 1;
   align-items: center;
-  padding: 0 26rpx;
+  padding: 0 22rpx;
   border: 1px solid $color-border;
-  border-radius: 20rpx;
+  border-radius: 36rpx;
   background: $color-surface;
 }
 
 .search-location-icon {
   position: relative;
-  width: 36rpx;
-  height: 36rpx;
-  flex: 0 0 36rpx;
-  margin-right: 14rpx;
+  width: 30rpx;
+  height: 30rpx;
+  flex: 0 0 30rpx;
+  margin-right: 12rpx;
   border: 2rpx solid currentColor;
   border-radius: 50%;
-  color: $color-text-secondary;
+  color: $color-text-tertiary;
 }
 
 .search-location-icon::after {
   position: absolute;
-  right: -10rpx;
-  bottom: -7rpx;
-  width: 14rpx;
+  right: -9rpx;
+  bottom: -6rpx;
+  width: 12rpx;
   height: 2rpx;
   border-radius: 3rpx;
   background: currentColor;
@@ -44,7 +44,7 @@
   min-width: 0;
   flex: 1;
   color: $color-text-primary;
-  font-size: 30rpx;
+  font-size: 27rpx;
 }
 
 .search-location-input::placeholder {

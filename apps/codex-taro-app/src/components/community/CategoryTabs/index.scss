@@ -1,7 +1,7 @@
 .category-tabs {
   width: 100%;
-  height: 96rpx;
-  margin-top: 24rpx;
+  height: 74rpx;
+  margin-top: 14rpx;
   scrollbar-width: none;
   white-space: nowrap;
 }
@@ -22,16 +22,21 @@
 .category-tab {
   position: relative;
   display: inline-block;
-  margin-right: 36rpx;
-  padding: 0 0 20rpx;
+  margin-right: 32rpx;
+  padding: 0 0 14rpx;
   color: $color-text-secondary;
-  font-size: 32rpx;
+  font-size: 30rpx;
   line-height: 1.35;
+  transition: color 140ms ease-out;
   white-space: nowrap;
 }
 
 .category-tab:last-child {
   margin-right: 0;
+}
+
+.category-tab:active {
+  opacity: .6;
 }
 
 .category-tab-active {
@@ -44,9 +49,15 @@
   right: auto;
   bottom: 0;
   left: 2rpx;
-  width: 48rpx;
+  width: 36rpx;
   height: 4rpx;
   border-radius: 4rpx;
   background: $color-brand;
   content: '';
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .category-tab {
+    transition: none;
+  }
 }

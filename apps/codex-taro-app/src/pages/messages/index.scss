@@ -6,7 +6,7 @@
 
 .messages-content {
   min-height: 100vh;
-  padding: 20rpx 32rpx calc(126rpx + env(safe-area-inset-bottom));
+  padding: 20rpx 32rpx calc(170rpx + env(safe-area-inset-bottom));
 }
 
 .messages-title-row {
@@ -41,6 +41,11 @@
   gap: 24rpx;
   padding: 22rpx 0;
   border-bottom: 1px solid $color-border;
+  transition: opacity 120ms ease-out;
+}
+
+.conversation-row:active {
+  opacity: .68;
 }
 
 .conversation-item-image {

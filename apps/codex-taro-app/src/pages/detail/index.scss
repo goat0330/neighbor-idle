@@ -213,6 +213,21 @@
   border-radius: 28rpx;
   color: $color-text-secondary;
   font-size: 23rpx;
+  transition: background-color 120ms ease-out, border-color 120ms ease-out, color 120ms ease-out;
+}
+
+.detail-quick-chip:active {
+  border-color: rgba(255, 116, 51, .35);
+  background: $color-brand-soft;
+  color: $color-brand;
+}
+
+.detail-seller-action:active {
+  background: $color-brand-soft;
+}
+
+.detail-location:active {
+  background: #f4f4f0;
 }
 
 .detail-bottom-action {

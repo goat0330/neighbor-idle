@@ -1,4 +1,5 @@
 import { Text, View } from '@tarojs/components'
+import { useSheetMotion } from '../useSheetMotion'
 import './index.scss'
 
 export type PublishActionSheetProps = {
@@ -14,10 +15,11 @@ export default function PublishActionSheet({
   onPublishProduct,
   onPublishWanted,
 }: PublishActionSheetProps) {
-  if (!open) return null
+  const { rendered, entered } = useSheetMotion(open)
+  if (!rendered) return null
 
   return (
-    <View className='publish-sheet-mask' onClick={onClose}>
+    <View className={`publish-sheet-mask ${entered ? 'publish-sheet-mask--entered' : ''}`} onClick={onClose}>
       <View className='publish-sheet' onClick={(event) => event.stopPropagation()}>
         <View className='publish-sheet-handle' />
         <Text className='publish-sheet-title'>发布什么</Text>
