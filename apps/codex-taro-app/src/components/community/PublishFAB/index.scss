@@ -12,7 +12,7 @@
 
 .publish-fab-visual {
   position: absolute;
-  bottom: 26rpx;
+  bottom: 10rpx;
   left: 50%;
   display: flex;
   align-items: center;
@@ -24,11 +24,11 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 168rpx;
-  height: 168rpx;
+  width: 120rpx;
+  height: 120rpx;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 143, 84, .24) 0%, rgba(255, 116, 51, .10) 46%, rgba(255, 116, 51, 0) 70%);
-  filter: blur(14rpx);
+  background: radial-gradient(circle, rgba(255, 143, 84, .18) 0%, rgba(255, 116, 51, .07) 46%, rgba(255, 116, 51, 0) 70%);
+  filter: blur(9rpx);
   pointer-events: none;
   transform: translate(-50%, -50%);
 }
@@ -37,34 +37,34 @@
   position: relative;
   z-index: 1;
   display: flex;
-  width: 126rpx;
-  height: 126rpx;
+  width: 96rpx;
+  height: 96rpx;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
   border: 1rpx solid rgba(255, 255, 255, .92);
-  background: rgba(255, 255, 255, .96);
-  box-shadow: 0 4rpx 12rpx rgba(34, 34, 34, .05), 0 0 14rpx rgba(255, 116, 51, .07);
+  background: rgba(250, 250, 248, .98);
+  box-shadow: 0 2rpx 8rpx rgba(34, 34, 34, .035), 0 0 8rpx rgba(255, 116, 51, .045);
 }
 
 .publish-fab-circle {
   display: flex;
-  width: 112rpx;
-  height: 112rpx;
-  flex: 0 0 112rpx;
+  width: 84rpx;
+  height: 84rpx;
+  flex: 0 0 84rpx;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
   background: linear-gradient(145deg, #ff914f 0%, $color-brand 52%, #ff6428 100%);
-  box-shadow: 0 5rpx 12rpx rgba(255, 116, 51, .22), inset 0 1rpx 1rpx rgba(255, 255, 255, .22);
+  box-shadow: 0 3rpx 8rpx rgba(255, 116, 51, .16), inset 0 1rpx 1rpx rgba(255, 255, 255, .20);
   transition: transform 120ms cubic-bezier(.23, 1, .32, 1), box-shadow 120ms ease-out;
 }
 
 .publish-fab-plus {
   position: relative;
   display: block;
-  width: 48rpx;
-  height: 48rpx;
+  width: 40rpx;
+  height: 40rpx;
 }
 
 .publish-fab-plus::before,
@@ -80,13 +80,13 @@
 }
 
 .publish-fab-plus::before {
-  width: 44rpx;
-  height: 4rpx;
+  width: 36rpx;
+  height: 3rpx;
 }
 
 .publish-fab-plus::after {
-  width: 4rpx;
-  height: 44rpx;
+  width: 3rpx;
+  height: 36rpx;
 }
 
 .publish-fab-label {
