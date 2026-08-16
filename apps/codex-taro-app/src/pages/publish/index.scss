@@ -43,7 +43,20 @@
 .publish-category.is-active, .publish-condition.is-active { border-color: rgba(255,116,51,.42); background: $color-brand-soft; color: $color-brand; }
 .publish-textarea { display: block; width: 100%; min-height: 194rpx; margin-top: 18rpx; color: $color-text-primary; font-size: 27rpx; line-height: 1.55; }
 .publish-field > .publish-counter { position: absolute; right: 0; bottom: 28rpx; }
-.publish-location-row { display: flex; align-items: center; justify-content: space-between; padding: 30rpx 0; }
+.publish-location-row {
+  position: fixed;
+  z-index: 19;
+  right: 0;
+  bottom: calc(124rpx + env(safe-area-inset-bottom));
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22rpx 32rpx;
+  border-top: 1px solid $color-border;
+  border-bottom: 1px solid $color-border;
+  background: rgba(250,250,248,.98);
+}
 .publish-location-value { color: $color-text-secondary; font-size: 28rpx; }
 .publish-submit-wrap { position: fixed; z-index: 20; right: 0; bottom: 0; left: 0; padding: 18rpx 32rpx calc(18rpx + env(safe-area-inset-bottom)); border-top: 1px solid $color-border; background: rgba(250,250,248,.98); }
 .publish-submit { height: 86rpx; margin: 0; border-radius: 43rpx; background: $color-brand; color: #fff; font-size: 30rpx; line-height: 86rpx; }
